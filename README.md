@@ -1,4 +1,4 @@
-The Website for the ApplicationServer
-=====================================
+Simple web app demo
+===================
 
-It's build as simple webapp for the ApplicationServer.
+Example for a web app using Servlet-/PersistenceContainer and MessageQueue
