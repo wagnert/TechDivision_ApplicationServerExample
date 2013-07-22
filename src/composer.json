@@ -1,0 +1,11 @@
+{
+    "name": "techdivision/techdivision_applicationsserverexample",
+    "description": "The example application for the ApplicationServer",
+    "require": {},
+    "authors": [
+        {
+            "name": "Tim Wagner",
+            "email": "tw@techdivision.com"
+        }
+    ]
+}

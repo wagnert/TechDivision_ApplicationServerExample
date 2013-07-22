@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<web-app version="2.4">
+
+    <display-name>Simple Web Servlet Example</display-name>
+    <description>Simple Web Servlet Example</description>
+
+    <servlet>
+        <description><![CDATA[A generic servlet that executes usual php scripts.]]></description>
+        <display-name>PhpServlet</display-name>
+        <servlet-name>PhpServlet</servlet-name>
+        <servlet-class>\TechDivision\ServletContainer\Servlets\PhpServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <description><![CDATA[A generic servlet that executes usual static content.]]></description>
+        <display-name>StaticResourceServlet</display-name>
+        <servlet-name>StaticResourceServlet</servlet-name>
+        <servlet-class>\TechDivision\ServletContainer\Servlets\StaticResourceServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <description/>
+        <display-name>IndexServlet</display-name>
+        <servlet-name>IndexServlet</servlet-name>
+        <servlet-class>\TechDivision\Example\Servlets\IndexServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>IndexServlet</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>IndexServlet</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>PhpServlet</servlet-name>
+        <url-pattern>/*.php</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>StaticResourceServlet</servlet-name>
+        <url-pattern>/static/*</url-pattern>
+    </servlet-mapping>
+
+</web-app>

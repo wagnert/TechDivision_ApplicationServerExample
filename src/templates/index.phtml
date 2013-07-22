@@ -1,0 +1,78 @@
+<?php
+
+/**
+ * templates\index.phtml
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ */
+
+namespace TechDivision\Example\Servlets;
+
+use TechDivision\Example\Utils\ContextKeys;
+
+// load the entity data if available
+if ($entity = $this->getAttribute(ContextKeys::VIEW_DATA)) {
+    $sampleId = $entity->getSampleId();
+    $name = $entity->getName();
+}
+
+?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <base href="/example/">
+    </head>
+    <body>
+    <div>
+        <ul>
+            <li><a href="">Home</a></li>
+        </ul>
+    </div>
+    <div>
+        <img src="static/images/logo.jpg"/>
+    </div>
+    <div>
+        <form action="index.do" method="get">
+            <input type="hidden" name="action" value="persist" />
+            <fieldset>
+                <legend>Sample</legend>
+                <table>
+                    <tr>
+                        <td>Id:</td>
+                        <td><input type="text" size="40" maxlength="40" name="sampleId" value="<?php echo $sampleId ?>"></td>
+                    </tr>
+                    <tr>
+                        <td>Name:</td>
+                        <td><input type="text" size="40" maxlength="40" name="name" value="<?php echo $name ?>"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><input type="submit" value="Save"/></td>
+                    </tr>
+                </table>
+            </fieldset>
+        </form>
+    </div>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <td>Id</td>
+                    <td>Name</td>
+                    <td>Actions</td>
+                </tr>
+            </thead>
+            <tbody><?php foreach ($this->getAttribute(ContextKeys::OVERVIEW_DATA) as $entity) { ?>
+                <tr>
+                    <td><a href="<?php echo $this->getEditLink($entity) ?>"><?php echo $entity->getSampleId() ?></a></td>
+                    <td><?php echo $entity->getName() ?></td>
+                    <td><a href="<?php echo $this->getDeleteLink($entity) ?>">Delete</a></td><?php } ?>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    </body>
+</html>
