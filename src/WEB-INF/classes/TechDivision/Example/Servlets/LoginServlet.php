@@ -40,7 +40,7 @@ class LoginServlet extends AbstractServlet implements Servlet {
      * Class name of the persistence container proxy that handles the data.
      * @var string
      */
-    const PROXY_CLASS = 'TechDivision\Example\Services\SampleProcessor';
+    const PROXY_CLASS = 'TechDivision\Example\Services\UserProcessor';
 
     /**
      * Default action to invoke if no action parameter has been found in the request.
@@ -84,14 +84,18 @@ class LoginServlet extends AbstractServlet implements Servlet {
             $password = filter_var($parameterMap['password'], FILTER_SANITIZE_STRING);
         }
 
-        if ($username == 'admin' && $password == 'password') {
+        try {
 
-            $res->addHeader('Location', 'index/index');
+            // try to login
+            $this->getProxy(self::PROXY_CLASS)->login($username, $password);
+
+            // if successfully then add the username to the session and redirect to the overview
             $req->getSession()->putData('username', $username);
+            $res->addHeader('Location', 'index/index');
 
-
-        } else {
-            $this->addAttribute('errorMessages', array('Invalid username or password'));
+        } catch(\Exception $e) {
+            // if not add an error message
+            $this->addAttribute('errorMessages', array($e->getMessage()));
         }
 
         // reload all entities and render the dialog

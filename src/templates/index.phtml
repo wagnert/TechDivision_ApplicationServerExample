@@ -36,8 +36,8 @@ if ($entity = $this->getAttribute(ContextKeys::VIEW_DATA)) {
     <div>
         <img src="static/images/logo.jpg"/>
     </div>
-    <?php if ($req->getSession()->hasKey('username')) { ?><div>
-        <p><?php echo $req->getSession->getData('username') ?></p>
+    <?php if ($this->getRequest()->getSession()->hasKey('username')) { ?><div>
+        <p><?php echo $this->getRequest()->getSession()->getData('username') ?></p>
     <?php } ?></div>
     <?php if ($errorMessages = $this->getAttribute('errorMessages')) { ?><ul>
         <?php foreach ($errorMessages as $errorMessage) { ?><li>

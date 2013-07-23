@@ -13,6 +13,7 @@
 namespace TechDivision\Example\Services;
 
 use TechDivision\Example\Entities\Sample;
+use TechDivision\Example\Entities\User;
 use TechDivision\ApplicationServer\InitialContext;
 use TechDivision\PersistenceContainer\Application;
 use TechDivision\PersistenceContainer\Interfaces\Singleton;
@@ -154,5 +155,42 @@ class SampleProcessor implements Singleton {
         // drop the schema if it already exists and create it new
         $tool->dropSchema($classes);
         $tool->createSchema($classes);
+
+        // create a default user
+        $this->createDefaultUser();
+    }
+
+    /**
+     * Creates the default admin user.
+     *
+     * @return void
+     */
+    protected function createDefaultUser() {
+
+        try {
+
+            // load the entity manager
+            $entityManager = $this->getApplication()->getEntityManager();
+
+            // set user data and save it
+            $user = new User();
+            $user->setUserId(1);
+            $user->setEmail('info@appserver.io');
+            $user->setUsername('admin');
+            $user->setUserLocale('en_US');
+            $user->setPassword(md5('password'));
+            $user->setEnabled(true);
+            $user->setRate(1000);
+            $user->setContractedHours(160);
+            $user->setLdapSynced(false);
+            $user->setSyncedAt(time());
+            $entityManager->persist($user);
+
+            // flush the entity manager
+            $entityManager->flush();
+
+        } catch (\Exception $e) {
+            error_log($e->__toString());
+        }
     }
 }

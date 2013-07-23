@@ -34,6 +34,10 @@ abstract class AbstractServlet extends HttpServlet implements Servlet {
      */
     protected $context = array();
 
+    protected $request;
+
+    protected $response;
+
     /**
      * Returns the base path to the web app.
      * @return string The base path
@@ -104,8 +108,12 @@ abstract class AbstractServlet extends HttpServlet implements Servlet {
      */
     public function doGet(Request $req, Response $res) {
 
+        // add request and response to session
+        $this->setRequest($req);
+        $this->setResponse($res);
+
         // start the session
-        $req->getSession()->start();
+        $this->getRequest()->getSession()->start();
 
         // load the request parameters
         $parameterMap = $req->getParameterMap();
@@ -125,5 +133,21 @@ abstract class AbstractServlet extends HttpServlet implements Servlet {
      */
     public function doPost(Request $req, Response $res) {
         $this->doGet($req, $res);
+    }
+
+    public function setRequest(Request $request) {
+        $this->request = $request;
+    }
+
+    public function setResponse(Response $response) {
+        $this->response = $response;
+    }
+
+    public function getRequest() {
+        return $this->request;
+    }
+
+    public function getResponse() {
+        return $this->response;
     }
 }
