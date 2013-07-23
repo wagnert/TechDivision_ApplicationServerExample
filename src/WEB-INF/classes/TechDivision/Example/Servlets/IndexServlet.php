@@ -55,7 +55,7 @@ class IndexServlet extends AbstractServlet implements Servlet {
     public function indexAction(Request $req, Response $res) {
         $overviewData = $this->getProxy(self::PROXY_CLASS)->findAll();
         $this->addAttribute(ContextKeys::OVERVIEW_DATA, $overviewData);
-        $res->setContent($this->processTemplate(self::INDEX_TEMPLATE));
+        $res->setContent($this->processTemplate(self::INDEX_TEMPLATE, $req, $res));
     }
 
     /**

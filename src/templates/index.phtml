@@ -29,14 +29,23 @@ if ($entity = $this->getAttribute(ContextKeys::VIEW_DATA)) {
     <body>
     <div>
         <ul>
-            <li><a href="">Home</a></li>
+            <li><a href="index">Home</a></li>
+            <li><a href="login/index">Login</a></li>
         </ul>
     </div>
     <div>
         <img src="static/images/logo.jpg"/>
     </div>
+    <?php if ($req->getSession()->hasKey('username')) { ?><div>
+        <p><?php echo $req->getSession->getData('username') ?></p>
+    <?php } ?></div>
+    <?php if ($errorMessages = $this->getAttribute('errorMessages')) { ?><ul>
+        <?php foreach ($errorMessages as $errorMessage) { ?><li>
+            <?php echo $errorMessage ?>
+            </li><?php } ?>
+        </ul><?php } ?>
     <div>
-        <form action="index.do" method="get">
+        <form action="/index" method="get">
             <input type="hidden" name="action" value="persist" />
             <fieldset>
                 <legend>Sample</legend>

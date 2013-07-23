@@ -69,9 +69,11 @@ abstract class AbstractServlet extends HttpServlet implements Servlet {
      * Processes the template and returns the content.
      *
      * @param string $template Relative path to the template file
+     * @param Request $req The servlet request
+     * @param Response $res The servlet response
      * @return string The templates content
      */
-    public function processTemplate($template) {
+    public function processTemplate($template, Request $req, Response $res) {
         // check if the template is available
         if (!file_exists($pathToTemplate = $this->getWebappPath() . DS . $template)) {
             throw new \Exception("Requested template '$pathToTemplate' is not available");
@@ -101,6 +103,9 @@ abstract class AbstractServlet extends HttpServlet implements Servlet {
      * @see HttpServlet::doGet(Request $req, Response $res)
      */
     public function doGet(Request $req, Response $res) {
+
+        // start the session
+        $req->getSession()->start();
 
         // load the request parameters
         $parameterMap = $req->getParams();
