@@ -60,7 +60,7 @@ class SampleProcessor implements Singleton {
             }
 
         } catch (\Doctrine\DBAL\DBALException $e) {
-            error_log("SQL doesn't support schema update!!");
+            // doesn't do anything here, because SQLite is not enabled of updating the schema
         }
     }
 

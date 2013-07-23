@@ -68,7 +68,7 @@ class LoginServlet extends AbstractServlet implements Servlet {
     public function loginAction(Request $req, Response $res) {
 
         // load the params with the entity data
-        $parameterMap = $req->getParams();
+        $parameterMap = $req->getParameterMap();
 
         // check if the necessary params has been specified and are valid
         if (!array_key_exists('username', $parameterMap)) {

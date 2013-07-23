@@ -70,7 +70,7 @@ class IndexServlet extends AbstractServlet implements Servlet {
     public function loadAction(Request $req, Response $res) {
 
         // load the params with the entity data
-        $parameterMap = $req->getParams();
+        $parameterMap = $req->getParameterMap();
 
         // check if the necessary params has been specified and are valid
         if (!array_key_exists('sampleId', $parameterMap)) {
@@ -99,7 +99,7 @@ class IndexServlet extends AbstractServlet implements Servlet {
     public function deleteAction(Request $req, Response $res) {
 
         // load the params with the entity data
-        $parameterMap = $req->getParams();
+        $parameterMap = $req->getParameterMap();
 
         // check if the necessary params has been specified and are valid
         if (!array_key_exists('sampleId', $parameterMap)) {
@@ -126,7 +126,7 @@ class IndexServlet extends AbstractServlet implements Servlet {
     public function persistAction(Request $req, Response $res) {
 
         // load the params with the entity data
-        $parameterMap = $req->getParams();
+        $parameterMap = $req->getParameterMap();
 
         // check if the necessary params has been specified and are valid
         if (!array_key_exists('sampleId', $parameterMap)) {

@@ -108,7 +108,7 @@ abstract class AbstractServlet extends HttpServlet implements Servlet {
         $req->getSession()->start();
 
         // load the request parameters
-        $parameterMap = $req->getParams();
+        $parameterMap = $req->getParameterMap();
 
         // evaluate the action method to be invoked
         $action = 'indexAction';
