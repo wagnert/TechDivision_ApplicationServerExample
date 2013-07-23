@@ -91,7 +91,8 @@ class LoginServlet extends AbstractServlet implements Servlet {
 
             // if successfully then add the username to the session and redirect to the overview
             $req->getSession()->putData('username', $username);
-            $res->addHeader('Location', 'index/index');
+            $res->addHeader('Location', $this->getBaseUrl() . 'index/index');
+            $res->addHeader("status", 'HTTP/1.1 301 OK');
 
         } catch(\Exception $e) {
             // if not add an error message

@@ -54,7 +54,8 @@
 
     <servlet-mapping>
         <servlet-name>StaticResourceServlet</servlet-name>
-        <url-pattern>/static/*</url-pattern>
+        <url-pattern>/components/*</url-pattern>
     </servlet-mapping>
+
 
 </web-app>

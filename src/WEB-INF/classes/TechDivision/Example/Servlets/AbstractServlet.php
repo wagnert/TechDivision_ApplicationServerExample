@@ -150,4 +150,18 @@ abstract class AbstractServlet extends HttpServlet implements Servlet {
     public function getResponse() {
         return $this->response;
     }
+
+    /**
+     * Returns baseurl for html base tag
+     *
+     * @return string
+     */
+    public function getBaseUrl() {
+        $baseUrl = '/';
+        // if the application has NOT been called over a VHost configuration append application folder naem
+        if (!$this->getServletConfig()->getApplication()->isVhostOf($this->getRequest()->getServerName())) {
+            $baseUrl .= $this->getServletConfig()->getApplication()->getName() . '/';
+        }
+        return $baseUrl;
+    }
 }
