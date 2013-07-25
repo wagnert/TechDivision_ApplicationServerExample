@@ -34,8 +34,7 @@ class ImportReceiver extends AbstractReceiver {
 	 */
 	public function onMessage(Message $message, $sessionId) {
 		
-	    // log that a Message was received
-		error_log($logMessage = "Successfully received / finished message");
+	    // connect to the PersistenceContainer
 		$connection = Factory::createContextConnection();
 		$session = $connection->createContextSession();
 		$initialContext = $session->createInitialContext();
@@ -48,7 +47,6 @@ class ImportReceiver extends AbstractReceiver {
 		
 		// open the import file
 		$persons = file($importFile, FILE_USE_INCLUDE_PATH);
-		error_log("Found " . sizeof($persons) . " persons in CSV file '$importFile'");
 		
 		// import the persons found in the file
 		foreach ($persons as $person) {
@@ -60,8 +58,6 @@ class ImportReceiver extends AbstractReceiver {
 		    $entity->setName($firstname . ', ' . $lastname);
 		    
 		    $processor->persist($entity);
-		    
-		    error_log("Successfully updated person with name: '{$entity->getName()}'");
 		}
 		
 		// initialize the message monitor
