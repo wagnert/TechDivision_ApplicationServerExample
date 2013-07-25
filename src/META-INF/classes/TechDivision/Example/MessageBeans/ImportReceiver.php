@@ -33,8 +33,9 @@ class ImportReceiver extends AbstractReceiver {
 	 * @see \TechDivision\MessageQueueClient\Interfaces\MessageReceiver::onMessage()
 	 */
 	public function onMessage(Message $message, $sessionId) {
-		
-	    // connect to the PersistenceContainer
+
+	    // log that a Message was received
+		error_log($logMessage = "Successfully received / finished message");
 		$connection = Factory::createContextConnection();
 		$session = $connection->createContextSession();
 		$initialContext = $session->createInitialContext();
@@ -59,11 +60,11 @@ class ImportReceiver extends AbstractReceiver {
 		    
 		    $processor->persist($entity);
 		}
-		
+
 		// initialize the message monitor
-		$message->setMessageMonitor($monitor = new MessageMonitor(1, $logMessage));
+		$message->setMessageMonitor($monitor = new MessageMonitor(1, 'Dummy message'));
 		$monitor->setRowCount(1);
-		
+
 		// update the MessageMonitor
 		$this->updateMonitor($message);
 	}
