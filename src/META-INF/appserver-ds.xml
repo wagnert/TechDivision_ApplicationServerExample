@@ -1,8 +1,7 @@
 <datasources>
-    <!--
     <datasource type="TechDivision\PersistenceContainer\Application">
         <name>TechDivision\Example</name>
-        <pathToEntities>TechDivision/Example/Entities</pathToEntities>
+        <pathToEntities>META-INF/classes/TechDivision/Example/Entities</pathToEntities>
         <database>
             <driver>pdo_mysql</driver>
             <user>appserver</user>
@@ -10,7 +9,8 @@
             <databaseName>appserver_ApplicationServer</databaseName>
         </database>
     </datasource>
-    -->
+
+    <!--
     <datasource type="TechDivision\PersistenceContainer\Application">
         <name>TechDivision\Example</name>
         <pathToEntities>META-INF/classes/TechDivision/Example/Entities</pathToEntities>
@@ -22,4 +22,5 @@
             <memory>false</memory>
         </database>
     </datasource>
+    -->
 </datasources>

@@ -34,7 +34,7 @@ class IndexServlet extends AbstractServlet implements Servlet {
      * The relative path, up from the webapp path, to the template to use.
      * @var string
      */
-    const INDEX_TEMPLATE = 'templates/index.phtml';
+    const INDEX_TEMPLATE = 'static/templates/index.phtml';
 
     /**
      * Class name of the persistence container proxy that handles the data.

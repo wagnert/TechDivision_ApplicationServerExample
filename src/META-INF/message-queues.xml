@@ -3,4 +3,7 @@
     <message-queue type="\TechDivision\Example\MessageBeans\ImportReceiver" directory="classes">
         <destination>queue/import</destination>
     </message-queue>
+    <message-queue type="\TechDivision\Example\MessageBeans\ImportChunkReceiver" directory="classes">
+        <destination>queue/import_chunk</destination>
+    </message-queue>
 </message-queues>

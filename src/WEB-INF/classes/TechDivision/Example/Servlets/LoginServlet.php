@@ -34,7 +34,7 @@ class LoginServlet extends AbstractServlet implements Servlet {
      * The relative path, up from the webapp path, to the template to use.
      * @var string
      */
-    const LOGIN_TEMPLATE = 'templates/login.phtml';
+    const LOGIN_TEMPLATE = 'static/templates/login.phtml';
 
     /**
      * Class name of the persistence container proxy that handles the data.
