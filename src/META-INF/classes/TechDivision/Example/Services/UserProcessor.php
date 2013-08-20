@@ -15,7 +15,7 @@ namespace TechDivision\Example\Services;
 use TechDivision\Example\Entities\User;
 use TechDivision\ApplicationServer\InitialContext;
 use TechDivision\PersistenceContainer\Application;
-use TechDivision\PersistenceContainer\Interfaces\Singleton;
+use TechDivision\PersistenceContainer\Interfaces\Stateless;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\SchemaValidator;
 
@@ -29,7 +29,7 @@ use Doctrine\ORM\Tools\SchemaValidator;
  *              Open Software License (OSL 3.0)
  * @author      Tim Wagner <tw@techdivision.com>
  */
-class UserProcessor implements Singleton {
+class UserProcessor implements Stateless {
 
     /**
      * The application instance that provides the entity manager.

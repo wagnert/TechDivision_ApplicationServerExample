@@ -16,7 +16,7 @@ use TechDivision\Example\Entities\Sample;
 use TechDivision\Example\Entities\User;
 use TechDivision\ApplicationServer\InitialContext;
 use TechDivision\PersistenceContainer\Application;
-use TechDivision\PersistenceContainer\Interfaces\Singleton;
+use TechDivision\PersistenceContainer\Interfaces\Stateless;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\SchemaValidator;
 
@@ -30,7 +30,7 @@ use Doctrine\ORM\Tools\SchemaValidator;
  *              Open Software License (OSL 3.0)
  * @author      Tim Wagner <tw@techdivision.com>
  */
-class SampleProcessor implements Singleton {
+class SampleProcessor implements Stateless {
 
     /**
      * The application instance that provides the entity manager.
