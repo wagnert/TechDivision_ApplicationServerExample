@@ -79,7 +79,7 @@ abstract class AbstractServlet extends HttpServlet implements Servlet {
      */
     public function processTemplate($template, Request $req, Response $res) {
         // check if the template is available
-        if (!file_exists($pathToTemplate = $this->getWebappPath() . DS . $template)) {
+        if (!file_exists($pathToTemplate = $this->getWebappPath() . DIRECTORY_SEPARATOR . $template)) {
             throw new \Exception("Requested template '$pathToTemplate' is not available");
         }
         // process the template
