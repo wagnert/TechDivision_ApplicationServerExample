@@ -16,7 +16,6 @@ use TechDivision\Example\Entities\Sample;
 use TechDivision\Example\Entities\User;
 use TechDivision\ApplicationServer\InitialContext;
 use TechDivision\PersistenceContainer\Application;
-use TechDivision\PersistenceContainer\Interfaces\Stateless;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\SchemaValidator;
 
@@ -32,7 +31,7 @@ use Doctrine\ORM\Tools\SchemaValidator;
  * 
  * @Singleton
  */
-class SampleProcessor implements Stateless {
+class SampleProcessor {
 
     /**
      * The application instance that provides the entity manager.

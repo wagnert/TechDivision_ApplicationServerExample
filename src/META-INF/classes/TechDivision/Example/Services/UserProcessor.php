@@ -15,7 +15,6 @@ namespace TechDivision\Example\Services;
 use TechDivision\Example\Entities\User;
 use TechDivision\ApplicationServer\InitialContext;
 use TechDivision\PersistenceContainer\Application;
-use TechDivision\PersistenceContainer\Interfaces\Stateless;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\SchemaValidator;
 
@@ -31,7 +30,7 @@ use Doctrine\ORM\Tools\SchemaValidator;
  * 
  * @Stateless
  */
-class UserProcessor implements Stateless {
+class UserProcessor {
 
     /**
      * The application instance that provides the entity manager.
