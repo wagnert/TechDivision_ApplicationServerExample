@@ -41,7 +41,7 @@ class IndexServlet extends AbstractServlet implements Servlet {
      * @var string
      */
     const PROXY_CLASS = 'TechDivision\Example\Services\SampleProcessor';
-
+    
     /**
      * Default action to invoke if no action parameter has been found in the request.
      *

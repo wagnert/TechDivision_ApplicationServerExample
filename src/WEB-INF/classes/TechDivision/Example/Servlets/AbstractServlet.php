@@ -37,6 +37,16 @@ abstract class AbstractServlet extends HttpServlet implements Servlet {
     protected $request;
 
     protected $response;
+    
+    protected $connection;
+    
+    protected $session;
+    
+    public function __construct() {
+        $this->connection = Factory::createContextConnection();
+        $this->session = $this->connection->createContextSession();
+    }
+    
 
     /**
      * Returns the base path to the web app.
@@ -96,10 +106,7 @@ abstract class AbstractServlet extends HttpServlet implements Servlet {
      * @return mixed The proxy instance
      */
     public function getProxy($proxyClass) {
-        // lookup and return the remote processor implementation
-        $connection = Factory::createContextConnection();
-        $session = $connection->createContextSession();
-        $initialContext = $session->createInitialContext();
+        $initialContext = $this->session->createInitialContext();
         return $initialContext->lookup($proxyClass);
     }
 
