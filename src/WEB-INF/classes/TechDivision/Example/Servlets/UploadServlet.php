@@ -59,6 +59,12 @@ class UploadServlet extends AbstractServlet implements Servlet {
      * @see IndexServlet::indexAction()
      */
     public function uploadAction(Request $req, Response $res) {
+    	
+    	// sample for saving file to appservers upload tmp folder with tmpname
+    	$req->getPart('fileToUpload')->write(
+			tempnam(ini_get('upload_tmp_dir'), 'example_upload_')
+    	);
+    
         $this->indexAction($req, $res);
     }
 }
