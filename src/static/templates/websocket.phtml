@@ -1,24 +1,14 @@
 <?php
 
 /**
- * templates\index.phtml
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- */
-
-namespace TechDivision\Example\Servlets;
-
-use TechDivision\Example\Utils\ContextKeys;
-
-// load the entity data if available
-if ($entity = $this->getAttribute(ContextKeys::VIEW_DATA)) {
-    $sampleId = $entity->getSampleId();
-    $name = $entity->getName();
-}
+ * templates\websocket.phtml
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Open Software License (OSL 3.0)
+* that is available through the world-wide-web at this URL:
+* http://opensource.org/licenses/osl-3.0.php
+*/
 
 ?>
 <!DOCTYPE html>
@@ -79,12 +69,12 @@ if ($entity = $this->getAttribute(ContextKeys::VIEW_DATA)) {
 
     <div class="masthead">
         <ul class="nav nav-pills pull-right">
-            <li class="active"><a href="index/index">Home</a></li>
+            <li><a href="index/index">Home</a></li>
             <li><a href="login/index">Login</a></li>
             <li><a href="upload/index">Upload</a></li>
-            <li><a href="websocket/index">WebSocket</a></li>
+            <li class="active"><a href="websocket/index">WebSocket</a></li>
         </ul>
-        <h3 class="muted">appserver example</h3>
+        <h3 class="muted">web socket example</h3>
     </div>
 
     <hr>
@@ -93,36 +83,12 @@ if ($entity = $this->getAttribute(ContextKeys::VIEW_DATA)) {
         <a href="http://appserver.io">
             <img src="http://appserver.io/static/img/logo-black.png"/>
         </a>
-        <h1>example</h1>
-        <p class="lead">
-        <?php if ($this->getRequest()->getSession()->hasKey('username')) { ?>
-            Logged in as: <strong><?php echo $this->getRequest()->getSession()->getData('username') ?></strong>
-        <?php } else { ?>
-            Not logged in.
-        <?php } ?>
-        </p>
+        <h1>web socket example</h1>
     </div>
 
     <hr>
 
     <div class="row-fluid marketing">
-
-        <div class="span12 text-center">
-            <?php if ($errorMessages = $this->getAttribute('errorMessages')) { ?>
-                <div class="alert alert-error">
-                    <?php foreach ($errorMessages as $errorMessage) { ?>
-                        <?php echo $errorMessage ?></br>
-                    <?php } ?>
-                </div>
-            <?php } ?>
-
-            <form class="form-inline" action="index" method="post">
-                <input type="hidden" name="action" value="persist" />
-                <input type="hidden" name="sampleId" value="<?php echo $sampleId ?>">
-                <input name="name" type="text" placeholder="Type your name..." value="<?php echo $name ?>">
-                <button type="submit" class="btn">Submit</button>
-            </form>
-        </div>
 
         <div class="span12">
             <table class="table table-hover">
@@ -133,13 +99,7 @@ if ($entity = $this->getAttribute(ContextKeys::VIEW_DATA)) {
                     <th>Actions</th>
                 </tr>
                 </thead>
-                <tbody><?php foreach ($this->getAttribute(ContextKeys::OVERVIEW_DATA) as $entity) { ?>
-                <tr>
-                    <td><a href="<?php echo $this->getEditLink($entity) ?>"><?php echo $entity->getSampleId() ?></a></td>
-                    <td><?php echo $entity->getName() ?></td>
-                    <td><a href="<?php echo $this->getDeleteLink($entity) ?>">Delete</a></td><?php } ?>
-                </tr>
-                </tbody>
+                <tbody/>
             </table>
         </div>
     </div>
@@ -156,6 +116,18 @@ if ($entity = $this->getAttribute(ContextKeys::VIEW_DATA)) {
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="components/require.js"></script>
+<script type="text/javascript">
 
+    var conn = new WebSocket('ws://127.0.0.1:8589/example');
+    
+    conn.onopen = function(e) {
+        console.log("Connection established!");
+    };
+    
+    conn.onmessage = function(e) {
+        console.log(e.data);
+    };
+
+</script>
 </body>
 </html>
