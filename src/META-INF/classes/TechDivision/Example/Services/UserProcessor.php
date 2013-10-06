@@ -12,11 +12,7 @@
 
 namespace TechDivision\Example\Services;
 
-use TechDivision\Example\Entities\User;
-use TechDivision\ApplicationServer\InitialContext;
-use TechDivision\PersistenceContainer\Application;
-use Doctrine\ORM\Tools\SchemaTool;
-use Doctrine\ORM\Tools\SchemaValidator;
+use TechDivision\Example\Services\AbstractProcessor;
 
 /**
  * A singleton session bean implementation that handles the
@@ -27,38 +23,10 @@ use Doctrine\ORM\Tools\SchemaValidator;
  * @license    	http://opensource.org/licenses/osl-3.0.php
  *              Open Software License (OSL 3.0)
  * @author      Tim Wagner <tw@techdivision.com>
- * 
  * @Stateless
  */
-class UserProcessor {
-
-    /**
-     * The application instance that provides the entity manager.
-     * @var Application
-     */
-    protected $application;
-
-    /**
-     * Initializes the session bean with the Application instance.
-     *
-     * Checks on every start if the database already exists, if not
-     * the database will be created immediately.
-     *
-     * @param Application $application The application instance
-     * @return void
-     */
-    public function __construct(Application $application) {
-        $this->application = $application;
-    }
-
-    /**
-     * The application instance providing the database connection.
-     *
-     * @return Application The application instance
-     */
-    public function getApplication() {
-        return $this->application;
-    }
+class UserProcessor extends AbstractProcessor
+{
 
     /**
      * Validates the passed username agains the password.
@@ -70,7 +38,7 @@ class UserProcessor {
     public function login($username, $password) {
 
         // load the entity manager and the user repository
-        $entityManager = $this->getApplication()->getEntityManager();
+        $entityManager = $this->getEntityManager();
         $repository = $entityManager->getRepository('TechDivision\Example\Entities\User');
 
         // try to load the user
