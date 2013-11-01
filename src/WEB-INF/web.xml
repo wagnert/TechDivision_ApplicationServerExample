@@ -47,6 +47,11 @@
     </servlet>
 
     <servlet-mapping>
+        <servlet-name>PhpServlet</servlet-name>
+        <url-pattern>/*.php</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
         <servlet-name>IndexServlet</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
@@ -69,11 +74,6 @@
     <servlet-mapping>
         <servlet-name>WebSocketServlet</servlet-name>
         <url-pattern>/websocket/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>PhpServlet</servlet-name>
-        <url-pattern>/*.php</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
