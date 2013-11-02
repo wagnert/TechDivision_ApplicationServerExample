@@ -246,7 +246,7 @@ class AbstractProcessor
      * Deletes the database schema and creates it new.
      *
      * Attention: All data will be lost if this method has been invoked.
-     *
+     *git clo0ne
      * @return void
      */
     public function createSchema()

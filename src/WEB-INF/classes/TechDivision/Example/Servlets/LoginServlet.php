@@ -12,6 +12,7 @@
 
 namespace TechDivision\Example\Servlets;
 
+
 use TechDivision\ServletContainer\Interfaces\Servlet;
 use TechDivision\ServletContainer\Interfaces\ServletConfig;
 use TechDivision\ServletContainer\Interfaces\Request;
@@ -20,24 +21,28 @@ use TechDivision\PersistenceContainerClient\Context\Connection\Factory;
 use TechDivision\Example\Servlets\AbstractServlet;
 use TechDivision\Example\Entities\Sample;
 use TechDivision\Example\Utils\ContextKeys;
+use TechDivision\Example\Exceptions\LoginExceptions;
 
 /**
- * @package     TechDivision\Example
- * @copyright  	Copyright (c) 2013 <info@techdivision.com> - TechDivision GmbH
- * @license    	http://opensource.org/licenses/osl-3.0.php
+ * @package        TechDivision\Example
+ * @copyright      Copyright (c) 2013 <info@techdivision.com> - TechDivision GmbH
+ * @license        http://opensource.org/licenses/osl-3.0.php
  *              Open Software License (OSL 3.0)
- * @author      Tim Wagner <tw@techdivision.com>
+ * @author         Tim Wagner <tw@techdivision.com>
  */
-class LoginServlet extends AbstractServlet implements Servlet {
+class LoginServlet extends AbstractServlet implements Servlet
+{
 
     /**
      * The relative path, up from the webapp path, to the template to use.
+     *
      * @var string
      */
     const LOGIN_TEMPLATE = 'static/templates/login.phtml';
 
     /**
      * Class name of the persistence container proxy that handles the data.
+     *
      * @var string
      */
     const PROXY_CLASS = 'TechDivision\Example\Services\UserProcessor';
@@ -48,11 +53,13 @@ class LoginServlet extends AbstractServlet implements Servlet {
      * Loads all sample data and attaches it to the servlet context ready to be rendered
      * by the template.
      *
-     * @param Request $req The request instance
+     * @param Request  $req The request instance
      * @param Response $res The response instance
+     *
      * @return void
      */
-    public function indexAction(Request $req, Response $res) {
+    public function indexAction(Request $req, Response $res)
+    {
         $res->setContent($this->processTemplate(self::LOGIN_TEMPLATE, $req, $res));
     }
 
@@ -60,12 +67,14 @@ class LoginServlet extends AbstractServlet implements Servlet {
      * Loads the sample entity with the sample ID found in the request and attaches
      * it to the servlet context ready to be rendered by the template.
      *
-     * @param Request $req The request instance
+     * @param Request  $req The request instance
      * @param Response $res The response instance
+     *
      * @return void
      * @see IndexServlet::indexAction()
      */
-    public function loginAction(Request $req, Response $res) {
+    public function loginAction(Request $req, Response $res)
+    {
 
         // load the params with the entity data
         $parameterMap = $req->getParameterMap();
@@ -86,6 +95,7 @@ class LoginServlet extends AbstractServlet implements Servlet {
 
         try {
 
+
             // try to login
             $this->getProxy(self::PROXY_CLASS)->login($username, $password);
 
@@ -94,12 +104,19 @@ class LoginServlet extends AbstractServlet implements Servlet {
             $res->addHeader('Location', $this->getBaseUrl() . 'index/index');
             $res->addHeader("status", 'HTTP/1.1 301 OK');
 
-        } catch(\Exception $e) {
+
+        } catch (LoginException $e) {
+
+            $this->addAttribute('errorMessages', array("Username or Password invalid"));
+
+
+        } catch (\Exception $e) {
             // if not add an error message
+            error_log(var_export($e, true));
             $this->addAttribute('errorMessages', array($e->getMessage()));
         }
 
-        // reload all entities and render the dialog
+// reload all entities and render the dialog
         $this->indexAction($req, $res);
     }
 }
