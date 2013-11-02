@@ -23,11 +23,11 @@ use TechDivision\Example\Entities\User;
  * A singleton session bean implementation that handles the
  * data by using Doctrine ORM.
  *
- * @package TechDivision\Example
+ * @package   TechDivision\Example
  * @copyright Copyright (c) 2013 <info@techdivision.com> - TechDivision GmbH
- * @license http://opensource.org/licenses/osl-3.0.php
+ * @license   http://opensource.org/licenses/osl-3.0.php
  *          Open Software License (OSL 3.0)
- * @author Tim Wagner <tw@techdivision.com>
+ * @author    Tim Wagner <tw@techdivision.com>
  */
 class AbstractProcessor
 {
@@ -61,6 +61,7 @@ class AbstractProcessor
      *
      * @param Application $application
      *            The application instance
+     *
      * @return void
      */
     public function __construct(ApplicationInterface $application)
@@ -107,6 +108,7 @@ class AbstractProcessor
      *
      * @param
      *            \TechDivision\ApplicationServer\Interfaces\ApplicationInterface The application instance
+     *
      * @return void
      */
     public function setApplication(ApplicationInterface $application)
@@ -129,6 +131,7 @@ class AbstractProcessor
      *
      * @param array $connectionParameters
      *            The Doctrine database connection parameters
+     *
      * @return
      *
      */
@@ -184,7 +187,9 @@ class AbstractProcessor
      */
     public function getEntityManager()
     {
-        $pathToEntities = array($this->getApplication()->getWebappPath() . DIRECTORY_SEPARATOR . $this->getPathToEntities());
+        $pathToEntities = array(
+            $this->getApplication()->getWebappPath() . DIRECTORY_SEPARATOR . $this->getPathToEntities()
+        );
         $metadataConfiguration = Setup::createAnnotationMetadataConfiguration($pathToEntities, true);
         return EntityManager::create($this->getConnectionParameters(), $metadataConfiguration);
     }
@@ -210,14 +215,14 @@ class AbstractProcessor
                 // initialize the connection parameters
                 $connectionParameters = array(
                     'driver' => $databaseNode->getDriver()
-                        ->getNodeValue()
-                        ->__toString(),
+                            ->getNodeValue()
+                            ->__toString(),
                     'user' => $databaseNode->getUser()
-                        ->getNodeValue()
-                        ->__toString(),
+                            ->getNodeValue()
+                            ->__toString(),
                     'password' => $databaseNode->getPassword()
-                        ->getNodeValue()
-                        ->__toString()
+                            ->getNodeValue()
+                            ->__toString()
                 );
 
                 /*
@@ -231,9 +236,11 @@ class AbstractProcessor
 
                 // initialize the path to the database when we use sqlite for example
                 if (($path = $databaseNode->getPath()
-                    ->getNodeValue()
-                    ->__toString()) != null) {
-                    $connectionParameters['path'] = $this->getApplication()->getWebappPath() . DIRECTORY_SEPARATOR . $path;
+                        ->getNodeValue()
+                        ->__toString()) != null
+                ) {
+                    $connectionParameters['path']
+                        = $this->getApplication()->getWebappPath() . DIRECTORY_SEPARATOR . $path;
                 }
 
                 // set the connection parameters
@@ -246,7 +253,7 @@ class AbstractProcessor
      * Deletes the database schema and creates it new.
      *
      * Attention: All data will be lost if this method has been invoked.
-     *git clo0ne
+     *
      * @return void
      */
     public function createSchema()
