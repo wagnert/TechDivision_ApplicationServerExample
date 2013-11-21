@@ -94,7 +94,7 @@ abstract class AbstractServlet extends HttpServlet implements Servlet {
         }
         // process the template
         ob_start();
-        require_once $pathToTemplate;
+        require $pathToTemplate;
         return ob_get_clean();
     }
 
