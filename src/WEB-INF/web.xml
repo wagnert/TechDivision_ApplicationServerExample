@@ -46,6 +46,13 @@
         <servlet-class>\TechDivision\Example\Servlets\WebSocketServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <description/>
+        <display-name>BaseAuthenticationServlet</display-name>
+        <servlet-name>BaseAuthenticationServlet</servlet-name>
+        <servlet-class>\TechDivision\Example\Servlets\BaseAuthenticationServlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>PhpServlet</servlet-name>
         <url-pattern>/*.php</url-pattern>
@@ -81,5 +88,37 @@
         <url-pattern>/components/*</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>BaseAuthenticationServlet</servlet-name>
+        <url-pattern>/baseAuthentication/*</url-pattern>
+    </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>BaseAuthenticationServlet</servlet-name>
+        <url-pattern>/baseAuthentication/</url-pattern>
+    </servlet-mapping>
+
+    <security>
+        <url-pattern>/baseAuthentication/</url-pattern>
+        <auth>
+            <auth_type>Basic</auth_type>
+            <realm>Test Login</realm>
+            <adapter_type>htpasswd</adapter_type>
+            <options>
+                <file>htpasswd</file>
+            </options>
+        </auth>
+    </security>
+
+    <security>
+        <url-pattern>/baseAuthentication/*</url-pattern>
+        <auth>
+            <auth_type>Basic</auth_type>
+            <realm>Test Login</realm>
+            <adapter_type>htpasswd</adapter_type>
+            <options>
+                <file>htpasswd</file>
+            </options>
+        </auth>
+    </security>
 </web-app>
