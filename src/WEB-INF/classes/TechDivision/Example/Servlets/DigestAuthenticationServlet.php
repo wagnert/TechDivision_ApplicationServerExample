@@ -28,13 +28,13 @@ use TechDivision\Example\Utils\ContextKeys;
  *              Open Software License (OSL 3.0)
  * @author      Thomas Kreidenhuber <t.kreidenhuber@techdivision.com>
  */
-class BaseAuthenticationServlet extends AbstractServlet implements Servlet {
+class DigestAuthenticationServlet extends AbstractServlet implements Servlet {
 
     /**
      * The relative path, up from the webapp path, to the template to use.
      * @var string
      */
-    const INDEX_TEMPLATE = 'static/templates/baseAuthentication.phtml';
+    const INDEX_TEMPLATE = 'static/templates/digestAuthentication.phtml';
 
     /**
      * Class name of the persistence container proxy that handles the data.
