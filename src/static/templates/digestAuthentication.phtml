@@ -14,12 +14,6 @@ namespace TechDivision\Example\Servlets;
 
 use TechDivision\Example\Utils\ContextKeys;
 
-// load the entity data if available
-if ($entity = $this->getAttribute(ContextKeys::VIEW_DATA)) {
-    $sampleId = $entity->getSampleId();
-    $name = $entity->getName();
-}
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -79,12 +73,12 @@ if ($entity = $this->getAttribute(ContextKeys::VIEW_DATA)) {
 
     <div class="masthead">
         <ul class="nav nav-pills pull-right">
-            <li class="active"><a href="index/index">Home</a></li>
+            <li><a href="index/index">Home</a></li>
             <li><a href="login/index">Login</a></li>
             <li><a href="upload/index">Upload</a></li>
             <li><a href="websocket/index">WebSocket</a></li>
             <li><a href="basicAuthentication/index">Basic Authentication</a></li>
-            <li><a href="digestAuthentication/index">Digest Authentication</a></li>
+            <li class="active"><a href="digestAuthentication/index">Digest Authentication</a></li>
         </ul>
         <h3 class="muted">appserver example</h3>
     </div>
@@ -97,11 +91,7 @@ if ($entity = $this->getAttribute(ContextKeys::VIEW_DATA)) {
         </a>
         <h1>example</h1>
         <p class="lead">
-        <?php if ($this->getRequest()->getSession()->hasKey('username')) { ?>
-            Logged in as: <strong><?php echo $this->getRequest()->getSession()->getData('username') ?></strong>
-        <?php } else { ?>
-            Not logged in.
-        <?php } ?>
+            Succesfully passed authentication
         </p>
     </div>
 
@@ -110,40 +100,15 @@ if ($entity = $this->getAttribute(ContextKeys::VIEW_DATA)) {
     <div class="row-fluid marketing">
 
         <div class="span12 text-center">
-            <?php if ($errorMessages = $this->getAttribute('errorMessages')) { ?>
+            <?php if ($errorMessages = $this->getAttribute('errorMessages')): ?>
                 <div class="alert alert-error">
-                    <?php foreach ($errorMessages as $errorMessage) { ?>
+                    <?php foreach ($errorMessages as $errorMessage): ?>
                         <?php echo $errorMessage ?></br>
-                    <?php } ?>
+                    <?php endforeach; ?>
                 </div>
-            <?php } ?>
-
-            <form class="form-inline" action="index" method="post">
-                <input type="hidden" name="action" value="persist" />
-                <input type="hidden" name="sampleId" value="<?php echo $sampleId ?>" />
-                <input name="name" type="text" placeholder="Type your name..." value="<?php echo $name ?>" />
-                <button type="submit" class="btn">Submit</button>
-            </form>
+            <?php endif; ?>
         </div>
 
-        <div class="span12">
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody><?php foreach ($this->getAttribute(ContextKeys::OVERVIEW_DATA) as $entity) { ?>
-                <tr>
-                    <td><a href="<?php echo $this->getEditLink($entity) ?>"><?php echo $entity->getSampleId() ?></a></td>
-                    <td><?php echo $entity->getName() ?></td>
-                    <td><a href="<?php echo $this->getDeleteLink($entity) ?>">Delete</a></td><?php } ?>
-                </tr>
-                </tbody>
-            </table>
-        </div>
     </div>
 
     <hr>
