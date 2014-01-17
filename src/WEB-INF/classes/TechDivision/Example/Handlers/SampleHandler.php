@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Example\Handler\SampleHandler
+ * TechDivision\Example\Handlers\SampleHandler
  *
  * NOTICE OF LICENSE
  *
@@ -10,11 +10,8 @@
  * http://opensource.org/licenses/osl-3.0.php
  */
 
-namespace TechDivision\Example\Handler;
+namespace TechDivision\Example\Handlers;
 
-use Ratchet\MessageComponentInterface;
-use Ratchet\ConnectionInterface;
-use TechDivision\PersistenceContainerClient\Context\Connection\Factory;
 use TechDivision\Example\Entities\Sample;
 
 /**
@@ -24,7 +21,7 @@ use TechDivision\Example\Entities\Sample;
  *              Open Software License (OSL 3.0)
  * @author      Tim Wagner <tw@techdivision.com>
  */
-class SampleHandler extends AbstractHandler
+class SampleHandler extends BaseHandler
 {
 
     /**

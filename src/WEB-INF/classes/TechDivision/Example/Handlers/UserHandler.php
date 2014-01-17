@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Example\Handler\UserHandler
+ * TechDivision\Example\Handlers\UserHandler
  *
  * NOTICE OF LICENSE
  *
@@ -10,9 +10,7 @@
  * http://opensource.org/licenses/osl-3.0.php
  */
 
-namespace TechDivision\Example\Handler;
-
-use TechDivision\Example\Handler\AbstractHandler;
+namespace TechDivision\Example\Handlers;
 
 /**
  * @package     TechDivision\Example
@@ -21,7 +19,7 @@ use TechDivision\Example\Handler\AbstractHandler;
  *              Open Software License (OSL 3.0)
  * @author      Tim Wagner <tw@techdivision.com>
  */
-class UserHandler extends AbstractHandler
+class UserHandler extends BaseHandler
 {
 
     /**

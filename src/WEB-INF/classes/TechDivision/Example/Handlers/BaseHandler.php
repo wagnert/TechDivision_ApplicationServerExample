@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Example\Handler\AbstractHandler
+ * TechDivision\Example\Handlers\AbstractHandler
  *
  * NOTICE OF LICENSE
  *
@@ -9,12 +9,11 @@
  * that is available through the world-wide-web at this URL:
  * http://opensource.org/licenses/osl-3.0.php
  */
-namespace TechDivision\Example\Handler;
+namespace TechDivision\Example\Handlers;
 
-use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
 use TechDivision\PersistenceContainerClient\Context\Connection\Factory;
-use TechDivision\Example\Entities\Sample;
+use TechDivision\WebSocketContainer\Handlers\AbstractHandler;
 
 /**
  *
@@ -24,7 +23,7 @@ use TechDivision\Example\Entities\Sample;
  *          Open Software License (OSL 3.0)
  * @author Tim Wagner <tw@techdivision.com>
  */
-abstract class AbstractHandler implements MessageComponentInterface
+abstract class BaseHandler extends AbstractHandler
 {
 
     /**
