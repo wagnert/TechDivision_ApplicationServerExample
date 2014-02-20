@@ -31,9 +31,43 @@ use TechDivision\Example\Utils\ContextKeys;
     <link rel="shortcut icon" href="static/img/favicon.png">
     <style type="text/css">
         body {
-            padding-top: 40px;
+            padding-top: 20px;
             padding-bottom: 40px;
-            background-color: #f5f5f5;
+        }
+
+        /* Custom container */
+        .container-narrow {
+            margin: 0 auto;
+            max-width: 700px;
+        }
+
+        .container-narrow > hr {
+            margin: 30px 0;
+        }
+
+        /* Main marketing message and sign up button */
+        .jumbotron {
+            margin: 60px 0;
+            text-align: center;
+        }
+
+        .jumbotron h1 {
+            font-size: 72px;
+            line-height: 1;
+        }
+
+        .jumbotron .btn {
+            font-size: 21px;
+            padding: 14px 24px;
+        }
+
+        /* Supporting marketing content */
+        .marketing {
+            margin: 60px 0;
+        }
+
+        .marketing p + h4 {
+            margin-top: 28px;
         }
 
         .form-signin {
@@ -67,7 +101,7 @@ use TechDivision\Example\Utils\ContextKeys;
 
 <body>
 
-<div class="container">
+<div class="container-narrow">
 
     <div class="masthead">
         <ul class="nav nav-pills pull-right">
@@ -81,13 +115,17 @@ use TechDivision\Example\Utils\ContextKeys;
         <h3 class="muted">appserver example</h3>
     </div>
 
+    <hr>
+
     <div class="row-fluid">
         <div class="span12">
-            <?php if ($this->getRequest()->getSession()->hasKey('username')) { ?>
-                <div>
-                    <p><?php echo $this->getRequest()->getSession()->getData('username') ?></p>
-                </div>
-            <?php } ?>
+            <p>
+                <?php if ($this->getRequest()->getSession()->hasKey('username')) { ?>
+                    Logged in as: <strong><?php echo $this->getRequest()->getSession()->getData('username') ?></strong>
+                <?php } else { ?>
+                    Not logged in.
+                <?php } ?>
+            </p>
             <?php if ($errorMessages = $this->getAttribute('errorMessages')) { ?>
                 <div class="alert alert-error">
                 <?php foreach ($errorMessages as $errorMessage) { ?>
@@ -112,7 +150,7 @@ use TechDivision\Example\Utils\ContextKeys;
     <hr>
 
     <div class="footer">
-        <p>&copy; appserver.io 2013</p>
+        <p>&copy; appserver.io 2014</p>
     </div>
 
 </div> <!-- /container -->

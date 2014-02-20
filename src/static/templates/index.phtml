@@ -40,35 +40,49 @@ if ($entity = $this->getAttribute(ContextKeys::VIEW_DATA)) {
             padding-bottom: 40px;
         }
 
-            /* Custom container */
+        /* Custom container */
         .container-narrow {
             margin: 0 auto;
             max-width: 700px;
         }
+
         .container-narrow > hr {
             margin: 30px 0;
         }
 
-            /* Main marketing message and sign up button */
+        /* Main marketing message and sign up button */
         .jumbotron {
             margin: 60px 0;
             text-align: center;
         }
+
         .jumbotron h1 {
             font-size: 72px;
             line-height: 1;
         }
+
         .jumbotron .btn {
             font-size: 21px;
             padding: 14px 24px;
         }
 
-            /* Supporting marketing content */
+        /* Supporting marketing content */
         .marketing {
             margin: 60px 0;
         }
+
         .marketing p + h4 {
             margin-top: 28px;
+        }
+
+        .password-container {
+            width: 250px;
+            text-align: center;
+            margin: auto;
+        }
+
+        .password-container table{
+            width: 100%;
         }
     </style>
 </head>
@@ -95,14 +109,38 @@ if ($entity = $this->getAttribute(ContextKeys::VIEW_DATA)) {
         <a href="http://appserver.io">
             <img src="http://appserver.io/static/img/logo-black.png"/>
         </a>
+
         <h1>example</h1>
+
         <p class="lead">
-        <?php if ($this->getRequest()->getSession()->hasKey('username')) { ?>
-            Logged in as: <strong><?php echo $this->getRequest()->getSession()->getData('username') ?></strong>
-        <?php } else { ?>
-            Not logged in.
-        <?php } ?>
+            <?php if ($this->getRequest()->getSession()->hasKey('username')) { ?>
+                Logged in as: <strong><?php echo $this->getRequest()->getSession()->getData('username') ?></strong>
+            <?php } else { ?>
+                Not logged in.
+            <?php } ?>
         </p>
+
+        <div class="password-container">
+            Universal login credentials
+            <table>
+                <tr>
+                    <td class="muted">
+                        Username
+                    </td>
+                    <td>
+                        appserver
+                    </td>
+                </tr>
+                <tr>
+                    <td class="muted">
+                        Password
+                    </td>
+                    <td>
+                        appserver.i0
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
 
     <hr>
@@ -119,9 +157,9 @@ if ($entity = $this->getAttribute(ContextKeys::VIEW_DATA)) {
             <?php } ?>
 
             <form class="form-inline" action="index" method="post">
-                <input type="hidden" name="action" value="persist" />
-                <input type="hidden" name="sampleId" value="<?php echo $sampleId ?>" />
-                <input name="name" type="text" placeholder="Type your name..." value="<?php echo $name ?>" />
+                <input type="hidden" name="action" value="persist"/>
+                <input type="hidden" name="sampleId" value="<?php echo $sampleId ?>"/>
+                <input name="name" type="text" placeholder="Type your name..." value="<?php echo $name ?>"/>
                 <button type="submit" class="btn">Submit</button>
             </form>
         </div>
@@ -135,9 +173,12 @@ if ($entity = $this->getAttribute(ContextKeys::VIEW_DATA)) {
                     <th>Actions</th>
                 </tr>
                 </thead>
-                <tbody><?php foreach ($this->getAttribute(ContextKeys::OVERVIEW_DATA) as $entity) { ?>
+                <tbody><?php foreach (
+
+                $this->getAttribute(ContextKeys::OVERVIEW_DATA) as $entity) { ?>
                 <tr>
-                    <td><a href="<?php echo $this->getEditLink($entity) ?>"><?php echo $entity->getSampleId() ?></a></td>
+                    <td><a href="<?php echo $this->getEditLink($entity) ?>"><?php echo $entity->getSampleId() ?></a>
+                    </td>
                     <td><?php echo $entity->getName() ?></td>
                     <td><a href="<?php echo $this->getDeleteLink($entity) ?>">Delete</a></td><?php } ?>
                 </tr>
@@ -149,10 +190,11 @@ if ($entity = $this->getAttribute(ContextKeys::VIEW_DATA)) {
     <hr>
 
     <div class="footer">
-        <p>&copy; appserver.io 2013</p>
+        <p>&copy; appserver.io 2014</p>
     </div>
 
-</div> <!-- /container -->
+</div>
+<!-- /container -->
 
 <!-- Le javascript
 ================================================== -->
