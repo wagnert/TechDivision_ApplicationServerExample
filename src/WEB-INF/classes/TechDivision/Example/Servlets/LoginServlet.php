@@ -21,7 +21,7 @@ use TechDivision\PersistenceContainerClient\Context\Connection\Factory;
 use TechDivision\Example\Servlets\AbstractServlet;
 use TechDivision\Example\Entities\Sample;
 use TechDivision\Example\Utils\ContextKeys;
-use TechDivision\Example\Exceptions\LoginExceptions;
+use TechDivision\Example\Exceptions\LoginException;
 
 /**
  * @package        TechDivision\Example
@@ -94,8 +94,6 @@ class LoginServlet extends AbstractServlet implements Servlet
         }
 
         try {
-
-
             // try to login
             $this->getProxy(self::PROXY_CLASS)->login($username, $password);
 
@@ -104,15 +102,12 @@ class LoginServlet extends AbstractServlet implements Servlet
             $res->addHeader('Location', $this->getBaseUrl() . 'index/index');
             $res->addHeader("status", 'HTTP/1.1 301 OK');
 
-
         } catch (LoginException $e) {
 
             $this->addAttribute('errorMessages', array("Username or Password invalid"));
 
-
         } catch (\Exception $e) {
             // if not add an error message
-            error_log(var_export($e, true));
             $this->addAttribute('errorMessages', array($e->getMessage()));
         }
 
