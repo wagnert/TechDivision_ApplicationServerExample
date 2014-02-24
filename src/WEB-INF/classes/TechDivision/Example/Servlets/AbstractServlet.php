@@ -37,16 +37,16 @@ abstract class AbstractServlet extends HttpServlet implements Servlet {
     protected $request;
 
     protected $response;
-    
+
     protected $connection;
-    
+
     protected $session;
-    
+
     public function __construct() {
-        $this->connection = Factory::createContextConnection();
+        $this->connection = Factory::createContextConnection('example');
         $this->session = $this->connection->createContextSession();
     }
-    
+
 
     /**
      * Returns the base path to the web app.
