@@ -65,7 +65,7 @@ abstract class BaseHandler extends AbstractHandler
         $this->clients = new \SplObjectStorage();
 
         // create proxy connnection + session
-        $this->connection = Factory::createContextConnection();
+        $this->connection = Factory::createContextConnection('example');
         $this->session = $this->connection->createContextSession();
     }
 
