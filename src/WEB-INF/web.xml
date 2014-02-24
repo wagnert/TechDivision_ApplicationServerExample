@@ -96,6 +96,11 @@
     </servlet-mapping>
 
     <servlet-mapping>
+        <servlet-name>StaticResourceServlet</servlet-name>
+        <url-pattern>/static/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
         <servlet-name>BasicAuthenticationServlet</servlet-name>
         <url-pattern>/basicAuthentication/*</url-pattern>
     </servlet-mapping>
