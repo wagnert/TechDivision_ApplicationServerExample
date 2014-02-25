@@ -297,9 +297,9 @@ class AbstractProcessor
             $user = $this->getApplication()->newInstance('\TechDivision\Example\Entities\User');
             $user->setUserId(1);
             $user->setEmail('info@appserver.io');
-            $user->setUsername('admin');
+            $user->setUsername('appserver');
             $user->setUserLocale('en_US');
-            $user->setPassword(md5('password'));
+            $user->setPassword(md5('appserver.i0'));
             $user->setEnabled(true);
             $user->setRate(1000);
             $user->setContractedHours(160);
