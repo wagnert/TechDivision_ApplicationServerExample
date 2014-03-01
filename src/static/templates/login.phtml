@@ -120,8 +120,8 @@ use TechDivision\Example\Utils\ContextKeys;
     <div class="row-fluid">
         <div class="span12">
             <p>
-                <?php if ($this->getRequest()->getSession()->hasKey('username')) { ?>
-                    Logged in as: <strong><?php echo $this->getRequest()->getSession()->getData('username') ?></strong>
+                <?php if ($this->getServletRequest()->getSession()->hasKey('username')) { ?>
+                    Logged in as: <strong><?php echo $this->getServletRequest()->getSession()->getData('username') ?></strong>
                 <?php } else { ?>
                     Not logged in.
                 <?php } ?>

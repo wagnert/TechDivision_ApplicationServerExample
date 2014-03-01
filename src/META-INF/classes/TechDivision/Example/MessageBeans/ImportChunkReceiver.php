@@ -8,6 +8,16 @@
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is available through the world-wide-web at this URL:
  * http://opensource.org/licenses/osl-3.0.php
+ *
+ * PHP version 5
+ *
+ * @category   Appserver
+ * @package    TechDivision_ApplicationServerExample
+ * @subpackage MessageBeans
+ * @author     Johann Zelger <jz@techdivision.com>
+ * @copyright  2014 TechDivision GmbH <info@techdivision.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link       http://www.appserver.io
  */
 
 namespace TechDivision\Example\MessageBeans;
@@ -19,13 +29,14 @@ use TechDivision\Example\Entities\Sample;
 use TechDivision\PersistenceContainerClient\Context\Connection\Factory;
 
 /**
- * This is the implementation of a import chunk message receiver.
- *
- * @package     TechDivision\Example
- * @copyright  	Copyright (c) 2013 <info@techdivision.com> - TechDivision GmbH
- * @license    	http://opensource.org/licenses/osl-3.0.php
- *              Open Software License (OSL 3.0)
- * @author      Johann Zelger <jz@techdivision.com>
+ * 
+ * @category   Appserver
+ * @package    TechDivision_ApplicationServerExample
+ * @subpackage MessageBeans
+ * @author     Johann Zelger <jz@techdivision.com>
+ * @copyright  2014 TechDivision GmbH <info@techdivision.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link       http://www.appserver.io
  */
 class ImportChunkReceiver extends AbstractReceiver {
 

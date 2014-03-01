@@ -8,6 +8,16 @@
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is available through the world-wide-web at this URL:
  * http://opensource.org/licenses/osl-3.0.php
+ *
+ * PHP version 5
+ *
+ * @category   Appserver
+ * @package    TechDivision_ApplicationServerExample
+ * @subpackage Handlers
+ * @author     Tim Wagner <tw@techdivision.com>
+ * @copyright  2014 TechDivision GmbH <info@techdivision.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link       http://www.appserver.io
  */
 namespace TechDivision\Example\Handlers;
 
@@ -16,12 +26,16 @@ use TechDivision\PersistenceContainerClient\Context\Connection\Factory;
 use TechDivision\WebSocketContainer\Handlers\AbstractHandler;
 
 /**
- *
- * @package TechDivision\Example
- * @copyright Copyright (c) 2010 <info@techdivision.com> - TechDivision GmbH
- * @license http://opensource.org/licenses/osl-3.0.php
- *          Open Software License (OSL 3.0)
- * @author Tim Wagner <tw@techdivision.com>
+ * Abstract example implementation that provides some kind of basic MVC functionality
+ * to handle web socket requests by subclasses action methods.
+ * 
+ * @category   Appserver
+ * @package    TechDivision_ApplicationServerExample
+ * @subpackage Handlers
+ * @author     Tim Wagner <tw@techdivision.com>
+ * @copyright  2014 TechDivision GmbH <info@techdivision.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link       http://www.appserver.io
  */
 abstract class BaseHandler extends AbstractHandler
 {
@@ -32,6 +46,13 @@ abstract class BaseHandler extends AbstractHandler
      * @var string
      */
     const METHOD_NAME_PARAM = 'action';
+    
+    /**
+     * Defines the persistence container application name to connect to.
+     * 
+     * @var string
+     */
+    const PERSISTENCE_CONTAINER_APPLICATION_NAME = 'example';
 
     /**
      * The connected web socket clients.
@@ -65,7 +86,7 @@ abstract class BaseHandler extends AbstractHandler
         $this->clients = new \SplObjectStorage();
 
         // create proxy connnection + session
-        $this->connection = Factory::createContextConnection('example');
+        $this->connection = Factory::createContextConnection(BaseHandler::PERSISTENCE_CONTAINER_APPLICATION_NAME);
         $this->session = $this->connection->createContextSession();
     }
 
@@ -73,8 +94,8 @@ abstract class BaseHandler extends AbstractHandler
      * Creates a new proxy for the passed session bean class name
      * and returns it.
      *
-     * @param string $proxyClass
-     *            The session bean class name to return the proxy for
+     * @param string $proxyClass The session bean class name to return the proxy for
+     * 
      * @return mixed The proxy instance
      */
     public function getProxy($proxyClass)
@@ -106,6 +127,17 @@ abstract class BaseHandler extends AbstractHandler
     /**
      * (non-PHPdoc)
      *
+     * @see \Ratchet\ComponentInterface::onError()
+     */
+    public function onError(ConnectionInterface $conn,\Exception $e)
+    {
+        error_log($e->__toString());
+        $conn->close();
+    }
+
+    /**
+     * (non-PHPdoc)
+     *
      * @see \Ratchet\MessageInterface::onMessage()
      */
     public function onMessage(ConnectionInterface $from, $msg)
@@ -130,10 +162,9 @@ abstract class BaseHandler extends AbstractHandler
      * Sorts the request params to match the action methods params
      * and strips the action param.
      *
-     * @param \ReflectionMethod $reflectionMethod
-     *            The reflection method to prepare the params for
-     * @param array $params
-     *            The params to prepare
+     * @param \ReflectionMethod $reflectionMethod The reflection method to prepare the params for
+     * @param array $params The params to prepare
+     * 
      * @return array The request params prepared for the reflection method
      */
     protected function prepareParams(\ReflectionMethod $reflectionMethod, array $params)
@@ -148,10 +179,10 @@ abstract class BaseHandler extends AbstractHandler
     /**
      * Returns the prepared action method name and returns it.
      *
-     * @param array $params
-     *            The request params to prepare the action method from
-     * @throws \Exception Is thrown if the param containing the action method name to invoke is missing
+     * @param array $params The request params to prepare the action method from
+     * 
      * @return string The prepared action method name
+     * @throws \Exception Is thrown if the param containing the action method name to invoke is missing
      */
     protected function getMethodName(array $params)
     {
@@ -159,16 +190,5 @@ abstract class BaseHandler extends AbstractHandler
             return $params[self::METHOD_NAME_PARAM] . ucfirst(self::METHOD_NAME_PARAM);
         }
         throw new \Exception('Missing action parameter in request');
-    }
-
-    /**
-     * (non-PHPdoc)
-     *
-     * @see \Ratchet\ComponentInterface::onError()
-     */
-    public function onError(ConnectionInterface $conn,\Exception $e)
-    {
-        error_log($e->__toString());
-        $conn->close();
     }
 }

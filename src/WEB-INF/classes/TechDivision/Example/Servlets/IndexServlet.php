@@ -8,36 +8,59 @@
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is available through the world-wide-web at this URL:
  * http://opensource.org/licenses/osl-3.0.php
+ *
+ * PHP version 5
+ *
+ * @category   Appserver
+ * @package    TechDivision_ApplicationServerExample
+ * @subpackage Http
+ * @author     Johann Zelger <jz@techdivision.com>
+ * @author     Tim Wagner <tw@techdivision.com>
+ * @copyright  2014 TechDivision GmbH <info@techdivision.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link       http://www.appserver.io
  */
 
 namespace TechDivision\Example\Servlets;
 
 use TechDivision\ServletContainer\Interfaces\Servlet;
 use TechDivision\ServletContainer\Interfaces\ServletConfig;
-use TechDivision\ServletContainer\Interfaces\Request;
-use TechDivision\ServletContainer\Interfaces\Response;
+use TechDivision\ServletContainer\Http\ServletRequest;
+use TechDivision\ServletContainer\Http\ServletResponse;
 use TechDivision\PersistenceContainerClient\Context\Connection\Factory;
 use TechDivision\Example\Servlets\AbstractServlet;
 use TechDivision\Example\Entities\Sample;
 use TechDivision\Example\Utils\ContextKeys;
 
 /**
- * @package     TechDivision\Example
- * @copyright  	Copyright (c) 2013 <info@techdivision.com> - TechDivision GmbH
- * @license    	http://opensource.org/licenses/osl-3.0.php
- *              Open Software License (OSL 3.0)
- * @author      Tim Wagner <tw@techdivision.com>
+ * Example servlet implementation that loads data over a persistence container proxy
+ * and renders a list, based on the returned values.
+ * 
+ * Additional it provides functionality to edit, delete und persist the data after
+ * changing it.
+ * 
+ * @category   Appserver
+ * @package    TechDivision_ApplicationServerExample
+ * @subpackage Servlets
+ * @author     Johann Zelger <jz@techdivision.com>
+ * @author     Tim Wagner <tw@techdivision.com>
+ * @copyright  2014 TechDivision GmbH <info@techdivision.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link       http://www.appserver.io
  */
-class IndexServlet extends AbstractServlet implements Servlet {
+class IndexServlet extends AbstractServlet
+{
 
     /**
      * The relative path, up from the webapp path, to the template to use.
+     * 
      * @var string
      */
     const INDEX_TEMPLATE = 'static/templates/index.phtml';
 
     /**
      * Class name of the persistence container proxy that handles the data.
+     * 
      * @var string
      */
     const PROXY_CLASS = 'TechDivision\Example\Services\SampleProcessor';
@@ -48,29 +71,33 @@ class IndexServlet extends AbstractServlet implements Servlet {
      * Loads all sample data and attaches it to the servlet context ready to be rendered
      * by the template.
      *
-     * @param Request $req The request instance
-     * @param Response $res The response instance
+     * @param \TechDivision\ServletContainer\Http\ServletRequest  $servletRequest  The request instance
+     * @param \TechDivision\ServletContainer\Http\ServletResponse $servletResponse The response instance
+     * 
      * @return void
      */
-    public function indexAction(Request $req, Response $res) {
+    public function indexAction(ServletRequest $servletRequest, ServletResponse $servletResponse)
+    {
         $overviewData = $this->getProxy(self::PROXY_CLASS)->findAll();
         $this->addAttribute(ContextKeys::OVERVIEW_DATA, $overviewData);
-        $res->setContent($this->processTemplate(self::INDEX_TEMPLATE, $req, $res));
+        $servletResponse->setContent($this->processTemplate(self::INDEX_TEMPLATE, $servletRequest, $servletResponse));
     }
 
     /**
      * Loads the sample entity with the sample ID found in the request and attaches
      * it to the servlet context ready to be rendered by the template.
      *
-     * @param Request $req The request instance
-     * @param Response $res The response instance
+     * @param \TechDivision\ServletContainer\Http\ServletRequest  $servletRequest  The request instance
+     * @param \TechDivision\ServletContainer\Http\ServletResponse $servletResponse The response instance
+     * 
      * @return void
-     * @see IndexServlet::indexAction()
+     * @see \TechDivision\Example\Servlets\IndexServlet::indexAction()
      */
-    public function loadAction(Request $req, Response $res) {
+    public function loadAction(ServletRequest $servletRequest, ServletResponse $servletResponse)
+    {
 
         // load the params with the entity data
-        $parameterMap = $req->getParameterMap();
+        $parameterMap = $servletRequest->getParameterMap();
 
         // check if the necessary params has been specified and are valid
         if (!array_key_exists('sampleId', $parameterMap)) {
@@ -84,22 +111,24 @@ class IndexServlet extends AbstractServlet implements Servlet {
         $this->addAttribute(ContextKeys::VIEW_DATA, $viewData);
 
         // reload all entities and render the dialog
-        $this->indexAction($req, $res);
+        $this->indexAction($servletRequest, $servletResponse);
     }
 
     /**
      * Deletes the sample entity with the sample ID found in the request and
      * reloads all other entities from the database.
      *
-     * @param Request $req The request instance
-     * @param Response $res The response instance
+     * @param \TechDivision\ServletContainer\Http\ServletRequest  $servletRequest  The request instance
+     * @param \TechDivision\ServletContainer\Http\ServletResponse $servletResponse The response instance
+     * 
      * @return void
-     * @see IndexServlet::indexAction()
+     * @see \TechDivision\Example\Servlets\IndexServlet::indexAction()
      */
-    public function deleteAction(Request $req, Response $res) {
+    public function deleteAction(ServletRequest $servletRequest, ServletResponse $servletResponse)
+    {
 
         // load the params with the entity data
-        $parameterMap = $req->getParameterMap();
+        $parameterMap = $servletRequest->getParameterMap();
 
         // check if the necessary params has been specified and are valid
         if (!array_key_exists('sampleId', $parameterMap)) {
@@ -112,21 +141,23 @@ class IndexServlet extends AbstractServlet implements Servlet {
         $this->getProxy(self::PROXY_CLASS)->delete($sampleId);
 
         // reload all entities and render the dialog
-        $this->indexAction($req, $res);
+        $this->indexAction($servletRequest, $servletResponse);
     }
 
     /**
      * Persists the entity data found in the request.
      *
-     * @param Request $req The request instance
-     * @param Response $res The response instance
+     * @param \TechDivision\ServletContainer\Http\ServletRequest  $servletRequest  The request instance
+     * @param \TechDivision\ServletContainer\Http\ServletResponse $servletResponse The response instance
+     * 
      * @return void
-     * @see IndexServlet::indexAction()
+     * @see \TechDivision\Example\Servlets\IndexServlet::indexAction()
      */
-    public function persistAction(Request $req, Response $res) {
+    public function persistAction(ServletRequest $servletRequest, ServletResponse $servletResponse)
+    {
 
         // load the params with the entity data
-        $parameterMap = $req->getParameterMap();
+        $parameterMap = $servletRequest->getParameterMap();
 
         // check if the necessary params has been specified and are valid
         if (!array_key_exists('sampleId', $parameterMap)) {
@@ -147,16 +178,18 @@ class IndexServlet extends AbstractServlet implements Servlet {
         $this->getProxy(self::PROXY_CLASS)->persist($entity);
 
         // reload all entities and render the dialog
-        $this->indexAction($req, $res);
+        $this->indexAction($servletRequest, $servletResponse);
     }
 
     /**
      * Creates and returns the URL to open the dialog to edit the passed entity.
      *
      * @param \TechDivision\Example\Entities\Sample $entity The entity to create the edit link for
+     * 
      * @return string The URL to open the edit dialog
      */
-    public function getEditLink($entity) {
+    public function getEditLink($entity)
+    {
         return '?action=load&sampleId=' . $entity->getSampleId();
     }
 
@@ -164,9 +197,11 @@ class IndexServlet extends AbstractServlet implements Servlet {
      * Creates and returns the URL that has to be invoked to delete the passed entity.
      *
      * @param \TechDivision\Example\Entities\Sample $entity The entity to create the deletion link for
+     * 
      * @return string The URL with the deletion link
      */
-    public function getDeleteLink($entity) {
+    public function getDeleteLink($entity)
+    {
         return '?action=delete&sampleId=' . $entity->getSampleId();
     }
 }

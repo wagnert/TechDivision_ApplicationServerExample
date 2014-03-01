@@ -8,6 +8,16 @@
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is available through the world-wide-web at this URL:
  * http://opensource.org/licenses/osl-3.0.php
+ *
+ * PHP version 5
+ *
+ * @category   Appserver
+ * @package    TechDivision_ApplicationServerExample
+ * @subpackage Services
+ * @author     Tim Wagner <tw@techdivision.com>
+ * @copyright  2014 TechDivision GmbH <info@techdivision.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link       http://www.appserver.io
  */
 namespace TechDivision\Example\Services;
 
@@ -22,12 +32,14 @@ use TechDivision\Example\Entities\User;
 /**
  * A singleton session bean implementation that handles the
  * data by using Doctrine ORM.
- *
- * @package   TechDivision\Example
- * @copyright Copyright (c) 2013 <info@techdivision.com> - TechDivision GmbH
- * @license   http://opensource.org/licenses/osl-3.0.php
- *          Open Software License (OSL 3.0)
- * @author    Tim Wagner <tw@techdivision.com>
+ * 
+ * @category   Appserver
+ * @package    TechDivision_ApplicationServerExample
+ * @subpackage MessageBeans
+ * @author     Tim Wagner <tw@techdivision.com>
+ * @copyright  2014 TechDivision GmbH <info@techdivision.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link       http://www.appserver.io
  */
 class AbstractProcessor
 {
@@ -49,7 +61,7 @@ class AbstractProcessor
     /**
      * The application instance that provides the entity manager.
      *
-     * @var Application
+     * @var \TechDivision\ApplicationServer\Interfaces\ApplicationInterface
      */
     protected $application;
 
@@ -59,8 +71,7 @@ class AbstractProcessor
      * Checks on every start if the database already exists, if not
      * the database will be created immediately.
      *
-     * @param Application $application
-     *            The application instance
+     * @param \TechDivision\ApplicationServer\Interfaces\ApplicationInterface $application The application instance
      *
      * @return void
      */
@@ -106,8 +117,7 @@ class AbstractProcessor
     /**
      * The application instance providing the database connection.
      *
-     * @param
-     *            \TechDivision\ApplicationServer\Interfaces\ApplicationInterface The application instance
+     * @param \TechDivision\ApplicationServer\Interfaces\ApplicationInterface $application The application instance
      *
      * @return void
      */
@@ -119,7 +129,7 @@ class AbstractProcessor
     /**
      * The application instance providing the database connection.
      *
-     * @return Application The application instance
+     * @return \TechDivision\ApplicationServer\Interfaces\ApplicationInterface The application instance
      */
     public function getApplication()
     {
@@ -129,10 +139,9 @@ class AbstractProcessor
     /**
      * The database connection parameters used to connect to Doctrine.
      *
-     * @param array $connectionParameters
-     *            The Doctrine database connection parameters
+     * @param array $connectionParameters The Doctrine database connection parameters
      *
-     * @return
+     * @return void
      *
      */
     public function setConnectionParameters(array $connectionParameters = array())
@@ -151,7 +160,7 @@ class AbstractProcessor
     }
 
     /**
-     * Return's the initial context instance.
+     * Returns the initial context instance.
      *
      * @return \TechDivision\ApplicationServer\InitialContext The initial context instance
      */
@@ -214,33 +223,15 @@ class AbstractProcessor
 
                 // initialize the connection parameters
                 $connectionParameters = array(
-                    'driver' => $databaseNode->getDriver()
-                            ->getNodeValue()
-                            ->__toString(),
-                    'user' => $databaseNode->getUser()
-                            ->getNodeValue()
-                            ->__toString(),
-                    'password' => $databaseNode->getPassword()
-                            ->getNodeValue()
-                            ->__toString()
+                    'driver'   => $databaseNode->getDriver()->getNodeValue()->__toString(),
+                    'user'     => $databaseNode->getUser()->getNodeValue()->__toString(),
+                    'password' => $databaseNode->getPassword()->getNodeValue()->__toString()
                 );
 
-                /*
-                // initialize database driver specific connection parameters
-                if (($databaseName = $databaseNode->getDatabaseName()
-                    ->getNodeValue()
-                    ->__toString()) != null) {
-                    $connectionParameters['dbname'] = $databaseName();
-                }
-                */
-
                 // initialize the path to the database when we use sqlite for example
-                if (($path = $databaseNode->getPath()
-                        ->getNodeValue()
-                        ->__toString()) != null
-                ) {
-                    $connectionParameters['path']
-                        = $this->getApplication()->getWebappPath() . DIRECTORY_SEPARATOR . $path;
+                $path = $databaseNode->getPath()->getNodeValue()->__toString();
+                if ($path != null) {
+                    $connectionParameters['path'] = $this->getApplication()->getWebappPath() . DIRECTORY_SEPARATOR . $path;
                 }
 
                 // set the connection parameters

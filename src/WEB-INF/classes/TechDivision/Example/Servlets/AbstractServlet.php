@@ -8,6 +8,17 @@
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is available through the world-wide-web at this URL:
  * http://opensource.org/licenses/osl-3.0.php
+ *
+ * PHP version 5
+ *
+ * @category   Appserver
+ * @package    TechDivision_ApplicationServerExample
+ * @subpackage Http
+ * @author     Johann Zelger <jz@techdivision.com>
+ * @author     Tim Wagner <tw@techdivision.com>
+ * @copyright  2014 TechDivision GmbH <info@techdivision.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link       http://www.appserver.io
  */
 
 namespace TechDivision\Example\Servlets;
@@ -15,44 +26,80 @@ namespace TechDivision\Example\Servlets;
 use TechDivision\ServletContainer\Interfaces\Servlet;
 use TechDivision\ServletContainer\Servlets\HttpServlet;
 use TechDivision\ServletContainer\Interfaces\ServletConfig;
-use TechDivision\ServletContainer\Interfaces\Request;
-use TechDivision\ServletContainer\Interfaces\Response;
+use TechDivision\ServletContainer\Http\ServletRequest;
+use TechDivision\ServletContainer\Http\ServletResponse;
 use TechDivision\PersistenceContainerClient\Context\Connection\Factory;
 
 /**
- * @package     TechDivision\Example
- * @copyright  	Copyright (c) 2013 <info@techdivision.com> - TechDivision GmbH
- * @license    	http://opensource.org/licenses/osl-3.0.php
- *              Open Software License (OSL 3.0)
- * @author      Tim Wagner <tw@techdivision.com>
+ * Abstract example implementation that provides some kind of basic MVC functionality
+ * to handle requests by subclasses action methods.
+ * 
+ * @category   Appserver
+ * @package    TechDivision_ApplicationServerExample
+ * @subpackage Servlets
+ * @author     Johann Zelger <jz@techdivision.com>
+ * @author     Tim Wagner <tw@techdivision.com>
+ * @copyright  2014 TechDivision GmbH <info@techdivision.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link       http://www.appserver.io
  */
-abstract class AbstractServlet extends HttpServlet implements Servlet {
+abstract class AbstractServlet extends HttpServlet
+{
 
     /**
      * Servlet context to transfer data between the servlet and the view.
+     * 
      * @var array
      */
     protected $context = array();
 
-    protected $request;
+    /**
+     * The servlet request instance.
+     * 
+     * @var \TechDivision\ServletContainer\Http\ServletRequest
+     */
+    protected $servletRequest;
 
-    protected $response;
+    /**
+     * The servlet response instance.
+     * 
+     * @var \TechDivision\ServletContainer\Http\ServletResponse
+     */
+    protected $servletResponse;
 
+    /**
+     * The connection instance for the persistence container.
+     * 
+     * @var \TechDivision\PersistenceContainerClient\Context\ContextConnection
+     */
     protected $connection;
 
+    /**
+     * The session instance for the persistence container connection.
+     * 
+     * @var \TechDivision\PersistenceContainerClient\Context\ContextSession
+     */
     protected $session;
 
-    public function __construct() {
+    /**
+     * Initializes the connection to the persistence container.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
         $this->connection = Factory::createContextConnection('example');
         $this->session = $this->connection->createContextSession();
     }
 
 
     /**
-     * Returns the base path to the web app.
+     * Returns the base path to the web application.
+     * 
      * @return string The base path
      */
-    public function getWebappPath() {
+    public function getWebappPath()
+    {
         return $this->getServletConfig()->getWebappPath();
     }
 
@@ -61,9 +108,11 @@ abstract class AbstractServlet extends HttpServlet implements Servlet {
      *
      * @param $key string The key to attach the data under
      * @param $value mixed The data to be attached
+     * 
      * @return void
      */
-    public function addAttribute($key, $value) {
+    public function addAttribute($key, $value)
+    {
         $this->context[$key] = $value;
     }
 
@@ -71,9 +120,11 @@ abstract class AbstractServlet extends HttpServlet implements Servlet {
      * Returns the data for the passed key.
      *
      * @param string $key The key to return the data for
+     * 
      * @return mixed The requested data
      */
-    public function getAttribute($key) {
+    public function getAttribute($key)
+    {
         if (array_key_exists($key, $this->context)) {
             return $this->context[$key];
         }
@@ -83,11 +134,13 @@ abstract class AbstractServlet extends HttpServlet implements Servlet {
      * Processes the template and returns the content.
      *
      * @param string $template Relative path to the template file
-     * @param Request $req The servlet request
-     * @param Response $res The servlet response
+     * @param \TechDivision\ServletContainer\Http\ServletRequest  $servletRequest  The request instance
+     * @param \TechDivision\ServletContainer\Http\ServletResponse $servletResponse The response instance
+     * 
      * @return string The templates content
      */
-    public function processTemplate($template, Request $req, Response $res) {
+    public function processTemplate($template, ServletRequest $servletRequest, ServletResponse $servletResponse)
+    {
         // check if the template is available
         if (!file_exists($pathToTemplate = $this->getWebappPath() . DIRECTORY_SEPARATOR . $template)) {
             throw new \Exception("Requested template '$pathToTemplate' is not available");
@@ -103,27 +156,35 @@ abstract class AbstractServlet extends HttpServlet implements Servlet {
      * and returns it.
      *
      * @param string $proxyClass The session bean class name to return the proxy for
+     * 
      * @return mixed The proxy instance
      */
-    public function getProxy($proxyClass) {
+    public function getProxy($proxyClass)
+    {
         $initialContext = $this->session->createInitialContext();
         return $initialContext->lookup($proxyClass);
     }
 
     /**
-     * @see HttpServlet::doGet(Request $req, Response $res)
+     * Implements Http GET method.
+     *
+     * @param \TechDivision\ServletContainer\Http\ServletRequest  $servletRequest  The request instance
+     * @param \TechDivision\ServletContainer\Http\ServletResponse $servletResponse The response instance
+     *
+     * @return void
      */
-    public function doGet(Request $req, Response $res) {
+    public function doGet(ServletRequest $servletRequest, ServletResponse $servletResponse)
+    {
 
         // add request and response to session
-        $this->setRequest($req);
-        $this->setResponse($res);
+        $this->setServletRequest($servletRequest);
+        $this->setServletResponse($servletResponse);
 
         // start the session
-        $this->getRequest()->getSession()->start();
+        $this->getServletRequest()->getSession()->start();
 
         // load the request parameters
-        $parameterMap = $req->getParameterMap();
+        $parameterMap = $servletRequest->getParameterMap();
 
         // evaluate the action method to be invoked
         $action = 'indexAction';
@@ -132,41 +193,76 @@ abstract class AbstractServlet extends HttpServlet implements Servlet {
         }
 
         // invoke the action itself
-        $this->$action($req, $res);
+        $this->$action($servletRequest, $servletResponse);
     }
 
     /**
-     * @see HttpServlet::doPost(Request $req, Response $res)
+     * Implements Http POST method.
+     *
+     * @param \TechDivision\ServletContainer\Http\ServletRequest  $servletRequest  The request instance
+     * @param \TechDivision\ServletContainer\Http\ServletResponse $servletResponse The response instance
+     *
+     * @return void
      */
-    public function doPost(Request $req, Response $res) {
-        $this->doGet($req, $res);
-    }
-
-    public function setRequest(Request $request) {
-        $this->request = $request;
-    }
-
-    public function setResponse(Response $response) {
-        $this->response = $response;
-    }
-
-    public function getRequest() {
-        return $this->request;
-    }
-
-    public function getResponse() {
-        return $this->response;
+    public function doPost(ServletRequest $servletRequest, ServletResponse $servletResponse)
+    {
+        $this->doGet($servletRequest, $servletResponse);
     }
 
     /**
-     * Returns baseurl for html base tag
+     * Sets the servlet request instance.
+     * 
+     * @param \TechDivision\ServletContainer\Http\ServletRequest $servletRequest The request instance
+     * 
+     * @return void
+     */
+    public function setServletRequest(ServletRequest $servletRequest)
+    {
+        $this->servletRequest = $servletRequest;
+    }
+
+    /**
+     * Sets the servlet response instance.
+     * 
+     * @param \TechDivision\ServletContainer\Http\ServletResponse $servletResponse The response instance
+     * 
+     * @return void
+     */
+    public function setServletResponse(ServletResponse $servletResponse)
+    {
+        $this->servletResponse = $servletResponse;
+    }
+
+    /**
+     * Returns the servlet response instance.
+     * 
+     * @return \TechDivision\ServletContainer\Http\ServletRequest $servletRequest The request instance
+     */
+    public function getServletRequest()
+    {
+        return $this->servletRequest;
+    }
+
+    /**
+     * Returns the servlet request instance.
+     * 
+     * @return \TechDivision\ServletContainer\Http\ServletResponse $servletResponse The response instance
+     */
+    public function getServletResponse()
+    {
+        return $this->servletResponse;
+    }
+
+    /**
+     * Returns base URL for the html base tag.
      *
      * @return string
      */
-    public function getBaseUrl() {
+    public function getBaseUrl()
+    {
         $baseUrl = '/';
         // if the application has NOT been called over a VHost configuration append application folder naem
-        if (!$this->getServletConfig()->getApplication()->isVhostOf($this->getRequest()->getServerName())) {
+        if (!$this->getServletConfig()->getApplication()->isVhostOf($this->getServletRequest()->getServerName())) {
             $baseUrl .= $this->getServletConfig()->getApplication()->getName() . '/';
         }
         return $baseUrl;

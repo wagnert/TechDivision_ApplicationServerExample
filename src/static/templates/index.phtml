@@ -113,8 +113,8 @@ if ($entity = $this->getAttribute(ContextKeys::VIEW_DATA)) {
         <h1>example</h1>
 
         <p class="lead">
-            <?php if ($this->getRequest()->getSession()->hasKey('username')) { ?>
-                Logged in as: <strong><?php echo $this->getRequest()->getSession()->getData('username') ?></strong>
+            <?php if ($this->getServletRequest()->getSession()->hasKey('username')) { ?>
+                Logged in as: <strong><?php echo $this->getServletRequest()->getSession()->getData('username') ?></strong>
             <?php } else { ?>
                 Not logged in.
             <?php } ?>

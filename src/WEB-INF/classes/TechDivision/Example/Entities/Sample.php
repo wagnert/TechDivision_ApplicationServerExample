@@ -1,13 +1,46 @@
 <?php
 
+/**
+ * TechDivision\Example\Entities\Sample
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ *
+ * PHP version 5
+ *
+ * @category   Appserver
+ * @package    TechDivision_ApplicationServerExample
+ * @subpackage Entities
+ * @author     Tim Wagner <tw@techdivision.com>
+ * @copyright  2014 TechDivision GmbH <info@techdivision.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link       http://www.appserver.io
+ */
+
 namespace TechDivision\Example\Entities;
 
 /**
+ * Doctrine entity that represents a sample.
+ *
+ * @category   Appserver
+ * @package    TechDivision_ApplicationServerExample
+ * @subpackage Entities
+ * @author     Tim Wagner <tw@techdivision.com>
+ * @copyright  2014 TechDivision GmbH <info@techdivision.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link       http://www.appserver.io
+ *
  * @Entity @Table(name="sample")
  */
-class Sample {
+class Sample
+{
 
     /**
+     * @var integer
+     * 
      * @Id 
      * @Column(type="integer") 
      * @GeneratedValue
@@ -15,36 +48,78 @@ class Sample {
     public $sampleId;
 
     /**
+     * @var string
+     * 
      * @Column(type="string", length=255)
      */
     public $name;
 
     /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * 
      * @OneToMany(targetEntity="User", mappedBy="sample", cascade={"all"}, fetch="EAGER")
-     **/
-    private $users;
+     */
+    protected $users;
 
-    public function __construct() {
+    /**
+     * Initializes the collection with the users.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-    public function setSampleId($sampleId) {
+    /**
+     * Sets the value for the class member sampleId.
+     *
+     * @param integer $sampleId Holds the value for the class member sampleId
+     */
+    public function setSampleId($sampleId)
+    {
         $this->sampleId = $sampleId;
     }
-
-    public function getSampleId() {
+    
+    /**
+     * Returns the value of the class member sampleId.
+     *
+     * @return integer Holds the value of the class member sampleId
+     */
+    public function getSampleId()
+    {
         return $this->sampleId;
     }
-    
-    public function setName($name) {
+
+    /**
+     * Sets the value for the class member name.
+     *
+     * @param string $name Holds the value for the class member name
+     * 
+     * @return void
+     */
+    public function setName($name)
+    {
         $this->name = $name;
     }
-    
-    public function getName() {
+
+    /**
+     * Returns the value of the class member name.
+     *
+     * @return string Holds the value of the class member name
+     */
+    public function getName()
+    {
         return $this->name;
     }
 
-    public function getUsers() {
+    /**
+     * Returns the user collection.
+     * 
+     * @return \Doctrine\Common\Collections\ArrayCollection The user collection
+     */
+    public function getUsers()
+    {
         return $this->users;
     }
 }
