@@ -75,6 +75,8 @@ class Sample
      * Sets the value for the class member sampleId.
      *
      * @param integer $sampleId Holds the value for the class member sampleId
+     * 
+     * @return void
      */
     public function setSampleId($sampleId)
     {

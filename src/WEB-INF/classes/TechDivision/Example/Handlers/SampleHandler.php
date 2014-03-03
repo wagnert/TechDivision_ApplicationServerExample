@@ -50,7 +50,7 @@ class SampleHandler extends BaseHandler
      * Persists the sample entity with the passed data.
      *
      * @param string $sampleId The ID to be persisted
-     * @param string $name The name to be persisted
+     * @param string $name     The name to be persisted
      * 
      * @return \TechDivision\Example\Entities\Sample The persisted entity
      */

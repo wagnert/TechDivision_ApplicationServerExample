@@ -29,6 +29,7 @@ use TechDivision\Example\Entities\Sample;
 use TechDivision\PersistenceContainerClient\Context\Connection\Factory;
 
 /**
+ * An message receiver that imports data chunks into a database.
  * 
  * @category   Appserver
  * @package    TechDivision_ApplicationServerExample
@@ -38,12 +39,20 @@ use TechDivision\PersistenceContainerClient\Context\Connection\Factory;
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  */
-class ImportChunkReceiver extends AbstractReceiver {
+class ImportChunkReceiver extends AbstractReceiver
+{
 
     /**
+     * Will be invoked when a new message for this message bean will be available.
+     * 
+     * @param \TechDivision\MessageQueueClient\Interfaces\Message $message   A message this message bean is listen for
+     * @param string                                              $sessionId The session ID                            
+     *
+     * @return void
      * @see \TechDivision\MessageQueueClient\Interfaces\MessageReceiver::onMessage()
      */
-    public function onMessage(Message $message, $sessionId) {
+    public function onMessage(Message $message, $sessionId)
+    {
 
         // put status message
         error_log($logMessage = "Process chuck data message");
@@ -64,19 +73,12 @@ class ImportChunkReceiver extends AbstractReceiver {
             // explode the name parts and append the data in the database
             list ($firstname, $lastname) = explode(',', $data);
 
+            // prepare the entity
             $entity = new Sample();
             $entity->setName($firstname . ', ' . $lastname);
 
+            // store the entity in the database
             $processor->persist($entity);
         }
-/*
-        // initialize the message monitor
-        $message->setMessageMonitor($monitor = new MessageMonitor(1, 'Chunk message'));
-        $monitor->setRowCount(1);
-
-        // update the MessageMonitor
-        $this->updateMonitor($message);
-*/
     }
-
 }

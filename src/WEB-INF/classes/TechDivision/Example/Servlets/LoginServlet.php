@@ -84,7 +84,6 @@ class LoginServlet extends AbstractServlet
      * Loads the sample entity with the sample ID found in the request and attaches
      * it to the servlet context ready to be rendered by the template.
      *
-     *
      * @param \TechDivision\ServletContainer\Http\ServletRequest  $servletRequest  The request instance
      * @param \TechDivision\ServletContainer\Http\ServletResponse $servletResponse The response instance
      *

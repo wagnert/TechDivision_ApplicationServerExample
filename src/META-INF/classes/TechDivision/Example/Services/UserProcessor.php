@@ -47,6 +47,7 @@ class UserProcessor extends AbstractProcessor
      * @param string $username The username to login with
      * @param string $password The password that should match the username
      *
+     * @return void
      * @throws TechDivision\Example\Exceptions\LoginException Is thrown if the user with the passed username doesn't exist or match the password
      */
     public function login($username, $password)

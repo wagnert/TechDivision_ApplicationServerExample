@@ -106,8 +106,8 @@ abstract class AbstractServlet extends HttpServlet
     /**
      * Attaches the passed data under the also passed key in the servlet context.
      *
-     * @param $key string The key to attach the data under
-     * @param $value mixed The data to be attached
+     * @param string $key   The key to attach the data under
+     * @param mixed  $value The data to be attached
      * 
      * @return void
      */
@@ -133,7 +133,7 @@ abstract class AbstractServlet extends HttpServlet
     /**
      * Processes the template and returns the content.
      *
-     * @param string $template Relative path to the template file
+     * @param string                                              $template        Relative path to the template file
      * @param \TechDivision\ServletContainer\Http\ServletRequest  $servletRequest  The request instance
      * @param \TechDivision\ServletContainer\Http\ServletResponse $servletResponse The response instance
      * 

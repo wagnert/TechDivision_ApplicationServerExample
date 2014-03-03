@@ -105,8 +105,12 @@ abstract class BaseHandler extends AbstractHandler
     }
 
     /**
-     * (non-PHPdoc)
-     *
+     * This method will be invoked when a new client has to be connected
+     * and attaches the client to the handler.
+     * 
+     * @param \Ratchet\ConnectionInterface $conn The ratchet connection instance
+     * 
+     * @return void
      * @see \Ratchet\ComponentInterface::onOpen()
      */
     public function onOpen(ConnectionInterface $conn)
@@ -115,8 +119,11 @@ abstract class BaseHandler extends AbstractHandler
     }
 
     /**
-     * (non-PHPdoc)
-     *
+     * This method will be invoked when the client connection will be closed.
+     * 
+     * @param \Ratchet\ConnectionInterface $conn The ratchet connection instance
+     * 
+     * @return void
      * @see \Ratchet\ComponentInterface::onClose()
      */
     public function onClose(ConnectionInterface $conn)
@@ -125,19 +132,29 @@ abstract class BaseHandler extends AbstractHandler
     }
 
     /**
-     * (non-PHPdoc)
-     *
+     * The method will be invoked when an error occures
+     * during client connection handling.
+     * 
+     * @param \Ratchet\ConnectionInterface $conn The ratchet connection instance
+     * @param \Exception                   $e    The exception that leads to the error
+     * 
+     * @return void
      * @see \Ratchet\ComponentInterface::onError()
      */
-    public function onError(ConnectionInterface $conn,\Exception $e)
+    public function onError(ConnectionInterface $conn, \Exception $e)
     {
         error_log($e->__toString());
         $conn->close();
     }
 
     /**
-     * (non-PHPdoc)
-     *
+     * This method will be invoked when a new message has to be send
+     * to the connected clients.
+     * 
+     * @param \Ratchet\ConnectionInterface $from The ratchet connection instance
+     * @param string                       $msg  The message to be send to all clients
+     * 
+     * @return void
      * @see \Ratchet\MessageInterface::onMessage()
      */
     public function onMessage(ConnectionInterface $from, $msg)
@@ -163,7 +180,7 @@ abstract class BaseHandler extends AbstractHandler
      * and strips the action param.
      *
      * @param \ReflectionMethod $reflectionMethod The reflection method to prepare the params for
-     * @param array $params The params to prepare
+     * @param array             $params           The params to prepare
      * 
      * @return array The request params prepared for the reflection method
      */

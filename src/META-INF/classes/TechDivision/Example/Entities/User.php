@@ -130,6 +130,8 @@ class User
      * Sets the value for the class member userId.
      *
      * @param integer $userId Holds the value for the class member userId
+     * 
+     * @return void
      */
     public function setUserId($userId)
     {
@@ -147,9 +149,11 @@ class User
     }
 
     /**
-     * Sets the value for the class member userId.
+     * Sets the value for the class member sampleIdFk.
      *
-     * @param integer $userId Holds the value for the class member userId
+     * @param integer $sampleIdFk Holds the value for the class member sampleIdFk
+     * 
+     * @return void
      */
     public function setSampleIdFk($sampleIdFk)
     {
