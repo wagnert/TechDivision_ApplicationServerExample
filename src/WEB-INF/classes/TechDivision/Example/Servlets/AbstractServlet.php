@@ -23,11 +23,10 @@
 
 namespace TechDivision\Example\Servlets;
 
-use TechDivision\ServletContainer\Interfaces\Servlet;
-use TechDivision\ServletContainer\Servlets\HttpServlet;
-use TechDivision\ServletContainer\Interfaces\ServletConfig;
-use TechDivision\ServletContainer\Http\ServletRequest;
-use TechDivision\ServletContainer\Http\ServletResponse;
+use TechDivision\ServletEngine\Http\Servlet;
+use TechDivision\Servlet\Http\HttpServletRequest;
+use TechDivision\Servlet\Http\HttpServletResponse;
+use TechDivision\WebServer\Dictionaries\ServerVars;
 use TechDivision\PersistenceContainerClient\Context\Connection\Factory;
 
 /**
@@ -43,7 +42,7 @@ use TechDivision\PersistenceContainerClient\Context\Connection\Factory;
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  */
-abstract class AbstractServlet extends HttpServlet
+abstract class AbstractServlet extends Servlet
 {
 
     /**
@@ -56,14 +55,14 @@ abstract class AbstractServlet extends HttpServlet
     /**
      * The servlet request instance.
      * 
-     * @var \TechDivision\ServletContainer\Http\ServletRequest
+     * @var \TechDivision\Servlet\Http\HttpServletRequest
      */
     protected $servletRequest;
 
     /**
      * The servlet response instance.
      * 
-     * @var \TechDivision\ServletContainer\Http\ServletResponse
+     * @var \TechDivision\Servlet\Http\HttpServletResponse
      */
     protected $servletResponse;
 
@@ -133,13 +132,13 @@ abstract class AbstractServlet extends HttpServlet
     /**
      * Processes the template and returns the content.
      *
-     * @param string                                              $template        Relative path to the template file
-     * @param \TechDivision\ServletContainer\Http\ServletRequest  $servletRequest  The request instance
-     * @param \TechDivision\ServletContainer\Http\ServletResponse $servletResponse The response instance
+     * @param string                                         $template        Relative path to the template file
+     * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
+     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
      * 
      * @return string The templates content
      */
-    public function processTemplate($template, ServletRequest $servletRequest, ServletResponse $servletResponse)
+    public function processTemplate($template, HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
         // check if the template is available
         if (!file_exists($pathToTemplate = $this->getWebappPath() . DIRECTORY_SEPARATOR . $template)) {
@@ -168,12 +167,12 @@ abstract class AbstractServlet extends HttpServlet
     /**
      * Implements Http GET method.
      *
-     * @param \TechDivision\ServletContainer\Http\ServletRequest  $servletRequest  The request instance
-     * @param \TechDivision\ServletContainer\Http\ServletResponse $servletResponse The response instance
+     * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
+     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
      *
      * @return void
      */
-    public function doGet(ServletRequest $servletRequest, ServletResponse $servletResponse)
+    public function doGet(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
 
         // add request and response to session
@@ -181,7 +180,7 @@ abstract class AbstractServlet extends HttpServlet
         $this->setServletResponse($servletResponse);
 
         // start the session
-        $this->getServletRequest()->getSession()->start();
+        $this->getServletRequest()->getSession(true)->start();
 
         // load the request parameters
         $parameterMap = $servletRequest->getParameterMap();
@@ -199,36 +198,36 @@ abstract class AbstractServlet extends HttpServlet
     /**
      * Implements Http POST method.
      *
-     * @param \TechDivision\ServletContainer\Http\ServletRequest  $servletRequest  The request instance
-     * @param \TechDivision\ServletContainer\Http\ServletResponse $servletResponse The response instance
+     * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
+     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
      *
      * @return void
      */
-    public function doPost(ServletRequest $servletRequest, ServletResponse $servletResponse)
+    public function doPost(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
         $this->doGet($servletRequest, $servletResponse);
     }
 
     /**
      * Sets the servlet request instance.
-     * 
-     * @param \TechDivision\ServletContainer\Http\ServletRequest $servletRequest The request instance
+     *
+     * @param \TechDivision\Servlet\Http\HttpServletRequest $servletRequest The request instance
      * 
      * @return void
      */
-    public function setServletRequest(ServletRequest $servletRequest)
+    public function setServletRequest(HttpServletRequest $servletRequest)
     {
         $this->servletRequest = $servletRequest;
     }
 
     /**
      * Sets the servlet response instance.
-     * 
-     * @param \TechDivision\ServletContainer\Http\ServletResponse $servletResponse The response instance
+     *
+     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The request instance
      * 
      * @return void
      */
-    public function setServletResponse(ServletResponse $servletResponse)
+    public function setServletResponse(HttpServletResponse $servletResponse)
     {
         $this->servletResponse = $servletResponse;
     }
@@ -236,7 +235,7 @@ abstract class AbstractServlet extends HttpServlet
     /**
      * Returns the servlet response instance.
      * 
-     * @return \TechDivision\ServletContainer\Http\ServletRequest $servletRequest The request instance
+     * @return \TechDivision\Servlet\Http\ServletRequest The request instance
      */
     public function getServletRequest()
     {
@@ -246,7 +245,7 @@ abstract class AbstractServlet extends HttpServlet
     /**
      * Returns the servlet request instance.
      * 
-     * @return \TechDivision\ServletContainer\Http\ServletResponse $servletResponse The response instance
+     * @return \TechDivision\Servlet\Http\HttpServletResponse The response instance
      */
     public function getServletResponse()
     {
@@ -262,7 +261,7 @@ abstract class AbstractServlet extends HttpServlet
     {
         $baseUrl = '/';
         // if the application has NOT been called over a VHost configuration append application folder naem
-        if (!$this->getServletConfig()->getApplication()->isVhostOf($this->getServletRequest()->getServerName())) {
+        if (!$this->getServletConfig()->getApplication()->isVhostOf($this->getServletRequest()->getServerVar(ServerVars::SERVER_NAME))) {
             $baseUrl .= $this->getServletConfig()->getApplication()->getName() . '/';
         }
         return $baseUrl;

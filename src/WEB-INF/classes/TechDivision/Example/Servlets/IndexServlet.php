@@ -23,12 +23,8 @@
 
 namespace TechDivision\Example\Servlets;
 
-use TechDivision\ServletContainer\Interfaces\Servlet;
-use TechDivision\ServletContainer\Interfaces\ServletConfig;
-use TechDivision\ServletContainer\Http\ServletRequest;
-use TechDivision\ServletContainer\Http\ServletResponse;
-use TechDivision\PersistenceContainerClient\Context\Connection\Factory;
-use TechDivision\Example\Servlets\AbstractServlet;
+use TechDivision\Servlet\Http\HttpServletRequest;
+use TechDivision\Servlet\Http\HttpServletResponse;
 use TechDivision\Example\Entities\Sample;
 use TechDivision\Example\Utils\ContextKeys;
 
@@ -71,29 +67,29 @@ class IndexServlet extends AbstractServlet
      * Loads all sample data and attaches it to the servlet context ready to be rendered
      * by the template.
      *
-     * @param \TechDivision\ServletContainer\Http\ServletRequest  $servletRequest  The request instance
-     * @param \TechDivision\ServletContainer\Http\ServletResponse $servletResponse The response instance
+     * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
+     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
      * 
      * @return void
      */
-    public function indexAction(ServletRequest $servletRequest, ServletResponse $servletResponse)
+    public function indexAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
-        $overviewData = $this->getProxy(self::PROXY_CLASS)->findAll();
+        $overviewData = $this->getProxy(IndexServlet::PROXY_CLASS)->findAll();
         $this->addAttribute(ContextKeys::OVERVIEW_DATA, $overviewData);
-        $servletResponse->setContent($this->processTemplate(self::INDEX_TEMPLATE, $servletRequest, $servletResponse));
+        $servletResponse->appendBodyStream($this->processTemplate(IndexServlet::INDEX_TEMPLATE, $servletRequest, $servletResponse));
     }
 
     /**
      * Loads the sample entity with the sample ID found in the request and attaches
      * it to the servlet context ready to be rendered by the template.
      *
-     * @param \TechDivision\ServletContainer\Http\ServletRequest  $servletRequest  The request instance
-     * @param \TechDivision\ServletContainer\Http\ServletResponse $servletResponse The response instance
+     * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
+     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
      * 
      * @return void
      * @see \TechDivision\Example\Servlets\IndexServlet::indexAction()
      */
-    public function loadAction(ServletRequest $servletRequest, ServletResponse $servletResponse)
+    public function loadAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
 
         // load the params with the entity data
@@ -107,7 +103,7 @@ class IndexServlet extends AbstractServlet
         }
 
         // load the entity to be edited and attach it to the servlet context
-        $viewData = $this->getProxy(self::PROXY_CLASS)->load($sampleId);
+        $viewData = $this->getProxy(IndexServlet::PROXY_CLASS)->load($sampleId);
         $this->addAttribute(ContextKeys::VIEW_DATA, $viewData);
 
         // reload all entities and render the dialog
@@ -118,13 +114,13 @@ class IndexServlet extends AbstractServlet
      * Deletes the sample entity with the sample ID found in the request and
      * reloads all other entities from the database.
      *
-     * @param \TechDivision\ServletContainer\Http\ServletRequest  $servletRequest  The request instance
-     * @param \TechDivision\ServletContainer\Http\ServletResponse $servletResponse The response instance
+     * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
+     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
      * 
      * @return void
      * @see \TechDivision\Example\Servlets\IndexServlet::indexAction()
      */
-    public function deleteAction(ServletRequest $servletRequest, ServletResponse $servletResponse)
+    public function deleteAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
 
         // load the params with the entity data
@@ -138,7 +134,7 @@ class IndexServlet extends AbstractServlet
         }
 
         // delete the entity
-        $this->getProxy(self::PROXY_CLASS)->delete($sampleId);
+        $this->getProxy(IndexServlet::PROXY_CLASS)->delete($sampleId);
 
         // reload all entities and render the dialog
         $this->indexAction($servletRequest, $servletResponse);
@@ -147,13 +143,13 @@ class IndexServlet extends AbstractServlet
     /**
      * Persists the entity data found in the request.
      *
-     * @param \TechDivision\ServletContainer\Http\ServletRequest  $servletRequest  The request instance
-     * @param \TechDivision\ServletContainer\Http\ServletResponse $servletResponse The response instance
+     * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
+     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
      * 
      * @return void
      * @see \TechDivision\Example\Servlets\IndexServlet::indexAction()
      */
-    public function persistAction(ServletRequest $servletRequest, ServletResponse $servletResponse)
+    public function persistAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
 
         // load the params with the entity data
@@ -175,7 +171,7 @@ class IndexServlet extends AbstractServlet
         $entity = new Sample();
         $entity->setSampleId((integer) $sampleId);
         $entity->setName($name);
-        $this->getProxy(self::PROXY_CLASS)->persist($entity);
+        $this->getProxy(IndexServlet::PROXY_CLASS)->persist($entity);
 
         // reload all entities and render the dialog
         $this->indexAction($servletRequest, $servletResponse);
@@ -188,7 +184,7 @@ class IndexServlet extends AbstractServlet
      * 
      * @return string The URL to open the edit dialog
      */
-    public function getEditLink($entity)
+    public function getEditLink(Sample $entity)
     {
         return '?action=load&sampleId=' . $entity->getSampleId();
     }
@@ -200,7 +196,7 @@ class IndexServlet extends AbstractServlet
      * 
      * @return string The URL with the deletion link
      */
-    public function getDeleteLink($entity)
+    public function getDeleteLink(Sample $entity)
     {
         return '?action=delete&sampleId=' . $entity->getSampleId();
     }

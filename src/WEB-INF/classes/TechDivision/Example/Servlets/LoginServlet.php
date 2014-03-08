@@ -23,15 +23,8 @@
 
 namespace TechDivision\Example\Servlets;
 
-
-use TechDivision\ServletContainer\Interfaces\Servlet;
-use TechDivision\ServletContainer\Interfaces\ServletConfig;
-use TechDivision\ServletContainer\Http\ServletRequest;
-use TechDivision\ServletContainer\Http\ServletResponse;
-use TechDivision\PersistenceContainerClient\Context\Connection\Factory;
-use TechDivision\Example\Servlets\AbstractServlet;
-use TechDivision\Example\Entities\Sample;
-use TechDivision\Example\Utils\ContextKeys;
+use TechDivision\Servlet\Http\HttpServletRequest;
+use TechDivision\Servlet\Http\HttpServletResponse;
 use TechDivision\Example\Exceptions\LoginException;
 
 /**
@@ -70,27 +63,27 @@ class LoginServlet extends AbstractServlet
      * Loads all sample data and attaches it to the servlet context ready to be rendered
      * by the template.
      *
-     * @param \TechDivision\ServletContainer\Http\ServletRequest  $servletRequest  The request instance
-     * @param \TechDivision\ServletContainer\Http\ServletResponse $servletResponse The response instance
+     * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
+     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
      *
      * @return void
      */
-    public function indexAction(ServletRequest $servletRequest, ServletResponse $servletResponse)
+    public function indexAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
-        $servletResponse->setContent($this->processTemplate(self::LOGIN_TEMPLATE, $servletRequest, $servletResponse));
+        $servletResponse->appendBodyStream($this->processTemplate(LoginServlet::LOGIN_TEMPLATE, $servletRequest, $servletResponse));
     }
 
     /**
      * Loads the sample entity with the sample ID found in the request and attaches
      * it to the servlet context ready to be rendered by the template.
      *
-     * @param \TechDivision\ServletContainer\Http\ServletRequest  $servletRequest  The request instance
-     * @param \TechDivision\ServletContainer\Http\ServletResponse $servletResponse The response instance
+     * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
+     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
      *
      * @return void
      * @see \TechDivision\Example\Servlets\IndexServlet::indexAction()
      */
-    public function loginAction(ServletRequest $servletRequest, ServletResponse $servletResponse)
+    public function loginAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
 
         try {
@@ -113,7 +106,7 @@ class LoginServlet extends AbstractServlet
             }
             
             // try to login
-            $this->getProxy(self::PROXY_CLASS)->login($username, $password);
+            $this->getProxy(LoginServlet::PROXY_CLASS)->login($username, $password);
 
             // if successfully then add the username to the session and redirect to the overview
             $servletRequest->getSession()->putData('username', $username);

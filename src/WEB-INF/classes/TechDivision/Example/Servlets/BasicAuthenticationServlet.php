@@ -24,9 +24,8 @@
 
 namespace TechDivision\Example\Servlets;
 
-use TechDivision\ServletContainer\Http\ServletRequest;
-use TechDivision\ServletContainer\Http\ServletResponse;
-use TechDivision\Example\Servlets\AbstractServlet;
+use TechDivision\Servlet\Http\HttpServletRequest;
+use TechDivision\Servlet\Http\HttpServletResponse;
 
 /**
  * Example servlet implementation that requests digest authentication to be loaded.
@@ -54,13 +53,15 @@ class BasicAuthenticationServlet extends AbstractServlet
     /**
      * Default action to invoke if no action parameter has been found in the request.
      *
-     * @param \TechDivision\ServletContainer\Http\ServletRequest  $servletRequest  The request instance
-     * @param \TechDivision\ServletContainer\Http\ServletResponse $servletResponse The response instance
+     * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
+     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
      * 
      * @return void
      */
-    public function indexAction(ServletRequest $servletRequest, ServletResponse $servletResponse)
+    public function indexAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
-        $servletResponse->setContent($this->processTemplate(self::INDEX_TEMPLATE, $servletRequest, $servletResponse));
+        $servletResponse->appendBodyStream(
+            $this->processTemplate(BasicAuthenticationServlet::INDEX_TEMPLATE, $servletRequest, $servletResponse)
+        );
     }
 }

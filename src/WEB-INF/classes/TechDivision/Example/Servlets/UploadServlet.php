@@ -22,14 +22,8 @@
  */
 namespace TechDivision\Example\Servlets;
 
-use TechDivision\ServletContainer\Interfaces\Servlet;
-use TechDivision\ServletContainer\Interfaces\ServletConfig;
-use TechDivision\ServletContainer\Http\ServletRequest;
-use TechDivision\ServletContainer\Http\ServletResponse;
-use TechDivision\PersistenceContainerClient\Context\Connection\Factory;
-use TechDivision\Example\Servlets\AbstractServlet;
-use TechDivision\Example\Entities\Sample;
-use TechDivision\Example\Utils\ContextKeys;
+use TechDivision\Servlet\Http\HttpServletRequest;
+use TechDivision\Servlet\Http\HttpServletResponse;
 
 /**
  * Example servlet implementation that handles an upload request.
@@ -58,27 +52,27 @@ class UploadServlet extends AbstractServlet
      *
      * Renders an upload dialoge with a select and submit button.
      *
-     * @param \TechDivision\ServletContainer\Http\ServletRequest  $servletRequest  The request instance
-     * @param \TechDivision\ServletContainer\Http\ServletResponse $servletResponse The response instance
+     * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
+     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
      *            
      * @return void
      */
-    public function indexAction(ServletRequest $servletRequest, ServletResponse $servletResponse)
+    public function indexAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
-        $servletResponse->setContent($this->processTemplate(self::UPLOAD_TEMPLATE, $servletRequest, $servletResponse));
+        $servletResponse->appendBodyStream($this->processTemplate(UploadServlet::UPLOAD_TEMPLATE, $servletRequest, $servletResponse));
     }
 
     /**
      * Loads the sample entity with the sample ID found in the request and attaches
      * it to the servlet context ready to be rendered by the template.
      *
-     * @param \TechDivision\ServletContainer\Http\ServletRequest  $servletRequest  The request instance
-     * @param \TechDivision\ServletContainer\Http\ServletResponse $servletResponse The response instance
+     * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
+     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
      *            
      * @return void
      * @see IndexServlet::indexAction()
      */
-    public function uploadAction(ServletRequest $servletRequest, ServletResponse $servletResponse)
+    public function uploadAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
         
         // sample for saving file to appservers upload tmp folder with tmpname
