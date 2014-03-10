@@ -48,37 +48,37 @@
 
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
-        <url-pattern>/login/*</url-pattern>
+        <url-pattern>/login.do*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>UploadServlet</servlet-name>
-        <url-pattern>/upload/*</url-pattern>
+        <url-pattern>/upload.do*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>WebSocketServlet</servlet-name>
-        <url-pattern>/websocket/*</url-pattern>
+        <url-pattern>/websocket.do*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>BasicAuthenticationServlet</servlet-name>
-        <url-pattern>/basicAuthentication/*</url-pattern>
+        <url-pattern>/basicAuthentication.do*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>BasicAuthenticationServlet</servlet-name>
-        <url-pattern>/basicAuthentication/</url-pattern>
+        <url-pattern>/basicAuthentication.do*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>DigestAuthenticationServlet</servlet-name>
-        <url-pattern>/digestAuthentication/*</url-pattern>
+        <url-pattern>/digestAuthentication.do*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>DigestAuthenticationServlet</servlet-name>
-        <url-pattern>/digestAuthentication/</url-pattern>
+        <url-pattern>/digestAuthentication.do*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

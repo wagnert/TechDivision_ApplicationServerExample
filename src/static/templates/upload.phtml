@@ -87,12 +87,12 @@ use TechDivision\Example\Utils\ContextKeys;
 
     <div class="masthead">
         <ul class="nav nav-pills pull-right">
-            <li><a href="index/index">Home</a></li>
-            <li><a href="login/index">Login</a></li>
-            <li class="active"><a href="upload/index">Upload</a></li>
-            <li><a href="websocket/index">WebSocket</a></li>
-            <li><a href="basicAuthentication/index">Basic Authentication</a></li>
-            <li><a href="digestAuthentication/index">Digest Authentication</a></li>
+            <li><a href="index.do">Home</a></li>
+            <li><a href="login.do">Login</a></li>
+            <li class="active"><a href="upload.do">Upload</a></li>
+            <li><a href="websocket.do">WebSocket</a></li>
+            <li><a href="basicAuthentication.do">Basic Authentication</a></li>
+            <li><a href="digestAuthentication.do">Digest Authentication</a></li>
         </ul>
         <h3 class="muted">appserver example</h3>
     </div>
@@ -100,9 +100,7 @@ use TechDivision\Example\Utils\ContextKeys;
     <hr>
 
     <div class="row-fluid marketing central">
-            <form class="form-upload" action="upload/upload" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="action" value="upload"/>
-
+            <form class="form-upload" action="upload.do/upload" method="post" enctype="multipart/form-data">
                 <h2 class="form-upload-heading">Select file</h2>
                 <input name="fileToUpload" type="file" class="input-block-level re-centered" placeholder="Filename">
                 <button class="btn btn-large btn-primary" type="submit">Upload file</button>

@@ -93,12 +93,12 @@ if ($entity = $this->getAttribute(ContextKeys::VIEW_DATA)) {
 
     <div class="masthead">
         <ul class="nav nav-pills pull-right">
-            <li class="active"><a href="index/index">Home</a></li>
-            <li><a href="login/index">Login</a></li>
-            <li><a href="upload/index">Upload</a></li>
-            <li><a href="websocket/index">WebSocket</a></li>
-            <li><a href="basicAuthentication/index">Basic Authentication</a></li>
-            <li><a href="digestAuthentication/index">Digest Authentication</a></li>
+            <li class="active"><a href="index.do">Home</a></li>
+            <li><a href="login.do">Login</a></li>
+            <li><a href="upload.do">Upload</a></li>
+            <li><a href="websocket.do">WebSocket</a></li>
+            <li><a href="basicAuthentication.do">Basic Authentication</a></li>
+            <li><a href="digestAuthentication.do">Digest Authentication</a></li>
         </ul>
         <h3 class="muted">appserver example</h3>
     </div>
@@ -156,8 +156,7 @@ if ($entity = $this->getAttribute(ContextKeys::VIEW_DATA)) {
                 </div>
             <?php } ?>
 
-            <form class="form-inline" action="index" method="post">
-                <input type="hidden" name="action" value="persist"/>
+            <form class="form-inline" action="index.do/persist" method="post">
                 <input type="hidden" name="sampleId" value="<?php echo $sampleId ?>"/>
                 <input name="name" type="text" placeholder="Type your name..." value="<?php echo $name ?>"/>
                 <button type="submit" class="btn">Submit</button>

@@ -46,6 +46,27 @@ abstract class AbstractServlet extends Servlet
 {
 
     /**
+     * The default action if no valid action name was found in the path info.
+     * 
+     * @var string
+     */
+    const DEFAULT_ACTION_NAME = 'index';
+    
+    /**
+     * The default action method suffix.
+     * 
+     * @var string
+     */
+    const ACTION_SUFFIX = 'Action';
+    
+    /**
+     * The default delimiter to extract the requested action name from the path info.
+     * 
+     * @var string
+     */
+    const ACTION_DELIMITER = '/';
+    
+    /**
      * Servlet context to transfer data between the servlet and the view.
      * 
      * @var array
@@ -179,20 +200,31 @@ abstract class AbstractServlet extends Servlet
         $this->setServletRequest($servletRequest);
         $this->setServletResponse($servletResponse);
 
-        // start the session
-        $this->getServletRequest()->getSession(true)->start();
+        // initialize the session (create a new one if necessary)
+        $session = $this->getServletRequest()->getSession(true);
+        $session->setSessionCookieHttpOnly(true);
+        $session->start();
+            
+        // create the default action => indexAction
+        $actionMethod = AbstractServlet::DEFAULT_ACTION_NAME . AbstractServlet::ACTION_SUFFIX;
+        
+        // load the first part of the path info => that is the action name by default
+        list ($requestedActionName, ) = explode(AbstractServlet::ACTION_DELIMITER, trim($servletRequest->getPathInfo(), AbstractServlet::ACTION_DELIMITER));
 
-        // load the request parameters
-        $parameterMap = $servletRequest->getParameterMap();
-
-        // evaluate the action method to be invoked
-        $action = 'indexAction';
-        if (array_key_exists('action', $parameterMap)) {
-            $action = "{$parameterMap['action']}Action";
+        // if the requested action has been found in the path info
+        if (empty($requestedActionName) === false) {
+            
+            // if yes, concatenate it to create a valid action name
+            $requestedActionMethod = $requestedActionName . AbstractServlet::ACTION_SUFFIX;
+            
+            // check if the requested action method is a class method
+            if (in_array($requestedActionMethod, get_class_methods($this))) {
+                $actionMethod = $requestedActionMethod;
+            }
         }
-
+    
         // invoke the action itself
-        $this->$action($servletRequest, $servletResponse);
+        $this->$actionMethod($servletRequest, $servletResponse);
     }
 
     /**
@@ -255,15 +287,13 @@ abstract class AbstractServlet extends Servlet
     /**
      * Returns base URL for the html base tag.
      *
-     * @return string
+     * @return string The base URL depending on the vhost
      */
     public function getBaseUrl()
     {
-        $baseUrl = '/';
-        // if the application has NOT been called over a VHost configuration append application folder naem
-        if (!$this->getServletConfig()->getApplication()->isVhostOf($this->getServletRequest()->getServerVar(ServerVars::SERVER_NAME))) {
-            $baseUrl .= $this->getServletConfig()->getApplication()->getName() . '/';
+        if ($this->getServletConfig()->getApplication()->isVhostOf($this->getServletRequest()->getServerName())) {
+            return $this->getServletRequest()->getServletPath();
         }
-        return $baseUrl;
+        return $this->getServletRequest()->getContextPath() . $this->getServletRequest()->getServletPath();
     }
 }

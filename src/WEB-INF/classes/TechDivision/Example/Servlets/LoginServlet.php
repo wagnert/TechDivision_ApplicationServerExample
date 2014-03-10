@@ -87,22 +87,15 @@ class LoginServlet extends AbstractServlet
     {
 
         try {
-
-            // load the params with the entity data
-            $parameterMap = $servletRequest->getParameterMap();
     
             // check if the necessary params has been specified and are valid
-            if (!array_key_exists('username', $parameterMap)) {
-                throw new \Exception();
-            } else {
-                $username = filter_var($parameterMap['username'], FILTER_SANITIZE_STRING);
+            if (($username = $servletRequest->getParameter('username')) === null) {
+                throw new \Exception('Please enter a valid username');
             }
     
             // check if the necessary params has been specified and are valid
-            if (!array_key_exists('password', $parameterMap)) {
-                throw new \Exception();
-            } else {
-                $password = filter_var($parameterMap['password'], FILTER_SANITIZE_STRING);
+            if (($password = $servletRequest->getParameter('password')) === null) {
+                throw new \Exception('Please enter a valid password');
             }
             
             // try to login
@@ -120,6 +113,19 @@ class LoginServlet extends AbstractServlet
         }
 
         // reload all entities and render the dialog
+        $this->indexAction($servletRequest, $servletResponse);
+    }
+
+    /**
+     *
+     * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
+     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
+     *
+     * @return void
+     * @see \TechDivision\Example\Servlets\IndexServlet::indexAction()
+     */
+    public function logoutAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
+    {
         $this->indexAction($servletRequest, $servletResponse);
     }
 }
