@@ -117,12 +117,14 @@ class LoginServlet extends AbstractServlet
     }
 
     /**
-     *
+     * Action that destroys the session and log the user out.
+     * 
      * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
      * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
      *
      * @return void
      * @see \TechDivision\Example\Servlets\IndexServlet::indexAction()
+     * @todo Still to implement
      */
     public function logoutAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
