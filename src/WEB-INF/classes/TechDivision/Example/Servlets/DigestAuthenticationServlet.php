@@ -23,8 +23,8 @@
 
 namespace TechDivision\Example\Servlets;
 
-use TechDivision\ServletContainer\Http\ServletRequest;
-use TechDivision\ServletContainer\Http\ServletResponse;
+use TechDivision\Servlet\Http\HttpServletRequest;
+use TechDivision\Servlet\Http\HttpServletResponse;
 
 /**
  * Example servlet implementation that requests digest authentication to be loaded.
