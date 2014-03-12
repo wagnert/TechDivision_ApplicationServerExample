@@ -103,8 +103,6 @@ class LoginServlet extends AbstractServlet
 
             // if successfully then add the username to the session and redirect to the overview
             $servletRequest->getSession()->putData('username', $username);
-            $servletResponse->addHeader('Location', $this->getBaseUrl() . 'index/index');
-            $servletResponse->addHeader("status", 'HTTP/1.1 301 OK');
 
         } catch (LoginException $e) { // invalid login credentials
             $this->addAttribute('errorMessages', array("Username or Password invalid"));

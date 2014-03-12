@@ -67,6 +67,13 @@ abstract class AbstractServlet extends Servlet
     const ACTION_DELIMITER = '/';
     
     /**
+     * The applications base URL.
+     * 
+     * @var string
+     */
+    const BASE_URL = '/';
+    
+    /**
      * Servlet context to transfer data between the servlet and the view.
      * 
      * @var array
@@ -291,9 +298,13 @@ abstract class AbstractServlet extends Servlet
      */
     public function getBaseUrl()
     {
+        
+        // if we ARE in a virtual host, return the base URL
         if ($this->getServletConfig()->getApplication()->isVhostOf($this->getServletRequest()->getServerName())) {
-            return $this->getServletRequest()->getServletPath();
+            return AbstractServlet::BASE_URL;
         }
-        return $this->getServletRequest()->getContextPath() . $this->getServletRequest()->getServletPath();
+        
+        // if not, prepend it with the context path
+        return $this->getServletRequest()->getContextPath() . AbstractServlet::BASE_URL;
     }
 }
