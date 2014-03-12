@@ -92,7 +92,7 @@
     </servlet-mapping>
 
     <security>
-        <url-pattern>/basicAuthentication/</url-pattern>
+        <url-pattern>/basicAuthentication.do*</url-pattern>
         <auth>
             <auth_type>Basic</auth_type>
             <realm>test</realm>
@@ -104,31 +104,7 @@
     </security>
 
     <security>
-        <url-pattern>/basicAuthentication/*</url-pattern>
-        <auth>
-            <auth_type>Basic</auth_type>
-            <realm>Basic-Example-Realm</realm>
-            <adapter_type>htpasswd</adapter_type>
-            <options>
-                <file>htpasswd</file>
-            </options>
-        </auth>
-    </security>
-
-    <security>
-        <url-pattern>/digestAuthentication/</url-pattern>
-        <auth>
-            <auth_type>Digest</auth_type>
-            <realm>Digest-Example-Realm</realm>
-            <adapter_type>htdigest</adapter_type>
-            <options>
-                <file>htdigest</file>
-            </options>
-        </auth>
-    </security>
-
-    <security>
-        <url-pattern>/digestAuthentication/*</url-pattern>
+        <url-pattern>/digestAuthentication.do*</url-pattern>
         <auth>
             <auth_type>Digest</auth_type>
             <realm>Digest-Example-Realm</realm>
