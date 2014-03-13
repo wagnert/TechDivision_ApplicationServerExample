@@ -1,27 +1,58 @@
 <?php
 
+/**
+ * TechDivision\Example\Entities\Assertion
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ *
+ * PHP version 5
+ *
+ * @category   Appserver
+ * @package    TechDivision_ApplicationServerExample
+ * @subpackage Entities
+ * @author     Tim Wagner <tw@techdivision.com>
+ * @copyright  2014 TechDivision GmbH <info@techdivision.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link       http://www.appserver.io
+ */
+
 namespace TechDivision\Example\Entities;
 
 /**
+ * Doctrine entity that represents a assertion.
+ *
+ * @category   Appserver
+ * @package    TechDivision_ApplicationServerExample
+ * @subpackage Entities
+ * @author     Tim Wagner <tw@techdivision.com>
+ * @copyright  2014 TechDivision GmbH <info@techdivision.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link       http://www.appserver.io
+ *
  * @Entity @Table(name="assertion")
- **/
-class Assertion {
+ */
+class Assertion
+{
 
     /**
+     * @var integer
      * @Id @GeneratedValue @Column(type="integer")
-     * @var int
      */
     protected $assertionId;
 
     /**
-     * @Column(type="string")
      * @var string
+     * @Column(type="string")
      */
     protected $type;
 
     /**
-     * @Column(type="string")
      * @var string
+     * @Column(type="string")
      */
     protected $includeFile;
 
@@ -30,7 +61,8 @@ class Assertion {
      *
      * @return integer Holds the value of the class member assertionId
      */
-    public function getAssertionId() {
+    public function getAssertionId()
+    {
         return $this->assertionId;
     }
 
@@ -38,8 +70,11 @@ class Assertion {
      * Sets the value for the class member assertionId.
      *
      * @param integer $assertionId Holds the value for the class member assertionId
+     * 
+     * @return void
      */
-    public function setAssertionId($assertionId) {
+    public function setAssertionId($assertionId)
+    {
         $this->assertionId = $assertionId;
     }
 
@@ -48,7 +83,8 @@ class Assertion {
      *
      * @return string Holds the value of the class member type
      */
-    public function getType() {
+    public function getType()
+    {
         return $this->type;
     }
 
@@ -56,8 +92,11 @@ class Assertion {
      * Sets the value for the class member type.
      *
      * @param string $type Holds the value for the class member type
+     * 
+     * @return void
      */
-    public function setType($type) {
+    public function setType($type)
+    {
         $this->type = $type;
     }
 
@@ -66,7 +105,8 @@ class Assertion {
      *
      * @return string Holds the value of the class member includeFile
      */
-    public function getIncludeFile() {
+    public function getIncludeFile()
+    {
         return $this->includeFile;
     }
 
@@ -74,9 +114,11 @@ class Assertion {
      * Sets the value for the class member includeFile.
      *
      * @param string $includeFile Holds the value for the class member includeFile
+     * 
+     * @return void
      */
-    public function setIncludeFile($includeFile) {
+    public function setIncludeFile($includeFile)
+    {
         $this->includeFile = $includeFile;
     }
-
 }

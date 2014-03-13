@@ -8,30 +8,41 @@
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is available through the world-wide-web at this URL:
  * http://opensource.org/licenses/osl-3.0.php
+ *
+ * PHP version 5
+ *
+ * @category   Appserver
+ * @package    TechDivision_ApplicationServerExample
+ * @subpackage Http
+ * @author     Johann Zelger <jz@techdivision.com>
+ * @author     Tim Wagner <tw@techdivision.com>
+ * @copyright  2014 TechDivision GmbH <info@techdivision.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link       http://www.appserver.io
  */
-
 namespace TechDivision\Example\Servlets;
 
-use TechDivision\ServletContainer\Interfaces\Servlet;
-use TechDivision\ServletContainer\Interfaces\ServletConfig;
-use TechDivision\ServletContainer\Interfaces\Request;
-use TechDivision\ServletContainer\Interfaces\Response;
-use TechDivision\PersistenceContainerClient\Context\Connection\Factory;
-use TechDivision\Example\Servlets\AbstractServlet;
-use TechDivision\Example\Entities\Sample;
-use TechDivision\Example\Utils\ContextKeys;
+use TechDivision\Servlet\Http\HttpServletRequest;
+use TechDivision\Servlet\Http\HttpServletResponse;
 
 /**
- * @package     TechDivision\Example
- * @copyright  	Copyright (c) 2013 <info@techdivision.com> - TechDivision GmbH
- * @license    	http://opensource.org/licenses/osl-3.0.php
- *              Open Software License (OSL 3.0)
- * @author      Tim Wagner <tw@techdivision.com>
+ * Example servlet implementation that handles an upload request.
+ *
+ * @category   Appserver
+ * @package    TechDivision_ApplicationServerExample
+ * @subpackage Servlets
+ * @author     Johann Zelger <jz@techdivision.com>
+ * @author     Tim Wagner <tw@techdivision.com>
+ * @copyright  2014 TechDivision GmbH <info@techdivision.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link       http://www.appserver.io
  */
-class UploadServlet extends AbstractServlet implements Servlet {
+class UploadServlet extends AbstractServlet
+{
 
     /**
      * The relative path, up from the webapp path, to the template to use.
+     *
      * @var string
      */
     const UPLOAD_TEMPLATE = 'static/templates/upload.phtml';
@@ -41,30 +52,35 @@ class UploadServlet extends AbstractServlet implements Servlet {
      *
      * Renders an upload dialoge with a select and submit button.
      *
-     * @param Request $req The request instance
-     * @param Response $res The response instance
+     * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
+     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
+     *            
      * @return void
      */
-    public function indexAction(Request $req, Response $res) {
-        $res->setContent($this->processTemplate(self::UPLOAD_TEMPLATE, $req, $res));
+    public function indexAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
+    {
+        $servletResponse->appendBodyStream($this->processTemplate(UploadServlet::UPLOAD_TEMPLATE, $servletRequest, $servletResponse));
     }
 
     /**
      * Loads the sample entity with the sample ID found in the request and attaches
      * it to the servlet context ready to be rendered by the template.
      *
-     * @param Request $req The request instance
-     * @param Response $res The response instance
+     * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
+     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
+     *            
      * @return void
      * @see IndexServlet::indexAction()
      */
-    public function uploadAction(Request $req, Response $res) {
-    	
-    	// sample for saving file to appservers upload tmp folder with tmpname
-    	$req->getPart('fileToUpload')->write(
-			tempnam(ini_get('upload_tmp_dir'), 'example_upload_')
-    	);
-    
-        $this->indexAction($req, $res);
+    public function uploadAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
+    {
+        
+        // sample for saving file to appservers upload tmp folder with tmpname
+        $servletRequest->getPart('fileToUpload')->write(
+            tempnam(ini_get('upload_tmp_dir'), 'example_upload_')
+        );
+        
+        // after the successfull upload, render the template again
+        $this->indexAction($servletRequest, $servletResponse);
     }
 }

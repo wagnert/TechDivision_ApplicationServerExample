@@ -8,6 +8,16 @@
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is available through the world-wide-web at this URL:
  * http://opensource.org/licenses/osl-3.0.php
+ *
+ * PHP version 5
+ *
+ * @category   Appserver
+ * @package    TechDivision_ApplicationServerExample
+ * @subpackage MessageBeans
+ * @author     Tim Wagner <tw@techdivision.com>
+ * @copyright  2014 TechDivision GmbH <info@techdivision.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link       http://www.appserver.io
  */
 
 namespace TechDivision\Example\MessageBeans;
@@ -24,67 +34,78 @@ use TechDivision\PersistenceContainerClient\Context\Connection\Factory;
 /**
  * This is the implementation of a import message receiver.
  *
- * @package     TechDivision\Example
- * @copyright  	Copyright (c) 2010 <info@techdivision.com> - TechDivision GmbH
- * @license    	http://opensource.org/licenses/osl-3.0.php
- *              Open Software License (OSL 3.0)
- * @author      Tim Wagner <tw@techdivision.com>
+ * @category   Appserver
+ * @package    TechDivision_ApplicationServerExample
+ * @subpackage MessageBeans
+ * @author     Tim Wagner <tw@techdivision.com>
+ * @copyright  2014 TechDivision GmbH <info@techdivision.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link       http://www.appserver.io
  */
-class ImportReceiver extends AbstractReceiver {
-	
-	/**
-	 * @see \TechDivision\MessageQueueClient\Interfaces\MessageReceiver::onMessage()
-	 */
-	public function onMessage(Message $message, $sessionId) {
+class ImportReceiver extends AbstractReceiver
+{
 
-	    // log that a Message was received
-		error_log($logMessage = "Successfully received / finished message");
-
-		// define the import file from message
-		$importFile = $message->getMessage();
-		
-		// open the import file
-		$importData = file($importFile, FILE_USE_INCLUDE_PATH);
-
+    /**
+     * Will be invoked when a new message for this message bean will be available.
+     *
+     * @param \TechDivision\MessageQueueClient\Interfaces\Message $message   A message this message bean is listen for
+     * @param string                                              $sessionId The session ID
+     *            
+     * @return void
+     * @see \TechDivision\MessageQueueClient\Interfaces\MessageReceiver::onMessage()
+     */
+    public function onMessage(Message $message, $sessionId)
+    {
+        
+        // log that a Message was received
+        error_log($logMessage = "Successfully received / finished message");
+        
+        // define the import file from message
+        $importFile = $message->getMessage();
+        
+        // open the import file
+        $importData = file($importFile, FILE_USE_INCLUDE_PATH);
+        
         // initialize the connection and the session
         $queue = Queue::createQueue("queue/import_chunk");
         $connection = QueueConnectionFactory::createQueueConnection();
         $session = $connection->createQueueSession();
         $sender = $session->createSender($queue);
-
+        
         // init chunk data
         $chunkSize = 1000;
         $currentChunkIndex = 0;
         $chunkData = array();
-
+        
         $i = 0;
         // send chunk message
         foreach ($importData as $data) {
+            
             // increase counter
-            $i++;
-
+            $i ++;
+            
             // fill chunk data array
             $chunkData[] = $data;
             // check if chunk size is reached
             if ($i == $chunkSize) {
-                $currentChunkIndex++;
+                
+                // raise the counter for the chunks
+                $currentChunkIndex ++;
+                
                 // reset counter
                 $i = 0;
+                
                 // send chunked data message
                 $send = $sender->send(new ArrayMessage($chunkData), false);
+                
                 // reset chunk data
                 $chunkData = array();
-                // initialize the message monitor
-                /*
-                $message->setMessageMonitor($monitor = new MessageMonitor(1, 'Dummy message'));
-                $monitor->setRowCount(1);
-                */
+                
                 // update the MessageMonitor
                 $this->updateMonitor($message);
                 error_log(__METHOD__ . ' -> chunk ' . $currentChunkIndex);
                 sleep(5);
             }
         }
-
-	}
+    }
 }

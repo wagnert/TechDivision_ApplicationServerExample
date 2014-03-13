@@ -1,33 +1,64 @@
 <?php
 
+/**
+ * TechDivision\Example\Entities\Resource
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ *
+ * PHP version 5
+ *
+ * @category   Appserver
+ * @package    TechDivision_ApplicationServerExample
+ * @subpackage Entities
+ * @author     Tim Wagner <tw@techdivision.com>
+ * @copyright  2014 TechDivision GmbH <info@techdivision.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link       http://www.appserver.io
+ */
+
 namespace TechDivision\Example\Entities;
 
 /**
+ * Doctrine entity that represents a resource.
+ *
+ * @category   Appserver
+ * @package    TechDivision_ApplicationServerExample
+ * @subpackage Entities
+ * @author     Tim Wagner <tw@techdivision.com>
+ * @copyright  2014 TechDivision GmbH <info@techdivision.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link       http://www.appserver.io
+ *
  * @Entity @Table(name="resource")
- **/
-class Resource {
+ */
+class Resource
+{
 
     /**
-     * @Id @GeneratedValue @Column(type="integer")
      * @var int
+     * @Id @GeneratedValue @Column(type="integer")
      */
     protected $resourceId;
 
     /**
-     * @Column(type="string")
      * @var string
+     * @Column(type="string")
      */
     protected $resourceLocale;
 
     /**
-     * @Column(type="string")
      * @var string
+     * @Column(type="string")
      */
     protected $key;
 
     /**
-     * @Column(type="string")
      * @var string
+     * @Column(type="string")
      */
     protected $message;
 
@@ -36,7 +67,8 @@ class Resource {
      *
      * @return integer Holds the value of the class member resourceId
      */
-    public function getResourceId() {
+    public function getResourceId()
+    {
         return $this->resourceId;
     }
 
@@ -44,8 +76,11 @@ class Resource {
      * Sets the value for the class member resourceId.
      *
      * @param integer $resourceId Holds the value for the class member resourceId
+     * 
+     * @return void
      */
-    public function setResourceId($resourceId) {
+    public function setResourceId($resourceId)
+    {
         $this->resourceId = $resourceId;
     }
 
@@ -54,7 +89,8 @@ class Resource {
      *
      * @return string Holds the value of the class member resourceLocale
      */
-    public function getResourceLocale() {
+    public function getResourceLocale()
+    {
         return $this->resourceLocale;
     }
 
@@ -62,8 +98,11 @@ class Resource {
      * Sets the value for the class member resourceLocale.
      *
      * @param string $resourceLocale Holds the value for the class member resourceLocale
+     * 
+     * @return void
      */
-    public function setResourceLocale($resourceLocale) {
+    public function setResourceLocale($resourceLocale)
+    {
         $this->resourceLocale = $resourceLocale;
     }
 
@@ -72,7 +111,8 @@ class Resource {
      *
      * @return string Holds the value of the class member key
      */
-    public function getKey() {
+    public function getKey()
+    {
         return $this->key;
     }
 
@@ -80,8 +120,11 @@ class Resource {
      * Sets the value for the class member key.
      *
      * @param string $key Holds the value for the class member key
+     * 
+     * @return void
      */
-    public function setKey($key) {
+    public function setKey($key)
+    {
         $this->key = $key;
     }
 
@@ -90,7 +133,8 @@ class Resource {
      *
      * @return string Holds the value of the class member message
      */
-    public function getMessage() {
+    public function getMessage()
+    {
         return $this->message;
     }
 
@@ -98,9 +142,11 @@ class Resource {
      * Sets the value for the class member message.
      *
      * @param string $message Holds the value for the class member message
+     * 
+     * @return void
      */
-    public function setMessage($message) {
+    public function setMessage($message)
+    {
         $this->message = $message;
     }
-
 }

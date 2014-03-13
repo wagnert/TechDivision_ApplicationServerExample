@@ -8,6 +8,16 @@
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is available through the world-wide-web at this URL:
  * http://opensource.org/licenses/osl-3.0.php
+ *
+ * PHP version 5
+ *
+ * @category   Appserver
+ * @package    TechDivision_ApplicationServerExample
+ * @subpackage Handlers
+ * @author     Tim Wagner <tw@techdivision.com>
+ * @copyright  2014 TechDivision GmbH <info@techdivision.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link       http://www.appserver.io
  */
 
 namespace TechDivision\Example\Handlers;
@@ -15,17 +25,23 @@ namespace TechDivision\Example\Handlers;
 use TechDivision\Example\Entities\Sample;
 
 /**
- * @package     TechDivision\Example
- * @copyright  	Copyright (c) 2010 <info@techdivision.com> - TechDivision GmbH
- * @license    	http://opensource.org/licenses/osl-3.0.php
- *              Open Software License (OSL 3.0)
- * @author      Tim Wagner <tw@techdivision.com>
+ * This is a web socket handler that handles requests
+ * related with samples.
+ * 
+ * @category   Appserver
+ * @package    TechDivision_ApplicationServerExample
+ * @subpackage Handlers
+ * @author     Tim Wagner <tw@techdivision.com>
+ * @copyright  2014 TechDivision GmbH <info@techdivision.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link       http://www.appserver.io
  */
 class SampleHandler extends BaseHandler
 {
 
     /**
      * Class name of the persistence container proxy that handles the data.
+     * 
      * @var string
      */
     const PROXY_CLASS = 'TechDivision\Example\Services\SampleProcessor';
@@ -34,7 +50,8 @@ class SampleHandler extends BaseHandler
      * Persists the sample entity with the passed data.
      *
      * @param string $sampleId The ID to be persisted
-     * @param string $name The name to be persisted
+     * @param string $name     The name to be persisted
+     * 
      * @return \TechDivision\Example\Entities\Sample The persisted entity
      */
     public function persistAction($sampleId, $name)
@@ -51,7 +68,7 @@ class SampleHandler extends BaseHandler
     /**
      * Returns all sample entities.
      *
-     * @return array<\TechDivision\Example\Entities\Sample> The array with the sample entities
+     * @return array The array with the sample entities
      */
     public function overviewAction()
     {
