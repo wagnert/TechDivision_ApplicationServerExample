@@ -23,7 +23,7 @@
 
 namespace TechDivision\Example\Servlets;
 
-use TechDivision\ServletEngine\Http\Servlet;
+use TechDivision\Servlet\Http\HttpServlet;
 use TechDivision\Servlet\Http\HttpServletRequest;
 use TechDivision\Servlet\Http\HttpServletResponse;
 use TechDivision\WebServer\Dictionaries\ServerVars;
@@ -42,7 +42,7 @@ use TechDivision\PersistenceContainerClient\Context\Connection\Factory;
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  */
-abstract class AbstractServlet extends Servlet
+abstract class AbstractServlet extends HttpServlet
 {
 
     /**

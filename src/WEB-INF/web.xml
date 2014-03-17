@@ -98,7 +98,7 @@
             <realm>test</realm>
             <adapter_type>htpasswd</adapter_type>
             <options>
-                <file>htpasswd</file>
+                <file>WEB-INF/htpasswd</file>
             </options>
         </auth>
     </security>
@@ -110,7 +110,7 @@
             <realm>Digest-Example-Realm</realm>
             <adapter_type>htdigest</adapter_type>
             <options>
-                <file>htdigest</file>
+                <file>WEB-INF/htdigest</file>
             </options>
         </auth>
     </security>
