@@ -300,7 +300,7 @@ abstract class AbstractServlet extends HttpServlet
     {
         
         // if we ARE in a virtual host, return the base URL
-        if ($this->getServletConfig()->getApplication()->isVhostOf($this->getServletRequest()->getServerName())) {
+        if ($this->getServletRequest()->getContext()->isVhostOf($this->getServletRequest()->getServerName())) {
             return AbstractServlet::BASE_URL;
         }
         
