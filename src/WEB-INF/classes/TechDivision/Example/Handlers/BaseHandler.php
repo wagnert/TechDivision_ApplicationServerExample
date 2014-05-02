@@ -22,7 +22,7 @@
 namespace TechDivision\Example\Handlers;
 
 use Ratchet\ConnectionInterface;
-use TechDivision\PersistenceContainerClient\Context\Connection\Factory;
+use TechDivision\PersistenceContainerClient\ConnectionFactory;
 use TechDivision\WebSocketContainer\Handlers\AbstractHandler;
 
 /**
@@ -86,7 +86,7 @@ abstract class BaseHandler extends AbstractHandler
         $this->clients = new \SplObjectStorage();
 
         // create proxy connnection + session
-        $this->connection = Factory::createContextConnection(BaseHandler::PERSISTENCE_CONTAINER_APPLICATION_NAME);
+        $this->connection = ConnectionFactory::createContextConnection(BaseHandler::PERSISTENCE_CONTAINER_APPLICATION_NAME);
         $this->session = $this->connection->createContextSession();
     }
 

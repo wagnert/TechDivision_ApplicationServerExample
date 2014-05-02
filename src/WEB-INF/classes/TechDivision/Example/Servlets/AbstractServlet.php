@@ -27,7 +27,7 @@ use TechDivision\Servlet\Http\HttpServlet;
 use TechDivision\Servlet\Http\HttpServletRequest;
 use TechDivision\Servlet\Http\HttpServletResponse;
 use TechDivision\WebServer\Dictionaries\ServerVars;
-use TechDivision\PersistenceContainerClient\Context\Connection\Factory;
+use TechDivision\PersistenceContainerClient\ConnectionFactory;
 
 /**
  * Abstract example implementation that provides some kind of basic MVC functionality
@@ -115,7 +115,7 @@ abstract class AbstractServlet extends HttpServlet
      */
     public function __construct()
     {
-        $this->connection = Factory::createContextConnection('example');
+        $this->connection = ConnectionFactory::createContextConnection('example');
         $this->session = $this->connection->createContextSession();
     }
 
