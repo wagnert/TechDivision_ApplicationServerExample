@@ -23,6 +23,7 @@
 
 namespace TechDivision\Example\Servlets;
 
+use TechDivision\Servlet\ServletConfig;
 use TechDivision\Servlet\Http\HttpServlet;
 use TechDivision\Servlet\Http\HttpServletRequest;
 use TechDivision\Servlet\Http\HttpServletResponse;
@@ -113,8 +114,12 @@ abstract class AbstractServlet extends HttpServlet
      * 
      * @return void
      */
-    public function __construct()
+    public function init(ServletConfig $config)
     {
+        // call parent method to set configuration
+        parent::init($config);
+        
+        // initialize the persistence container proxy
         $this->connection = ConnectionFactory::createContextConnection('example');
         $this->session = $this->connection->createContextSession();
     }
@@ -202,7 +207,7 @@ abstract class AbstractServlet extends HttpServlet
      */
     public function doGet(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
-
+        
         // add request and response to session
         $this->setServletRequest($servletRequest);
         $this->setServletResponse($servletResponse);
@@ -211,6 +216,9 @@ abstract class AbstractServlet extends HttpServlet
         $session = $this->getServletRequest()->getSession(true);
         $session->setSessionCookieHttpOnly(true);
         $session->start();
+        
+        // set the session ID on the persistence container proxy
+        $this->session->setSessionId($session->getId());
             
         // create the default action => indexAction
         $actionMethod = AbstractServlet::DEFAULT_ACTION_NAME . AbstractServlet::ACTION_SUFFIX;
