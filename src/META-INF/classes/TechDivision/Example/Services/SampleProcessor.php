@@ -27,25 +27,32 @@ use TechDivision\Example\Services\AbstractProcessor;
 /**
  * A singleton session bean implementation that handles the
  * data by using Doctrine ORM.
- * 
+ *
  * @category   Appserver
  * @package    TechDivision_ApplicationServerExample
- * @subpackage MessageBeans
+ * @subpackage Services
  * @author     Tim Wagner <tw@techdivision.com>
  * @copyright  2014 TechDivision GmbH <info@techdivision.com>
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
- * 
- * @Singleton
+ *
+ * @Stateless
  */
 class SampleProcessor extends AbstractProcessor
 {
 
     /**
+     * A dummy counter to check that we can be stateful.
+     *
+     * @var integer
+     */
+    protected $counter = 0;
+
+    /**
      * Loads and returns the entity with the ID passed as parameter.
      *
      * @param integer $id The ID of the entity to load
-     * 
+     *
      * @return object The entity
      */
     public function load($id)
@@ -58,7 +65,7 @@ class SampleProcessor extends AbstractProcessor
      * Persists the passed entity.
      *
      * @param Sample $entity The entity to persist
-     * 
+     *
      * @return Sample The persisted entity
      */
     public function persist(Sample $entity)
@@ -82,7 +89,7 @@ class SampleProcessor extends AbstractProcessor
      * Deletes the entity with the passed ID.
      *
      * @param integer $id The ID of the entity to delete
-     * 
+     *
      * @return array An array with all existing entities
      */
     public function delete($id)
@@ -100,6 +107,11 @@ class SampleProcessor extends AbstractProcessor
      */
     public function findAll()
     {
+
+        // raise the dummy counter
+        $this->counter++;
+
+        // load all entities
         $entityManager = $this->getEntityManager();
         $repository = $entityManager->getRepository('TechDivision\Example\Entities\Sample');
         return $repository->findAll();

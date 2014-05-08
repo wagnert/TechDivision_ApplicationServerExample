@@ -23,6 +23,7 @@
 
 namespace TechDivision\Example\Servlets;
 
+use TechDivision\Example\Utils\ContextKeys;
 use TechDivision\Servlet\Http\HttpServletRequest;
 use TechDivision\Servlet\Http\HttpServletResponse;
 use TechDivision\Example\Exceptions\LoginException;
@@ -30,7 +31,7 @@ use TechDivision\Example\Exceptions\LoginException;
 /**
  * Example servlet implementation that validates passed user credentials against
  * persistence container proxy and stores the user data in the session.
- * 
+ *
  * @category   Appserver
  * @package    TechDivision_ApplicationServerExample
  * @subpackage Servlets
@@ -70,6 +71,8 @@ class LoginServlet extends AbstractServlet
      */
     public function indexAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
+    	$viewData = $this->getProxy(LoginServlet::PROXY_CLASS)->checkForDefaultCredentials();
+    	$this->addAttribute(ContextKeys::VIEW_DATA, $viewData);
         $servletResponse->appendBodyStream($this->processTemplate(LoginServlet::LOGIN_TEMPLATE, $servletRequest, $servletResponse));
     }
 
@@ -87,17 +90,17 @@ class LoginServlet extends AbstractServlet
     {
 
         try {
-    
+
             // check if the necessary params has been specified and are valid
             if (($username = $servletRequest->getParameter('username')) === null) {
                 throw new \Exception('Please enter a valid username');
             }
-    
+
             // check if the necessary params has been specified and are valid
             if (($password = $servletRequest->getParameter('password')) === null) {
                 throw new \Exception('Please enter a valid password');
             }
-            
+
             // try to login
             $this->getProxy(LoginServlet::PROXY_CLASS)->login($username, $password);
 
@@ -116,16 +119,16 @@ class LoginServlet extends AbstractServlet
 
     /**
      * Action that destroys the session and log the user out.
-     * 
+     *
      * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
      * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
      *
      * @return void
      * @see \TechDivision\Example\Servlets\IndexServlet::indexAction()
-     * @todo Still to implement
      */
     public function logoutAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
+    	$servletRequest->getSession()->destroy();
         $this->indexAction($servletRequest, $servletResponse);
     }
 }
