@@ -60,7 +60,7 @@ use TechDivision\Example\Utils\ContextKeys;
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="active"><a href="index.do"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;Home</a></li>
+                    <li><a href="index.do"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;Home</a></li>
                     <li><a href="login.do"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;Login</a></li>
                     <li><a href="upload.do"><span class="glyphicon glyphicon-upload"></span>&nbsp;&nbsp;Upload</a></li>
                     <li><a href="websocket.do"><span class="glyphicon glyphicon-retweet"></span>&nbsp;&nbsp;WebSocket</a></li>
@@ -72,7 +72,6 @@ use TechDivision\Example\Utils\ContextKeys;
                             <li><a href="digestAuthentication.do">Digest</a></li>
                         </ul>
                     </li>
-
                 </ul>
             </div>
         </div>
@@ -94,14 +93,13 @@ use TechDivision\Example\Utils\ContextKeys;
 
         <br>
 
-        <h1>Message Queue example</h1>
+        <h1>Select file</h1>
 
         <br>
 
-        <form class="form-upload" action="messageQueue.do/upload" method="post" enctype="multipart/form-data">
-            <h2 class="form-upload-heading">Select file</h2>
-            <input name="fileToUpload" type="file" class="input-block-level re-centered" placeholder="Filename">
-            <button class="btn btn-large btn-primary" type="submit">Upload file</button>
+        <form class="form-center" role="form" action="upload.do/upload" method="post" enctype="multipart/form-data">
+            <input name="fileToUpload" type="file" class="form-control" placeholder="Filename">
+            <button class="btn btn-large btn-default btn-block" type="submit">Upload file</button>
         </form>
 
         <br><br>
