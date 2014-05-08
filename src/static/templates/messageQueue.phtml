@@ -1,7 +1,7 @@
 <?php
 
 /**
- * templates\index.phtml
+ * templates\messageQueue.phtml
  *
  * NOTICE OF LICENSE
  *
@@ -14,13 +14,14 @@ namespace TechDivision\Example\Servlets;
 
 use TechDivision\Example\Utils\ContextKeys;
 
+/** @var $this \TechDivision\Example\Servlets\LoginServlet */
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <base href="<?php echo $this->getBaseUrl() ?>">
-    <title>Example</title>
+    <title>Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -34,37 +35,50 @@ use TechDivision\Example\Utils\ContextKeys;
             padding-bottom: 40px;
         }
 
-            /* Custom container */
+        /* Custom container */
         .container-narrow {
             margin: 0 auto;
             max-width: 700px;
         }
+
         .container-narrow > hr {
             margin: 30px 0;
         }
 
-            /* Main marketing message and sign up button */
+        /* Main marketing message and sign up button */
         .jumbotron {
             margin: 60px 0;
             text-align: center;
         }
+
         .jumbotron h1 {
             font-size: 72px;
             line-height: 1;
         }
+
         .jumbotron .btn {
             font-size: 21px;
             padding: 14px 24px;
         }
 
-            /* Supporting marketing content */
+        /* Supporting marketing content */
         .marketing {
             margin: 60px 0;
         }
+
         .marketing p + h4 {
             margin-top: 28px;
         }
+
+        .central {
+            text-align: center;
+        }
+
+        .re-centered {
+            margin-left: 35%;
+        }
     </style>
+
 </head>
 
 <body>
@@ -78,38 +92,40 @@ use TechDivision\Example\Utils\ContextKeys;
             <li><a href="upload.do">Upload</a></li>
             <li><a href="websocket.do">WebSocket</a></li>
             <li><a href="basicAuthentication.do">Basic Authentication</a></li>
-            <li class="active"><a href="digestAuthentication.do">Digest Authentication</a></li>
-            <li><a href="messageQueue.do">Message-Queue</a></li>
+            <li><a href="digestAuthentication.do">Digest Authentication</a></li>
+            <li class="active"><a href="messageQueue.do">Message-Queue</a></li>
         </ul>
         <h3 class="muted">appserver example</h3>
     </div>
 
     <hr>
 
-    <div class="jumbotron">
-        <a href="http://appserver.io">
-            <img src="http://appserver.io/static/img/logo-black.png"/>
-        </a>
-        <h1>example</h1>
-        <p class="lead">
-            Succesfully passed authentication
-        </p>
-    </div>
+    <div class="row-fluid marketing central">
 
-    <hr>
+        <form class="form-upload" action="messageQueue.do/upload" method="post" enctype="multipart/form-data">
+            <h2 class="form-upload-heading">Select file</h2>
+            <input name="fileToUpload" type="file" class="input-block-level re-centered" placeholder="Filename">
+            <button class="btn btn-large btn-primary" type="submit">Upload file</button>
+        </form>
 
-    <div class="row-fluid marketing">
-
-        <div class="span12 text-center">
-            <?php if ($errorMessages = $this->getAttribute('errorMessages')): ?>
-                <div class="alert alert-error">
-                    <?php foreach ($errorMessages as $errorMessage): ?>
-                        <?php echo $errorMessage ?></br>
-                    <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
+        <div class="span12">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($this->getAttribute(ContextKeys::OVERVIEW_DATA) as $importFile) { ?><tr>
+                        <td><?php echo $importFile->getFilename() ?></td>
+                        <td><a href="<?php echo $this->getImportLink($importFile) ?>">Import</a></td>
+                        <td><a href="<?php echo $this->getDeleteLink($importFile) ?>">Delete</a></td>
+                    </tr><?php } ?>
+                </tbody>
+            </table>
         </div>
-
     </div>
 
     <hr>
@@ -118,7 +134,8 @@ use TechDivision\Example\Utils\ContextKeys;
         <p>&copy; appserver.io 2014</p>
     </div>
 
-</div> <!-- /container -->
+</div>
+<!-- /container -->
 
 <!-- Le javascript
 ================================================== -->

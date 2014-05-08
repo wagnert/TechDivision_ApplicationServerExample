@@ -31,10 +31,10 @@ use TechDivision\Example\Utils\ContextKeys;
 /**
  * Example servlet implementation that loads data over a persistence container proxy
  * and renders a list, based on the returned values.
- * 
+ *
  * Additional it provides functionality to edit, delete und persist the data after
  * changing it.
- * 
+ *
  * @category   Appserver
  * @package    TechDivision_ApplicationServerExample
  * @subpackage Servlets
@@ -49,18 +49,18 @@ class IndexServlet extends AbstractServlet
 
     /**
      * The relative path, up from the webapp path, to the template to use.
-     * 
+     *
      * @var string
      */
     const INDEX_TEMPLATE = 'static/templates/index.phtml';
 
     /**
      * Class name of the persistence container proxy that handles the data.
-     * 
+     *
      * @var string
      */
     const PROXY_CLASS = 'TechDivision\Example\Services\SampleProcessor';
-    
+
     /**
      * Default action to invoke if no action parameter has been found in the request.
      *
@@ -69,7 +69,7 @@ class IndexServlet extends AbstractServlet
      *
      * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
      * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
-     * 
+     *
      * @return void
      */
     public function indexAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
@@ -85,7 +85,7 @@ class IndexServlet extends AbstractServlet
      *
      * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
      * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
-     * 
+     *
      * @return void
      * @see \TechDivision\Example\Servlets\IndexServlet::indexAction()
      */
@@ -116,7 +116,7 @@ class IndexServlet extends AbstractServlet
      *
      * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
      * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
-     * 
+     *
      * @return void
      * @see \TechDivision\Example\Servlets\IndexServlet::indexAction()
      */
@@ -145,7 +145,7 @@ class IndexServlet extends AbstractServlet
      *
      * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
      * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
-     * 
+     *
      * @return void
      * @see \TechDivision\Example\Servlets\IndexServlet::indexAction()
      */
@@ -181,23 +181,23 @@ class IndexServlet extends AbstractServlet
      * Creates and returns the URL to open the dialog to edit the passed entity.
      *
      * @param \TechDivision\Example\Entities\Sample $entity The entity to create the edit link for
-     * 
+     *
      * @return string The URL to open the edit dialog
      */
     public function getEditLink(Sample $entity)
     {
-        return '?action=load&sampleId=' . $entity->getSampleId();
+        return 'index.do/load?sampleId=' . $entity->getSampleId();
     }
 
     /**
      * Creates and returns the URL that has to be invoked to delete the passed entity.
      *
      * @param \TechDivision\Example\Entities\Sample $entity The entity to create the deletion link for
-     * 
+     *
      * @return string The URL with the deletion link
      */
     public function getDeleteLink(Sample $entity)
     {
-        return '?action=delete&sampleId=' . $entity->getSampleId();
+        return 'index.do/delete?sampleId=' . $entity->getSampleId();
     }
 }

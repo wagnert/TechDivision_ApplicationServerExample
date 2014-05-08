@@ -33,7 +33,7 @@ use TechDivision\PersistenceContainerClient\ConnectionFactory;
 /**
  * Abstract example implementation that provides some kind of basic MVC functionality
  * to handle requests by subclasses action methods.
- * 
+ *
  * @category   Appserver
  * @package    TechDivision_ApplicationServerExample
  * @subpackage Servlets
@@ -48,86 +48,85 @@ abstract class AbstractServlet extends HttpServlet
 
     /**
      * The default action if no valid action name was found in the path info.
-     * 
+     *
      * @var string
      */
     const DEFAULT_ACTION_NAME = 'index';
-    
+
     /**
      * The default action method suffix.
-     * 
+     *
      * @var string
      */
     const ACTION_SUFFIX = 'Action';
-    
+
     /**
      * The default delimiter to extract the requested action name from the path info.
-     * 
+     *
      * @var string
      */
     const ACTION_DELIMITER = '/';
-    
+
     /**
      * The applications base URL.
-     * 
+     *
      * @var string
      */
     const BASE_URL = '/';
-    
+
     /**
      * Servlet context to transfer data between the servlet and the view.
-     * 
+     *
      * @var array
      */
     protected $context = array();
 
     /**
      * The servlet request instance.
-     * 
+     *
      * @var \TechDivision\Servlet\Http\HttpServletRequest
      */
     protected $servletRequest;
 
     /**
      * The servlet response instance.
-     * 
+     *
      * @var \TechDivision\Servlet\Http\HttpServletResponse
      */
     protected $servletResponse;
 
     /**
      * The connection instance for the persistence container.
-     * 
+     *
      * @var \TechDivision\PersistenceContainerClient\Context\ContextConnection
      */
     protected $connection;
 
     /**
      * The session instance for the persistence container connection.
-     * 
+     *
      * @var \TechDivision\PersistenceContainerClient\Context\ContextSession
      */
     protected $session;
 
     /**
      * Initializes the connection to the persistence container.
-     * 
+     *
      * @return void
      */
     public function init(ServletConfig $config)
     {
         // call parent method to set configuration
         parent::init($config);
-        
+
         // initialize the persistence container proxy
         $this->connection = ConnectionFactory::createContextConnection('example');
         $this->session = $this->connection->createContextSession();
     }
 
-
     /**
      * Returns the base path to the web application.
-     * 
+     *
      * @return string The base path
      */
     public function getWebappPath()
@@ -140,7 +139,7 @@ abstract class AbstractServlet extends HttpServlet
      *
      * @param string $key   The key to attach the data under
      * @param mixed  $value The data to be attached
-     * 
+     *
      * @return void
      */
     public function addAttribute($key, $value)
@@ -152,7 +151,7 @@ abstract class AbstractServlet extends HttpServlet
      * Returns the data for the passed key.
      *
      * @param string $key The key to return the data for
-     * 
+     *
      * @return mixed The requested data
      */
     public function getAttribute($key)
@@ -168,7 +167,7 @@ abstract class AbstractServlet extends HttpServlet
      * @param string                                         $template        Relative path to the template file
      * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
      * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
-     * 
+     *
      * @return string The templates content
      */
     public function processTemplate($template, HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
@@ -188,7 +187,7 @@ abstract class AbstractServlet extends HttpServlet
      * and returns it.
      *
      * @param string $proxyClass The session bean class name to return the proxy for
-     * 
+     *
      * @return mixed The proxy instance
      */
     public function getProxy($proxyClass)
@@ -207,7 +206,7 @@ abstract class AbstractServlet extends HttpServlet
      */
     public function doGet(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
-        
+
         // add request and response to session
         $this->setServletRequest($servletRequest);
         $this->setServletResponse($servletResponse);
@@ -216,28 +215,28 @@ abstract class AbstractServlet extends HttpServlet
         $session = $this->getServletRequest()->getSession(true);
         $session->setSessionCookieHttpOnly(true);
         $session->start();
-        
+
         // set the session ID on the persistence container proxy
         $this->session->setSessionId($session->getId());
-            
+
         // create the default action => indexAction
         $actionMethod = AbstractServlet::DEFAULT_ACTION_NAME . AbstractServlet::ACTION_SUFFIX;
-        
+
         // load the first part of the path info => that is the action name by default
         list ($requestedActionName, ) = explode(AbstractServlet::ACTION_DELIMITER, trim($servletRequest->getPathInfo(), AbstractServlet::ACTION_DELIMITER));
 
         // if the requested action has been found in the path info
         if (empty($requestedActionName) === false) {
-            
+
             // if yes, concatenate it to create a valid action name
             $requestedActionMethod = $requestedActionName . AbstractServlet::ACTION_SUFFIX;
-            
+
             // check if the requested action method is a class method
             if (in_array($requestedActionMethod, get_class_methods($this))) {
                 $actionMethod = $requestedActionMethod;
             }
         }
-    
+
         // invoke the action itself
         $this->$actionMethod($servletRequest, $servletResponse);
     }
@@ -259,7 +258,7 @@ abstract class AbstractServlet extends HttpServlet
      * Sets the servlet request instance.
      *
      * @param \TechDivision\Servlet\Http\HttpServletRequest $servletRequest The request instance
-     * 
+     *
      * @return void
      */
     public function setServletRequest(HttpServletRequest $servletRequest)
@@ -271,7 +270,7 @@ abstract class AbstractServlet extends HttpServlet
      * Sets the servlet response instance.
      *
      * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The request instance
-     * 
+     *
      * @return void
      */
     public function setServletResponse(HttpServletResponse $servletResponse)
@@ -281,7 +280,7 @@ abstract class AbstractServlet extends HttpServlet
 
     /**
      * Returns the servlet response instance.
-     * 
+     *
      * @return \TechDivision\Servlet\Http\ServletRequest The request instance
      */
     public function getServletRequest()
@@ -291,7 +290,7 @@ abstract class AbstractServlet extends HttpServlet
 
     /**
      * Returns the servlet request instance.
-     * 
+     *
      * @return \TechDivision\Servlet\Http\HttpServletResponse The response instance
      */
     public function getServletResponse()
@@ -306,12 +305,12 @@ abstract class AbstractServlet extends HttpServlet
      */
     public function getBaseUrl()
     {
-        
+
         // if we ARE in a virtual host, return the base URL
         if ($this->getServletRequest()->getContext()->isVhostOf($this->getServletRequest()->getServerName())) {
             return AbstractServlet::BASE_URL;
         }
-        
+
         // if not, prepend it with the context path
         return $this->getServletRequest()->getContextPath() . AbstractServlet::BASE_URL;
     }
