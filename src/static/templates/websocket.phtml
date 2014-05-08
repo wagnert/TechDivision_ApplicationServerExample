@@ -40,7 +40,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">appserver.io example</a>
+                <a class="navbar-brand" href="/index.do">appserver.io example</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -75,10 +75,6 @@
 
     <div class="container content">
 
-        <a href="http://appserver.io">
-            <img src="http://appserver.io/static/img/logo-black.png"/>
-        </a>
-
         <?php if ($errorMessages = $this->getAttribute('errorMessages')): ?>
             <div class="alert alert-danger">
                 <?php foreach ($errorMessages as $errorMessage): ?>
@@ -86,6 +82,10 @@
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
+
+        <a href="http://appserver.io">
+            <img src="http://appserver.io/static/img/logo-black.png"/>
+        </a>
 
         <br>
 
@@ -122,7 +122,7 @@
 <!-- placed at the end of the document so the pages load faster -->
 <script src="components/jquery/jquery.min.js"></script>
 <script src="components/bootstrap/js/bootstrap.min.js"></script>
-<script src="components/require.js"></script>
+
 <script type="text/javascript">
     var connSample = new WebSocket('ws://127.0.0.1:8589/example/sample');
 
@@ -139,7 +139,7 @@
 
     connSample.onmessage = function(e) {
         console.log("Sample-Handler: " + e.data);
-        require(['jquery'], function($) {
+        $(function($) {
             var data = JSON.parse(e.data);
             for (i = 0; i < data.length; i++) {
                 $('#results > tbody:last').append('<tr><td>'+ data[i].sampleId +'</td><td>'+ data[i].name +'</td><td>Edit</td></tr>');

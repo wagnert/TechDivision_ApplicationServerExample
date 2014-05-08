@@ -45,7 +45,7 @@ use TechDivision\Example\Utils\ContextKeys;
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">appserver.io example</a>
+                <a class="navbar-brand" href="/index.do">appserver.io example</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -80,10 +80,6 @@ use TechDivision\Example\Utils\ContextKeys;
 
     <div class="container content">
 
-        <a href="http://appserver.io">
-            <img src="http://appserver.io/static/img/logo-black.png"/>
-        </a>
-
         <?php if ($errorMessages = $this->getAttribute('errorMessages')): ?>
             <div class="alert alert-danger">
                 <?php foreach ($errorMessages as $errorMessage): ?>
@@ -91,6 +87,10 @@ use TechDivision\Example\Utils\ContextKeys;
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
+
+        <a href="http://appserver.io">
+            <img src="http://appserver.io/static/img/logo-black.png"/>
+        </a>
 
         <br>
 
