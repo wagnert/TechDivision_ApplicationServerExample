@@ -20,145 +20,100 @@ use TechDivision\Example\Utils\ContextKeys;
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <base href="<?php echo $this->getBaseUrl() ?>">
-    <title>Login</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="author" content="appserver.io">
 
-    <!-- Le styles -->
-    <link href="components/require.css" rel="stylesheet">
-    <link rel="shortcut icon" href="static/img/favicon.png">
-    <style type="text/css">
-        body {
-            padding-top: 20px;
-            padding-bottom: 40px;
-        }
+    <title>appserver.io example</title>
 
-        /* Custom container */
-        .container-narrow {
-            margin: 0 auto;
-            max-width: 700px;
-        }
+    <base href="<?php echo $this->getBaseUrl() ?>">
 
-        .container-narrow > hr {
-            margin: 30px 0;
-        }
-
-        /* Main marketing message and sign up button */
-        .jumbotron {
-            margin: 60px 0;
-            text-align: center;
-        }
-
-        .jumbotron h1 {
-            font-size: 72px;
-            line-height: 1;
-        }
-
-        .jumbotron .btn {
-            font-size: 21px;
-            padding: 14px 24px;
-        }
-
-        /* Supporting marketing content */
-        .marketing {
-            margin: 60px 0;
-        }
-
-        .marketing p + h4 {
-            margin-top: 28px;
-        }
-
-        .form-signin {
-            max-width: 300px;
-            padding: 19px 29px 29px;
-            margin: 0 auto 20px;
-            background-color: #fff;
-            border: 1px solid #e5e5e5;
-            -webkit-border-radius: 5px;
-            -moz-border-radius: 5px;
-            border-radius: 5px;
-            -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-            -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-            box-shadow: 0 1px 2px rgba(0,0,0,.05);
-        }
-        .form-signin .form-signin-heading,
-        .form-signin .checkbox {
-            margin-bottom: 10px;
-        }
-        .form-signin input[type="text"],
-        .form-signin input[type="password"] {
-            font-size: 16px;
-            height: auto;
-            margin-bottom: 15px;
-            padding: 7px 9px;
-        }
-
-    </style>
-
+    <link href="components/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/css/style.css" rel="stylesheet">
+    <link href="static/img/favicon.png" rel="shortcut icon">
 </head>
 
 <body>
 
-<div class="container-narrow">
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/index.do"><img src="static/img/appserver-io-example.png" alt="appserver.io example"></a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <p class="navbar-text">
+                            <?php if ($this->getServletRequest()->getSession()->hasKey('username')): ?>
+                                Logged in as: <strong><?php echo $this->getServletRequest()->getSession()->getData('username') ?></strong>
+                            <?php else: ?>
+                                Not logged in.
+                            <?php endif; ?>
+                        </p>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="index.do"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;&nbsp;Home</a></li>
+                    <li class="active"><a href="login.do"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;&nbsp;Login</a></li>
+                    <li><a href="upload.do"><span class="glyphicon glyphicon-upload"></span>&nbsp;&nbsp;&nbsp;Upload</a></li>
+                    <li><a href="websocket.do"><span class="glyphicon glyphicon-retweet"></span>&nbsp;&nbsp;&nbsp;WebSocket</a></li>
+                    <li><a href="messageQueue.do"><span class="glyphicon glyphicon-list"></span>&nbsp;&nbsp;&nbsp;Message-Queue</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-briefcase"></span>&nbsp;&nbsp;&nbsp;Authentication <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="basicAuthentication.do">Basic</a></li>
+                            <li><a href="digestAuthentication.do">Digest</a></li>
+                        </ul>
+                    </li>
 
-    <div class="masthead">
-        <ul class="nav nav-pills pull-right">
-            <li><a href="index.do">Home</a></li>
-            <li class="active"><a href="login.do">Login</a></li>
-            <li><a href="upload.do">Upload</a></li>
-            <li><a href="websocket.do">WebSocket</a></li>
-            <li><a href="basicAuthentication.do">Basic Authentication</a></li>
-            <li><a href="digestAuthentication.do">Digest Authentication</a></li>
-            <li><a href="messageQueue.do">Message-Queue</a></li>
-        </ul>
-        <h3 class="muted">appserver example</h3>
-    </div>
-
-    <hr>
-
-    <div class="row-fluid">
-        <div class="span12">
-            <p>
-                <?php if ($this->getServletRequest()->getSession()->hasKey('username')) { ?>
-                    Logged in as: <strong><?php echo $this->getServletRequest()->getSession()->getData('username') ?></strong>
-                <?php } else { ?>
-                    Not logged in.
-                <?php } ?>
-            </p>
-            <?php if ($errorMessages = $this->getAttribute('errorMessages')) { ?>
-                <div class="alert alert-error">
-                <?php foreach ($errorMessages as $errorMessage) { ?>
-                    <?php echo $errorMessage ?></br>
-                <?php } ?>
-                </div>
-            <?php } ?>
+                </ul>
+            </div>
         </div>
     </div>
 
-    <form class="form-signin" action="login.do/login" method="post">
-        <h2 class="form-signin-heading">Please sign in</h2>
-        <input name="username" type="text" class="input-block-level" placeholder="Username">
-        <input name="password" type="password" class="input-block-level" placeholder="Password">
-        <label class="checkbox">
-            <input type="checkbox" value="remember-me"> Remember me
-        </label>
-        <button class="btn btn-large btn-primary" type="submit">Sign in</button>
-    </form>
+    <div class="container content">
 
-    <hr>
+        <?php if ($errorMessages = $this->getAttribute('errorMessages')): ?>
+            <div class="alert alert-danger">
+                <?php foreach ($errorMessages as $errorMessage): ?>
+                    <?php echo $errorMessage ?></br>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
 
-    <div class="footer">
-        <p>&copy; appserver.io 2014</p>
+        <a href="http://appserver.io">
+            <img src="http://appserver.io/static/img/logo-black.png"/>
+        </a>
+
+        <br>
+
+        <h1>Please sign in</h1>
+
+        <form class="form-center" role="form" action="login.do/login" method="post">
+            <input type="text" class="form-control" placeholder="Username" required="" autofocus="">
+            <input type="password" class="form-control" placeholder="Password" required="">
+            <label class="checkbox">
+                <input type="checkbox" value="remember-me"> Remember me
+            </label>
+            <button class="btn btn-lg btn-info btn-block" type="submit">Sign in</button>
+        </form>
+
+        <div class="footer">
+            <p>&copy; and built with pride by <a href="http://appserver.io" target="_blank">appserver.io</a></p>
+        </div>
+
     </div>
 
-</div> <!-- /container -->
-
-<!-- Le javascript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="components/require.js"></script>
+<!-- placed at the end of the document so the pages load faster -->
+<script src="components/jquery/jquery.min.js"></script>
+<script src="components/bootstrap/js/bootstrap.min.js"></script>
 
 </body>
 </html>
