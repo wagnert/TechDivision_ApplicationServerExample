@@ -1,7 +1,7 @@
 <?php
 
 /**
- * templates\index.phtml
+ * templates\messageQueue.phtml
  *
  * NOTICE OF LICENSE
  *
@@ -14,6 +14,7 @@ namespace TechDivision\Example\Servlets;
 
 use TechDivision\Example\Utils\ContextKeys;
 
+/** @var $this \TechDivision\Example\Servlets\LoginServlet */
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -59,11 +60,11 @@ use TechDivision\Example\Utils\ContextKeys;
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="active"><a href="index.do"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;&nbsp;Home</a></li>
-                    <li><a href="login.do"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;&nbsp;Login</a></li>
-                    <li><a href="upload.do"><span class="glyphicon glyphicon-upload"></span>&nbsp;&nbsp;&nbsp;Upload</a></li>
-                    <li><a href="websocket.do"><span class="glyphicon glyphicon-retweet"></span>&nbsp;&nbsp;&nbsp;WebSocket</a></li>
-                    <li><a href="messageQueue.do"><span class="glyphicon glyphicon-list"></span>&nbsp;&nbsp;&nbsp;Message-Queue</a></li>
+                    <li class="active"><a href="index.do"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;Home</a></li>
+                    <li><a href="login.do"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;Login</a></li>
+                    <li><a href="upload.do"><span class="glyphicon glyphicon-upload"></span>&nbsp;&nbsp;Upload</a></li>
+                    <li><a href="websocket.do"><span class="glyphicon glyphicon-retweet"></span>&nbsp;&nbsp;WebSocket</a></li>
+                    <li class="active"><a href="messageQueue.do"><span class="glyphicon glyphicon-list"></span>&nbsp;&nbsp;Message-Queue</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-briefcase"></span>&nbsp;&nbsp;&nbsp;Authentication <b class="caret"></b></a>
                         <ul class="dropdown-menu">
@@ -93,21 +94,36 @@ use TechDivision\Example\Utils\ContextKeys;
 
         <br>
 
-        <h1>Succesfully passed digist authentication</h1>
+        <h1>Message Queue example</h1>
 
-        <div class="row-fluid marketing">
+        <br>
 
-            <div class="span12 text-center">
-                <?php if ($errorMessages = $this->getAttribute('errorMessages')): ?>
-                    <div class="alert alert-error">
-                        <?php foreach ($errorMessages as $errorMessage): ?>
-                            <?php echo $errorMessage ?></br>
-                        <?php endforeach; ?>
-                    </div>
-                <?php endif; ?>
-            </div>
+        <form class="form-upload" action="messageQueue.do/upload" method="post" enctype="multipart/form-data">
+            <h2 class="form-upload-heading">Select file</h2>
+            <input name="fileToUpload" type="file" class="input-block-level re-centered" placeholder="Filename">
+            <button class="btn btn-large btn-primary" type="submit">Upload file</button>
+        </form>
 
-        </div>
+        <br><br>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($this->getAttribute(ContextKeys::OVERVIEW_DATA) as $importFile): ?>
+                    <tr>
+                        <td><?php echo $importFile->getFilename() ?></td>
+                        <td><a href="<?php echo $this->getImportLink($importFile) ?>">Import</a></td>
+                        <td><a href="<?php echo $this->getDeleteLink($importFile) ?>">Delete</a></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
 
         <div class="footer">
             <p>&copy; and built with pride by <a href="http://appserver.io" target="_blank">appserver.io</a></p>

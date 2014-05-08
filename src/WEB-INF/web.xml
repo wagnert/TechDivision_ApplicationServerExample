@@ -46,6 +46,13 @@
         <servlet-class>\TechDivision\Example\Servlets\DigestAuthenticationServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <description/>
+        <display-name>MessageQueueServlet</display-name>
+        <servlet-name>MessageQueueServlet</servlet-name>
+        <servlet-class>\TechDivision\Example\Servlets\MessageQueueServlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login.do*</url-pattern>
@@ -79,6 +86,11 @@
     <servlet-mapping>
         <servlet-name>DigestAuthenticationServlet</servlet-name>
         <url-pattern>/digestAuthentication.do*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>MessageQueueServlet</servlet-name>
+        <url-pattern>/messageQueue.do*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

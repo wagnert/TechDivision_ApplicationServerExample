@@ -21,18 +21,17 @@
  */
 namespace TechDivision\Example\Services;
 
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityManager;
+use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\Tools\Setup;
-use Doctrine\ORM\Tools\SchemaTool;
-use Doctrine\ORM\Tools\SchemaValidator;
+use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Persistence\ObjectManager;
 use TechDivision\ApplicationServer\Interfaces\ApplicationInterface;
 use TechDivision\Example\Entities\User;
 
 /**
  * A singleton session bean implementation that handles the
  * data by using Doctrine ORM.
- * 
+ *
  * @category   Appserver
  * @package    TechDivision_ApplicationServerExample
  * @subpackage MessageBeans
@@ -49,7 +48,7 @@ class AbstractProcessor
      *
      * @var string
      */
-    protected $datasourceName = 'TechDivision\Example';
+    protected $datasourceName = 'appserver.io-example-application';
 
     /**
      * Relative path to the folder with the database entries.
@@ -77,21 +76,8 @@ class AbstractProcessor
      */
     public function __construct(ApplicationInterface $application)
     {
-        try {
-
-            // set the application instance and initialize the connection parameters
-            $this->setApplication($application);
-            $this->initConnectionParameters();
-
-            // check if the database already exists, if not create it
-            $tool = new SchemaValidator($this->getEntityManager());
-            if ($tool->schemaInSyncWithMetadata() === false) {
-                $this->createSchema();
-            }
-
-        } catch (\Doctrine\DBAL\DBALException $e) {
-            // doesn't do anything here, because SQLite is not enabled of updating the schema
-        }
+        $this->setApplication($application);
+        $this->initConnectionParameters();
     }
 
     /**
@@ -196,10 +182,15 @@ class AbstractProcessor
      */
     public function getEntityManager()
     {
-        $pathToEntities = array(
-            $this->getApplication()->getWebappPath() . DIRECTORY_SEPARATOR . $this->getPathToEntities()
-        );
-        $metadataConfiguration = Setup::createAnnotationMetadataConfiguration($pathToEntities, true);
+        // prepare the path to the entities
+        $absolutePaths = array();
+        if ($relativePaths = $this->getPathToEntities()) {
+        	foreach (explode(PATH_SEPARATOR, $relativePaths) as $relativePath) {
+        		$absolutePaths[] = $this->getApplication()->getWebappPath() . DIRECTORY_SEPARATOR . $relativePath;
+        	}
+        }
+		// create the database configuration and initialize the entity manager
+        $metadataConfiguration = Setup::createAnnotationMetadataConfiguration($absolutePaths, true);
         return EntityManager::create($this->getConnectionParameters(), $metadataConfiguration);
     }
 
@@ -229,79 +220,13 @@ class AbstractProcessor
                 );
 
                 // initialize the path to the database when we use sqlite for example
-                $path = $databaseNode->getPath()->getNodeValue()->__toString();
-                if ($path != null) {
+                if ($path = $databaseNode->getPath()->getNodeValue()->__toString()) {
                     $connectionParameters['path'] = $this->getApplication()->getWebappPath() . DIRECTORY_SEPARATOR . $path;
                 }
 
                 // set the connection parameters
                 $this->setConnectionParameters($connectionParameters);
             }
-        }
-    }
-
-    /**
-     * Deletes the database schema and creates it new.
-     *
-     * Attention: All data will be lost if this method has been invoked.
-     *
-     * @return void
-     */
-    public function createSchema()
-    {
-
-        // load the entity manager and the schema tool
-        $entityManager = $this->getEntityManager();
-        $tool = new SchemaTool($entityManager);
-
-        // initialize the schema data from the entities
-        $classes = array(
-            $entityManager->getClassMetadata('TechDivision\Example\Entities\Assertion'),
-            $entityManager->getClassMetadata('TechDivision\Example\Entities\Resource'),
-            $entityManager->getClassMetadata('TechDivision\Example\Entities\Role'),
-            $entityManager->getClassMetadata('TechDivision\Example\Entities\Rule'),
-            $entityManager->getClassMetadata('TechDivision\Example\Entities\Sample'),
-            $entityManager->getClassMetadata('TechDivision\Example\Entities\User')
-        );
-
-        // drop the schema if it already exists and create it new
-        $tool->dropSchema($classes);
-        $tool->createSchema($classes);
-
-        // create a default user
-        $this->createDefaultUser();
-    }
-
-    /**
-     * Creates the default admin user.
-     *
-     * @return void
-     */
-    protected function createDefaultUser()
-    {
-        try {
-
-            // load the entity manager
-            $entityManager = $this->getEntityManager();
-
-            // set user data and save it
-            $user = $this->getApplication()->newInstance('\TechDivision\Example\Entities\User');
-            $user->setUserId(1);
-            $user->setEmail('info@appserver.io');
-            $user->setUsername('appserver');
-            $user->setUserLocale('en_US');
-            $user->setPassword(md5('appserver.i0'));
-            $user->setEnabled(true);
-            $user->setRate(1000);
-            $user->setContractedHours(160);
-            $user->setLdapSynced(false);
-            $user->setSyncedAt(time());
-            $entityManager->persist($user);
-
-            // flush the entity manager
-            $entityManager->flush();
-        } catch (\Exception $e) {
-            error_log($e->__toString());
         }
     }
 }

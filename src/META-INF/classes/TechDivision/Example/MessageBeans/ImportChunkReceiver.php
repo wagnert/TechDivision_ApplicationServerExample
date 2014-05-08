@@ -22,15 +22,14 @@
 
 namespace TechDivision\Example\MessageBeans;
 
-use TechDivision\MessageQueueClient\Interfaces\Message;
-use TechDivision\MessageQueueClient\Messages\MessageMonitor;
-use TechDivision\MessageQueueClient\Receiver\AbstractReceiver;
 use TechDivision\Example\Entities\Sample;
-use TechDivision\PersistenceContainerClient\Context\Connection\Factory;
+use TechDivision\MessageQueueProtocol\Message;
+use TechDivision\MessageQueue\Receiver\AbstractReceiver;
+use TechDivision\PersistenceContainerClient\ConnectionFactory;
 
 /**
  * An message receiver that imports data chunks into a database.
- * 
+ *
  * @category   Appserver
  * @package    TechDivision_ApplicationServerExample
  * @subpackage MessageBeans
@@ -38,26 +37,29 @@ use TechDivision\PersistenceContainerClient\Context\Connection\Factory;
  * @copyright  2014 TechDivision GmbH <info@techdivision.com>
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
+ *
+ * @MessageDriven
  */
 class ImportChunkReceiver extends AbstractReceiver
 {
 
     /**
      * Will be invoked when a new message for this message bean will be available.
-     * 
-     * @param \TechDivision\MessageQueueClient\Interfaces\Message $message   A message this message bean is listen for
-     * @param string                                              $sessionId The session ID                            
+     *
+     * @param \TechDivision\MessageQueueProtocol\Message $message   A message this message bean is listen for
+     * @param string                                     $sessionId The session ID
      *
      * @return void
-     * @see \TechDivision\MessageQueueClient\Interfaces\MessageReceiver::onMessage()
+     * @see \TechDivision\MessageQueueProtocol\Receiver::onMessage()
      */
     public function onMessage(Message $message, $sessionId)
     {
 
         // put status message
-        error_log($logMessage = "Process chuck data message");
+        error_log($logMessage = "Process chunked data message");
 
-        $connection = Factory::createContextConnection();
+        // initialize the persistence container proxy
+        $connection = ConnectionFactory::createContextConnection('example');
         $session = $connection->createContextSession();
         $initialContext = $session->createInitialContext();
 
@@ -75,10 +77,13 @@ class ImportChunkReceiver extends AbstractReceiver
 
             // prepare the entity
             $entity = new Sample();
-            $entity->setName($firstname . ', ' . $lastname);
+            $entity->setName(trim($firstname . ', ' . $lastname));
 
             // store the entity in the database
             $processor->persist($entity);
         }
+
+        // update the message monitor for this message
+        $this->updateMonitor($message);
     }
 }

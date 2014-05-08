@@ -13,7 +13,7 @@
     </datasource>
     -->
     
-    <datasource name="TechDivision\Example" type="TechDivision\PersistenceContainer\Application">
+    <datasource name="appserver.io-example-application">
         <database>
             <driver>pdo_sqlite</driver>
             <user>appserver</user>

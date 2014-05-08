@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <message-queues>
-    <message-queue type="\TechDivision\Example\MessageBeans\ImportReceiver" directory="classes">
+    <message-queue type="\TechDivision\Example\MessageBeans\ImportReceiver">
         <destination>queue/import</destination>
     </message-queue>
-    <message-queue type="\TechDivision\Example\MessageBeans\ImportChunkReceiver" directory="classes">
+    <message-queue type="\TechDivision\Example\MessageBeans\ImportChunkReceiver">
         <destination>queue/import_chunk</destination>
     </message-queue>
 </message-queues>
