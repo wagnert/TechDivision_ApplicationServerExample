@@ -1,16 +1,20 @@
 {
     "name": "techdivision/techdivision_applicationsserverexample",
     "description": "The example application for the ApplicationServer",
-    "version": "0.1.0",
+    "version": "0.6.0",
     "require": {
         "components/jquery": "*",
         "components/font-awesome": "*",
-        "components/bootstrap-default": "2.3.2"
+        "components/bootstrap": "3.1.1"
     },
     "authors": [
         {
             "name": "Tim Wagner",
             "email": "tw@techdivision.com"
+        },
+        {
+            "name": "Johann Zelger",
+            "email": "jz@techdivision.com"
         }
     ]
 }

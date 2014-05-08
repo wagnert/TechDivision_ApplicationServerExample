@@ -6,4 +6,5 @@
 /.project
 /.settings
 .sass-cache
+composer.lock
 build.properties
