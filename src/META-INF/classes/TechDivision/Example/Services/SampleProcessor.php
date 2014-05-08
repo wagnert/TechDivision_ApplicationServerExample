@@ -36,11 +36,18 @@ use TechDivision\Example\Services\AbstractProcessor;
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  * 
- * @Singleton
+ * @Stateful
  */
 class SampleProcessor extends AbstractProcessor
 {
 
+    /**
+     * A dummy counter to check that we can be stateful.
+     * 
+     * @var integer
+     */
+    protected $counter = 0;
+    
     /**
      * Loads and returns the entity with the ID passed as parameter.
      *
@@ -100,6 +107,11 @@ class SampleProcessor extends AbstractProcessor
      */
     public function findAll()
     {
+        
+        // raise the dummy counter
+        $this->counter++;
+        
+        // load all entities
         $entityManager = $this->getEntityManager();
         $repository = $entityManager->getRepository('TechDivision\Example\Entities\Sample');
         return $repository->findAll();
