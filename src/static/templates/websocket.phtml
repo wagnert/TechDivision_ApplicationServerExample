@@ -124,14 +124,14 @@
 <script src="components/bootstrap/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
-    var connSample = new WebSocket('ws://127.0.0.1:8589/example/sample');
+    var connSample = new WebSocket('ws://' + window.location.hostname + ':8589/example/sample');
 
     connSample.onopen = function(e) {
         console.log("Connection to sample handler established!");
         connSample.send('action=overview');
     };
 
-    var connUser = new WebSocket('ws://127.0.0.1:8589/example/user');
+    var connUser = new WebSocket('ws://' + window.location.hostname + ':8589/example/user');
 
     connUser.onopen = function(e) {
         console.log("Connection to user handler established!");
