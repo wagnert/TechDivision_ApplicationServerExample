@@ -71,8 +71,8 @@ class LoginServlet extends AbstractServlet
      */
     public function indexAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
-    	$viewData = $this->getProxy(LoginServlet::PROXY_CLASS)->checkForDefaultCredentials();
-    	$this->addAttribute(ContextKeys::VIEW_DATA, $viewData);
+        $viewData = $this->getProxy(LoginServlet::PROXY_CLASS)->checkForDefaultCredentials();
+        $this->addAttribute(ContextKeys::VIEW_DATA, $viewData);
         $servletResponse->appendBodyStream($this->processTemplate(LoginServlet::LOGIN_TEMPLATE, $servletRequest, $servletResponse));
     }
 
@@ -128,7 +128,7 @@ class LoginServlet extends AbstractServlet
      */
     public function logoutAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
-    	$servletRequest->getSession()->destroy();
+        $servletRequest->getSession()->destroy();
         $this->indexAction($servletRequest, $servletResponse);
     }
 }

@@ -112,6 +112,8 @@ abstract class AbstractServlet extends HttpServlet
     /**
      * Initializes the connection to the persistence container.
      *
+     * @param \TechDivision\Servlet\ServletConfig $config The servlet configuration
+     *
      * @return void
      */
     public function init(ServletConfig $config)
