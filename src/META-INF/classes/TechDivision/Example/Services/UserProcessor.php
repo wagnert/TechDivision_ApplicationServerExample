@@ -41,12 +41,12 @@ use TechDivision\Example\Exceptions\LoginException;
 class UserProcessor extends AbstractProcessor
 {
 
-	/**
-	 * The default username.
-	 *
-	 * @var string
-	 */
-	const DEFAULT_USERNAME = 'appserver';
+    /**
+     * The default username.
+     *
+     * @var string
+     */
+    const DEFAULT_USERNAME = 'appserver';
 
     /**
      * Validates the passed username agains the password.
@@ -88,7 +88,7 @@ class UserProcessor extends AbstractProcessor
         $repository = $entityManager->getRepository('TechDivision\Example\Entities\User');
 
         // try to load the default credentials
-    	$defaultUser = $repository->findOneBy(array('username' => UserProcessor::DEFAULT_USERNAME));
+        $defaultUser = $repository->findOneBy(array('username' => UserProcessor::DEFAULT_USERNAME));
         if ($defaultUser == null) {
             $defaultUser = $this->createDefaultCredentials();
         }

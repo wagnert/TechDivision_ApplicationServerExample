@@ -185,11 +185,11 @@ class AbstractProcessor
         // prepare the path to the entities
         $absolutePaths = array();
         if ($relativePaths = $this->getPathToEntities()) {
-        	foreach (explode(PATH_SEPARATOR, $relativePaths) as $relativePath) {
-        		$absolutePaths[] = $this->getApplication()->getWebappPath() . DIRECTORY_SEPARATOR . $relativePath;
-        	}
+            foreach (explode(PATH_SEPARATOR, $relativePaths) as $relativePath) {
+                $absolutePaths[] = $this->getApplication()->getWebappPath() . DIRECTORY_SEPARATOR . $relativePath;
+            }
         }
-		// create the database configuration and initialize the entity manager
+        // create the database configuration and initialize the entity manager
         $metadataConfiguration = Setup::createAnnotationMetadataConfiguration($absolutePaths, true);
         return EntityManager::create($this->getConnectionParameters(), $metadataConfiguration);
     }

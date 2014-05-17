@@ -66,7 +66,7 @@ class MessageQueueServlet extends AbstractServlet
     public function indexAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
 
-    	// initialize an array object to load file uploads
+        // initialize an array object to load file uploads
         $overviewData = new \ArrayObject();
 
         // init file iterator on deployment directory
@@ -129,7 +129,7 @@ class MessageQueueServlet extends AbstractServlet
     public function uploadAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
 
-    	// load the uploaded file information
+        // load the uploaded file information
         $fileToUpload = $servletRequest->getPart('fileToUpload');
 
         // sample for saving file to appservers upload tmp folder with tmpname
