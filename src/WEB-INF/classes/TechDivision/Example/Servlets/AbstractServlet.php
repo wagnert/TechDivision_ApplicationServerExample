@@ -254,7 +254,7 @@ abstract class AbstractServlet extends HttpServlet
     /**
      * Returns the session with the passed session name.
      *
-     * @param boolean $create      TRUE if a session has to be created if we can't find any
+     * @param boolean $create TRUE if a session has to be created if we can't find any
      *
      * @return \TechDivision\ServletEngine\Http\Session The requested session instance
      * @throws \Exception Is thrown if we can't find a request instance
