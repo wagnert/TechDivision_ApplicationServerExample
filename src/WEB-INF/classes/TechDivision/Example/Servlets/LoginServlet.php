@@ -105,7 +105,7 @@ class LoginServlet extends AbstractServlet
             $this->getProxy(LoginServlet::PROXY_CLASS)->login($username, $password);
 
             // if successfully then add the username to the session and redirect to the overview
-            $servletRequest->getSession()->putData('username', $username);
+            $this->getLoginSession()->putData('username', $username);
 
         } catch (LoginException $e) { // invalid login credentials
             $this->addAttribute('errorMessages', array("Username or Password invalid"));
@@ -128,7 +128,8 @@ class LoginServlet extends AbstractServlet
      */
     public function logoutAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
-        $servletRequest->getSession()->destroy();
-        $this->indexAction($servletRequest, $servletResponse);
+
+        // destroy the session
+        $this->getLoginSession()->destroy();
     }
 }

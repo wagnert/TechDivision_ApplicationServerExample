@@ -29,6 +29,7 @@ use TechDivision\Servlet\Http\HttpServletRequest;
 use TechDivision\Servlet\Http\HttpServletResponse;
 use TechDivision\WebServer\Dictionaries\ServerVars;
 use TechDivision\PersistenceContainerClient\ConnectionFactory;
+use TechDivision\Example\Exceptions\LoginException;
 
 /**
  * Abstract example implementation that provides some kind of basic MVC functionality
@@ -45,6 +46,13 @@ use TechDivision\PersistenceContainerClient\ConnectionFactory;
  */
 abstract class AbstractServlet extends HttpServlet
 {
+
+    /**
+     * The session name we want to use.
+     *
+     * @var string
+     */
+    const SESSION_NAME = 'example_login';
 
     /**
      * The default action if no valid action name was found in the path info.
@@ -214,7 +222,7 @@ abstract class AbstractServlet extends HttpServlet
         $this->setServletResponse($servletResponse);
 
         // initialize the session (create a new one if necessary)
-        $session = $this->getServletRequest()->getSession(true);
+        $session = $this->getLoginSession(true);
         $session->setSessionCookieHttpOnly(true);
         $session->start();
 
@@ -241,6 +249,79 @@ abstract class AbstractServlet extends HttpServlet
 
         // invoke the action itself
         $this->$actionMethod($servletRequest, $servletResponse);
+    }
+
+    /**
+     * Returns the session with the passed session name.
+     *
+     * @param boolean $create      TRUE if a session has to be created if we can't find any
+     *
+     * @return \TechDivision\ServletEngine\Http\Session The requested session instance
+     * @throws \Exception Is thrown if we can't find a request instance
+     */
+    public function getLoginSession($create = false)
+    {
+
+        // try to load the servlet request
+        $servletRequest = $this->getServletRequest();
+        if ($servletRequest == null) {
+            throw new \Exception('Can\'t find necessary servlet request instance');
+        }
+
+        // if no session has already been load, initialize the session manager
+        $servletRequest->setRequestedSessionName(AbstractServlet::SESSION_NAME);
+        return $servletRequest->getSession($create);
+    }
+
+    /**
+     * Returns TRUE if a user has been logged in, else FALSE.
+     *
+     * @return boolean TRUE if a user has been logged into the sytem
+     */
+    public function isLoggedIn()
+    {
+
+        // try to load the session
+        $session = $this->getLoginSession();
+
+        // if we can't find a session, something went wrong
+        if ($session == null) {
+            return false;
+        }
+
+        // if we can't find a username, also something went wrong
+        if ($session->hasKey('username') === false) {
+            return false;
+        }
+
+        // return the name of the registered user
+        return true;
+    }
+
+    /**
+     * Returns the name of the user currently logged into the system.
+     *
+     * @return string Name of the user logged into the system
+     * @throws \TechDivision\Example\Exceptions\LoginException Is thrown if we can't find a session or a user logged in
+     */
+    public function getUsername()
+    {
+
+        // try to load the session
+        $session = $this->getLoginSession();
+
+        // if we can't find a session, something went wrong
+        if ($session == null) {
+            throw new LoginException(sprintf('Can\'t find session %s', AbstractServlet::SESSION_NAME));
+        }
+
+        // if we can't find a username, also something went wrong
+        if ($session->hasKey('username') === false) {
+            throw new LoginException('Session has no user registered');
+        }
+
+        // return the name of the registered user
+        return $session->getData('username');
     }
 
     /**
