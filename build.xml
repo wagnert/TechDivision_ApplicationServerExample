@@ -45,11 +45,9 @@
                 <exclude name="**/*.xml.*" />
             </fileset>
         </copy>
-    	<!--
         <exec executable="composer.phar" dir="${php-target.dir}/${webapp.name}">
             <arg line="update"/>
         </exec>
-        -->
     </target>
 
     <!-- ==================================================================== -->
