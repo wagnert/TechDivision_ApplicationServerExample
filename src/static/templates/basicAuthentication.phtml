@@ -50,8 +50,8 @@ use TechDivision\Example\Utils\ContextKeys;
                 <ul class="nav navbar-nav">
                     <li>
                         <p class="navbar-text">
-                            <?php if ($this->getServletRequest()->getSession()->hasKey('username')): ?>
-                                Logged in as: <strong><?php echo $this->getServletRequest()->getSession()->getData('username') ?></strong>
+                            <?php if ($this->isLoggedIn()): ?>
+                                Logged in as: <strong><?php echo $this->getUsername() ?></strong>
                             <?php else: ?>
                                 Not logged in.
                             <?php endif; ?>
