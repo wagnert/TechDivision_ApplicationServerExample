@@ -25,6 +25,7 @@ namespace TechDivision\Example\Servlets;
 
 use TechDivision\Servlet\ServletConfig;
 use TechDivision\Servlet\Http\HttpServlet;
+use TechDivision\Servlet\Http\HttpSession;
 use TechDivision\Servlet\Http\HttpServletRequest;
 use TechDivision\Servlet\Http\HttpServletResponse;
 use TechDivision\WebServer\Dictionaries\ServerVars;
@@ -270,7 +271,15 @@ abstract class AbstractServlet extends HttpServlet
 
         // if no session has already been load, initialize the session manager
         $servletRequest->setRequestedSessionName(AbstractServlet::SESSION_NAME);
-        return $servletRequest->getSession($create);
+        $session = $servletRequest->getSession($create);
+
+        // start session if necessary
+        if ($session instanceof HttpSession && $session->isStarted() === false) {
+            $session->start();
+        }
+
+        // return the session
+        return $session;
     }
 
     /**

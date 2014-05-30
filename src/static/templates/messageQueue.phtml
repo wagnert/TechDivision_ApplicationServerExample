@@ -116,7 +116,7 @@ use TechDivision\Example\Utils\ContextKeys;
             <tbody>
                 <?php foreach ($this->getAttribute(ContextKeys::OVERVIEW_DATA) as $importFile): ?>
                     <tr>
-                        <td><?php echo $importFile->getFilename() ?></td>
+                        <td><?php echo $importFile ?></td>
                         <td><a href="<?php echo $this->getImportLink($importFile) ?>">Import</a></td>
                         <td><a href="<?php echo $this->getDeleteLink($importFile) ?>">Delete</a></td>
                     </tr>
