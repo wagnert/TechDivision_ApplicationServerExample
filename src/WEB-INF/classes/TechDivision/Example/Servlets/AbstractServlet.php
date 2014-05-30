@@ -203,8 +203,7 @@ abstract class AbstractServlet extends HttpServlet
      */
     public function getProxy($proxyClass)
     {
-        $initialContext = $this->session->createInitialContext();
-        return $initialContext->lookup($proxyClass);
+        return $this->session->createInitialContext()->lookup($proxyClass);
     }
 
     /**
@@ -221,14 +220,6 @@ abstract class AbstractServlet extends HttpServlet
         // add request and response to session
         $this->setServletRequest($servletRequest);
         $this->setServletResponse($servletResponse);
-
-        // initialize the session (create a new one if necessary)
-        $session = $this->getLoginSession(true);
-        $session->setSessionCookieHttpOnly(true);
-        $session->start();
-
-        // set the session ID on the persistence container proxy
-        $this->session->setSessionId($session->getId());
 
         // create the default action => indexAction
         $actionMethod = AbstractServlet::DEFAULT_ACTION_NAME . AbstractServlet::ACTION_SUFFIX;
@@ -295,11 +286,13 @@ abstract class AbstractServlet extends HttpServlet
 
         // if we can't find a session, something went wrong
         if ($session == null) {
+            error_log("Can't find session");
             return false;
         }
 
         // if we can't find a username, also something went wrong
         if ($session->hasKey('username') === false) {
+            error_log("Can't find username in session");
             return false;
         }
 
