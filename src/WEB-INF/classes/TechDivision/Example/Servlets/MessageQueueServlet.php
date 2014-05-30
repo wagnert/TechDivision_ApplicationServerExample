@@ -74,7 +74,7 @@ class MessageQueueServlet extends AbstractServlet
 
         // Iterate through all phar files and extract them to tmp dir
         foreach (new \RegexIterator($fileIterator, '/^.*\\.csv$/') as $importFile) {
-            $overviewData->append($importFile);
+            $overviewData->append($importFile->getFilename());
         }
 
         // set the uploaded .csv files to the context
@@ -166,24 +166,24 @@ class MessageQueueServlet extends AbstractServlet
     /**
      * Creates and returns the URL to start the .csv import action.
      *
-     * @param \SplFileInfo $importFile The file info of the .csv file to import
+     * @param string $importFile The file info of the .csv file to import
      *
      * @return string The URL to start the file import
      */
-    public function getImportLink(\SplFileInfo $importFile)
+    public function getImportLink($importFile)
     {
-        return 'messageQueue.do/import?filename=' . $importFile->getFilename();
+        return 'messageQueue.do/import?filename=' . $importFile;
     }
 
     /**
      * Creates and returns the URL to delete the uploaded .csv file.
      *
-     * @param \SplFileInfo $importFile The file info of the .csv file to delete
+     * @param string $importFile The file info of the .csv file to delete
      *
      * @return string The URL with the deletion link
      */
-    public function getDeleteLink(\SplFileInfo $importFile)
+    public function getDeleteLink($importFile)
     {
-        return 'messageQueue.do/delete?filename=' . $importFile->getFilename();
+        return 'messageQueue.do/delete?filename=' . $importFile;
     }
 }
