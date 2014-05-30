@@ -128,8 +128,6 @@ class LoginServlet extends AbstractServlet
      */
     public function logoutAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
-
-        // destroy the session
         $this->getLoginSession()->destroy();
     }
 }
