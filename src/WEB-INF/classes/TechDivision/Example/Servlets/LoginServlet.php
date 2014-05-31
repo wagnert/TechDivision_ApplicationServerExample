@@ -105,7 +105,9 @@ class LoginServlet extends AbstractServlet
             $this->getProxy(LoginServlet::PROXY_CLASS)->login($username, $password);
 
             // if successfully then add the username to the session and redirect to the overview
-            $this->getLoginSession(true)->putData('username', $username);
+            $session = $this->getLoginSession(true);
+            $session->start();
+            $session->putData('username', $username);
 
         } catch (LoginException $e) { // invalid login credentials
             $this->addAttribute('errorMessages', array("Username or Password invalid"));

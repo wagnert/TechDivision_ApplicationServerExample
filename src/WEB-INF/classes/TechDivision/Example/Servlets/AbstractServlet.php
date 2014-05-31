@@ -262,15 +262,9 @@ abstract class AbstractServlet extends HttpServlet
 
         // if no session has already been load, initialize the session manager
         $servletRequest->setRequestedSessionName(AbstractServlet::SESSION_NAME);
-        $session = $servletRequest->getSession($create);
-
-        // start session if necessary
-        if ($session instanceof HttpSession && $session->isStarted() === false) {
-            $session->start();
-        }
 
         // return the session
-        return $session;
+        return $servletRequest->getSession($create);
     }
 
     /**
@@ -286,13 +280,11 @@ abstract class AbstractServlet extends HttpServlet
 
         // if we can't find a session, something went wrong
         if ($session == null) {
-            error_log("Can't find session");
             return false;
         }
 
         // if we can't find a username, also something went wrong
         if ($session->hasKey('username') === false) {
-            error_log("Can't find username in session");
             return false;
         }
 
