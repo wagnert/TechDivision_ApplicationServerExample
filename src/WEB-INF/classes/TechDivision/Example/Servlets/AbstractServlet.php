@@ -293,6 +293,16 @@ abstract class AbstractServlet extends HttpServlet
     }
 
     /**
+     * Returns the link to logout the actual user.
+     *
+     * @return string The link to logout the user actually logged in
+     */
+    public function getLogoutLink()
+    {
+        return 'login.do/logout';
+    }
+
+    /**
      * Returns the name of the user currently logged into the system.
      *
      * @return string Name of the user logged into the system

@@ -25,6 +25,10 @@ a, a:hover, a:active {
     color: #222;
 }
 
+.navbar-text a, .navbar-text a:hover, .navbar-text a:active {
+    color: #999;
+}
+
 table {
     text-align: left;
 }

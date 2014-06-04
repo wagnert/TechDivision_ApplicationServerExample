@@ -130,6 +130,11 @@ class LoginServlet extends AbstractServlet
      */
     public function logoutAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
-        $this->getLoginSession()->destroy();
+
+        // destroy the session and reset the cookie
+        $this->getLoginSession()->destroy('Explicit logout requested by: ' . $this->getUsername());
+
+        // reload all entities and render the dialog
+        $this->indexAction($servletRequest, $servletResponse);
     }
 }
