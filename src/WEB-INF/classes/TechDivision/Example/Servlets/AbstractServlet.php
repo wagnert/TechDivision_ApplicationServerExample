@@ -105,37 +105,6 @@ abstract class AbstractServlet extends HttpServlet
     protected $servletResponse;
 
     /**
-     * The connection instance for the persistence container.
-     *
-     * @var \TechDivision\PersistenceContainerClient\Context\ContextConnection
-     */
-    protected $connection;
-
-    /**
-     * The session instance for the persistence container connection.
-     *
-     * @var \TechDivision\PersistenceContainerClient\Context\ContextSession
-     */
-    protected $session;
-
-    /**
-     * Initializes the connection to the persistence container.
-     *
-     * @param \TechDivision\Servlet\ServletConfig $config The servlet configuration
-     *
-     * @return void
-     */
-    public function init(ServletConfig $config)
-    {
-        // call parent method to set configuration
-        parent::init($config);
-
-        // initialize the persistence container proxy
-        $this->connection = ConnectionFactory::createContextConnection('example');
-        $this->session = $this->connection->createContextSession();
-    }
-
-    /**
      * Returns the base path to the web application.
      *
      * @return string The base path
@@ -203,7 +172,21 @@ abstract class AbstractServlet extends HttpServlet
      */
     public function getProxy($proxyClass)
     {
-        return $this->session->createInitialContext()->lookup($proxyClass);
+
+        // load the application name
+        $applicationName = $this->getServletRequest()->getContext()->getName();
+
+        // initialize the connection and the session
+        $connection = ConnectionFactory::createContextConnection($applicationName);
+        $session = $connection->createContextSession();
+
+        // check if we've a session ID
+        if ($this->isLoggedIn()) {
+            $session->setSessionId($this->getLoginSession()->getId());
+        }
+
+        // create an return the proxy instance
+        return $session->createInitialContext()->lookup($proxyClass);
     }
 
     /**
