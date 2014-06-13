@@ -271,7 +271,7 @@ abstract class ExampleBaseAction extends DispatchAction
      */
     public function getLogoutLink()
     {
-        return 'login.do/logout';
+        return 'index.do/login/logout';
     }
 
     /**

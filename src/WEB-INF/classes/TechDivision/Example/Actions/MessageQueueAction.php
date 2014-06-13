@@ -174,7 +174,7 @@ class MessageQueueAction extends ExampleBaseAction
      */
     public function getImportLink($importFile)
     {
-        return 'messageQueue.do/import?filename=' . $importFile;
+        return 'index.do/messageQueue/import?filename=' . $importFile;
     }
 
     /**
@@ -186,6 +186,6 @@ class MessageQueueAction extends ExampleBaseAction
      */
     public function getDeleteLink($importFile)
     {
-        return 'messageQueue.do/delete?filename=' . $importFile;
+        return 'index.do/messageQueue/delete?filename=' . $importFile;
     }
 }

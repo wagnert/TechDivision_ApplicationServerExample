@@ -184,7 +184,7 @@ class IndexAction extends ExampleBaseAction
      */
     public function getEditLink(Sample $entity)
     {
-        return 'index.do/load?sampleId=' . $entity->getSampleId();
+        return 'index.do/index/load?sampleId=' . $entity->getSampleId();
     }
 
     /**
@@ -196,6 +196,6 @@ class IndexAction extends ExampleBaseAction
      */
     public function getDeleteLink(Sample $entity)
     {
-        return 'index.do/delete?sampleId=' . $entity->getSampleId();
+        return 'index.do/index/delete?sampleId=' . $entity->getSampleId();
     }
 }
