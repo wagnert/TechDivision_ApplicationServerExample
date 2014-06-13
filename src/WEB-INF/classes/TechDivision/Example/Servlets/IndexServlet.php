@@ -23,181 +23,74 @@
 
 namespace TechDivision\Example\Servlets;
 
-use TechDivision\Servlet\Http\HttpServletRequest;
-use TechDivision\Servlet\Http\HttpServletResponse;
-use TechDivision\Example\Entities\Sample;
-use TechDivision\Example\Utils\ContextKeys;
+use TechDivision\Context\BaseContext;
+use TechDivision\Servlet\ServletConfig;
+use TechDivision\Example\Controller\ControllerServlet;
 
 /**
- * Example servlet implementation that loads data over a persistence container proxy
- * and renders a list, based on the returned values.
- *
- * Additional it provides functionality to edit, delete und persist the data after
- * changing it.
+ * Abstract example implementation that provides some kind of basic MVC functionality
+ * to handle requests by subclasses action methods.
  *
  * @category   Appserver
  * @package    TechDivision_ApplicationServerExample
- * @subpackage Servlets
- * @author     Johann Zelger <jz@techdivision.com>
+ * @subpackage Controller
  * @author     Tim Wagner <tw@techdivision.com>
  * @copyright  2014 TechDivision GmbH <info@techdivision.com>
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  */
-class IndexServlet extends AbstractServlet
+class IndexServlet extends ControllerServlet
 {
 
     /**
-     * The relative path, up from the webapp path, to the template to use.
+     * The array with the available route mappings.
      *
-     * @var string
+     * @var array
      */
-    const INDEX_TEMPLATE = 'static/templates/index.phtml';
+    protected $mappings = array(
+        '/index*'                => '\TechDivision\Example\Actions\IndexAction',
+        '/upload*'               => '\TechDivision\Example\Actions\UploadAction',
+        '/login*'                => '\TechDivision\Example\Actions\LoginAction',
+        '/basicAuthentication*'  => '\TechDivision\Example\Actions\BasicAuthenticationAction',
+        '/digestAuthentication*' => '\TechDivision\Example\Actions\DigestAuthenticationAction',
+        '/webSocket*'            => '\TechDivision\Example\Actions\WebSocketAction',
+        '/messageQueue*'         => '\TechDivision\Example\Actions\MessageQueueAction'
+    );
 
     /**
-     * Class name of the persistence container proxy that handles the data.
+     * The array with the initialized routes.
      *
-     * @var string
+     * @var array
      */
-    const PROXY_CLASS = 'TechDivision\Example\Services\SampleProcessor';
+    protected $routes = array();
 
     /**
-     * Default action to invoke if no action parameter has been found in the request.
+     * Initializes the servlet with the passed configuration.
      *
-     * Loads all sample data and attaches it to the servlet context ready to be rendered
-     * by the template.
+     * @param \TechDivision\Servlet\ServletConfig $config The configuration to initialize the servlet with
      *
-     * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
-     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
-     *
+     * @throws \TechDivision\Servlet\ServletException Is thrown if the configuration has errors
      * @return void
      */
-    public function indexAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
-    {
-        $overviewData = $this->getProxy(IndexServlet::PROXY_CLASS)->findAll();
-        $this->addAttribute(ContextKeys::OVERVIEW_DATA, $overviewData);
-        $servletResponse->appendBodyStream($this->processTemplate(IndexServlet::INDEX_TEMPLATE, $servletRequest, $servletResponse));
-    }
-
-    /**
-     * Loads the sample entity with the sample ID found in the request and attaches
-     * it to the servlet context ready to be rendered by the template.
-     *
-     * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
-     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
-     *
-     * @return void
-     * @see \TechDivision\Example\Servlets\IndexServlet::indexAction()
-     */
-    public function loadAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
+    public function init(ServletConfig $config)
     {
 
-        // load the params with the entity data
-        $parameterMap = $servletRequest->getParameterMap();
+        // call parent method
+        parent::init($config);
 
-        // check if the necessary params has been specified and are valid
-        if (!array_key_exists('sampleId', $parameterMap)) {
-            throw new \Exception();
-        } else {
-            $sampleId = filter_var($parameterMap['sampleId'], FILTER_VALIDATE_INT);
+        // initialize the routes
+        foreach ($this->mappings as $route => $mapping) {
+            $this->routes[$route] = new $mapping(new BaseContext());
         }
-
-        // load the entity to be edited and attach it to the servlet context
-        $viewData = $this->getProxy(IndexServlet::PROXY_CLASS)->load($sampleId);
-        $this->addAttribute(ContextKeys::VIEW_DATA, $viewData);
-
-        // reload all entities and render the dialog
-        $this->indexAction($servletRequest, $servletResponse);
     }
 
     /**
-     * Deletes the sample entity with the sample ID found in the request and
-     * reloads all other entities from the database.
+     * Returns the available routes.
      *
-     * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
-     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
-     *
-     * @return void
-     * @see \TechDivision\Example\Servlets\IndexServlet::indexAction()
+     * @return array The array with the available routes
      */
-    public function deleteAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
+    protected function getRoutes()
     {
-
-        // load the params with the entity data
-        $parameterMap = $servletRequest->getParameterMap();
-
-        // check if the necessary params has been specified and are valid
-        if (!array_key_exists('sampleId', $parameterMap)) {
-            throw new \Exception();
-        } else {
-            $sampleId = filter_var($parameterMap['sampleId'], FILTER_VALIDATE_INT);
-        }
-
-        // delete the entity
-        $this->getProxy(IndexServlet::PROXY_CLASS)->delete($sampleId);
-
-        // reload all entities and render the dialog
-        $this->indexAction($servletRequest, $servletResponse);
-    }
-
-    /**
-     * Persists the entity data found in the request.
-     *
-     * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
-     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
-     *
-     * @return void
-     * @see \TechDivision\Example\Servlets\IndexServlet::indexAction()
-     */
-    public function persistAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
-    {
-
-        // load the params with the entity data
-        $parameterMap = $servletRequest->getParameterMap();
-
-        // check if the necessary params has been specified and are valid
-        if (!array_key_exists('sampleId', $parameterMap)) {
-            throw new \Exception();
-        } else {
-            $sampleId = filter_var($parameterMap['sampleId'], FILTER_VALIDATE_INT);
-        }
-        if (!array_key_exists('name', $parameterMap)) {
-            throw new \Exception();
-        } else {
-            $name = filter_var($parameterMap['name'], FILTER_SANITIZE_STRING);
-        }
-
-        // create a new entity and persist it
-        $entity = new Sample();
-        $entity->setSampleId((integer) $sampleId);
-        $entity->setName($name);
-        $this->getProxy(IndexServlet::PROXY_CLASS)->persist($entity);
-
-        // reload all entities and render the dialog
-        $this->indexAction($servletRequest, $servletResponse);
-    }
-
-    /**
-     * Creates and returns the URL to open the dialog to edit the passed entity.
-     *
-     * @param \TechDivision\Example\Entities\Sample $entity The entity to create the edit link for
-     *
-     * @return string The URL to open the edit dialog
-     */
-    public function getEditLink(Sample $entity)
-    {
-        return 'index.do/load?sampleId=' . $entity->getSampleId();
-    }
-
-    /**
-     * Creates and returns the URL that has to be invoked to delete the passed entity.
-     *
-     * @param \TechDivision\Example\Entities\Sample $entity The entity to create the deletion link for
-     *
-     * @return string The URL with the deletion link
-     */
-    public function getDeleteLink(Sample $entity)
-    {
-        return 'index.do/delete?sampleId=' . $entity->getSampleId();
+        return $this->routes;
     }
 }

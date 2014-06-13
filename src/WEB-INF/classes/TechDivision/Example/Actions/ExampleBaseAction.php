@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Example\Servlets\AbstractServlet
+ * TechDivision\Example\Actions\ExampleBaseAction
  *
  * NOTICE OF LICENSE
  *
@@ -13,17 +13,15 @@
  *
  * @category   Appserver
  * @package    TechDivision_ApplicationServerExample
- * @subpackage Http
- * @author     Johann Zelger <jz@techdivision.com>
+ * @subpackage Actions
  * @author     Tim Wagner <tw@techdivision.com>
  * @copyright  2014 TechDivision GmbH <info@techdivision.com>
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  */
 
-namespace TechDivision\Example\Servlets;
+namespace TechDivision\Example\Actions;
 
-use TechDivision\Servlet\ServletConfig;
 use TechDivision\Servlet\Http\HttpServlet;
 use TechDivision\Servlet\Http\HttpSession;
 use TechDivision\Servlet\Http\HttpServletRequest;
@@ -31,6 +29,7 @@ use TechDivision\Servlet\Http\HttpServletResponse;
 use TechDivision\WebServer\Dictionaries\ServerVars;
 use TechDivision\PersistenceContainerClient\ConnectionFactory;
 use TechDivision\Example\Exceptions\LoginException;
+use TechDivision\Example\Controller\DispatchAction;
 
 /**
  * Abstract example implementation that provides some kind of basic MVC functionality
@@ -38,14 +37,13 @@ use TechDivision\Example\Exceptions\LoginException;
  *
  * @category   Appserver
  * @package    TechDivision_ApplicationServerExample
- * @subpackage Servlets
- * @author     Johann Zelger <jz@techdivision.com>
+ * @subpackage Actions
  * @author     Tim Wagner <tw@techdivision.com>
  * @copyright  2014 TechDivision GmbH <info@techdivision.com>
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  */
-abstract class AbstractServlet extends HttpServlet
+abstract class ExampleBaseAction extends DispatchAction
 {
 
     /**
@@ -56,39 +54,11 @@ abstract class AbstractServlet extends HttpServlet
     const SESSION_NAME = 'example_login';
 
     /**
-     * The default action if no valid action name was found in the path info.
-     *
-     * @var string
-     */
-    const DEFAULT_ACTION_NAME = 'index';
-
-    /**
-     * The default action method suffix.
-     *
-     * @var string
-     */
-    const ACTION_SUFFIX = 'Action';
-
-    /**
-     * The default delimiter to extract the requested action name from the path info.
-     *
-     * @var string
-     */
-    const ACTION_DELIMITER = '/';
-
-    /**
      * The applications base URL.
      *
      * @var string
      */
     const BASE_URL = '/';
-
-    /**
-     * Servlet context to transfer data between the servlet and the view.
-     *
-     * @var array
-     */
-    protected $context = array();
 
     /**
      * The servlet request instance.
@@ -105,13 +75,67 @@ abstract class AbstractServlet extends HttpServlet
     protected $servletResponse;
 
     /**
-     * Returns the base path to the web application.
+     * This method implements the functionality to invoke a method implemented in its subclass.
      *
-     * @return string The base path
+     * The method that should be invoked has to be specified by a HTTPServletRequest parameter
+     * which name is specified in the configuration file as parameter for the ActionMapping.
+     *
+     * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
+     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
+     *
+     * @return void
      */
-    public function getWebappPath()
+    public function perform(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
-        return $this->getServletConfig()->getWebappPath();
+
+        $this->setServletRequest($servletRequest);
+        $this->setServletResponse($servletResponse);
+
+        parent::perform($servletRequest, $servletResponse);
+    }
+
+    /**
+     * Sets the servlet request instance.
+     *
+     * @param \TechDivision\Servlet\Http\HttpServletRequest $servletRequest The request instance
+     *
+     * @return void
+     */
+    public function setServletRequest(HttpServletRequest $servletRequest)
+    {
+        $this->servletRequest = $servletRequest;
+    }
+
+    /**
+     * Sets the servlet response instance.
+     *
+     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The request instance
+     *
+     * @return void
+     */
+    public function setServletResponse(HttpServletResponse $servletResponse)
+    {
+        $this->servletResponse = $servletResponse;
+    }
+
+    /**
+     * Returns the servlet response instance.
+     *
+     * @return \TechDivision\Servlet\Http\ServletRequest The request instance
+     */
+    public function getServletRequest()
+    {
+        return $this->servletRequest;
+    }
+
+    /**
+     * Returns the servlet request instance.
+     *
+     * @return \TechDivision\Servlet\Http\HttpServletResponse The response instance
+     */
+    public function getServletResponse()
+    {
+        return $this->servletResponse;
     }
 
     /**
@@ -122,9 +146,9 @@ abstract class AbstractServlet extends HttpServlet
      *
      * @return void
      */
-    public function addAttribute($key, $value)
+    public function setAttribute($key, $value)
     {
-        $this->context[$key] = $value;
+        $this->context->setAttribute($key, $value);
     }
 
     /**
@@ -136,9 +160,7 @@ abstract class AbstractServlet extends HttpServlet
      */
     public function getAttribute($key)
     {
-        if (array_key_exists($key, $this->context)) {
-            return $this->context[$key];
-        }
+        return $this->context->getAttribute($key);
     }
 
     /**
@@ -152,8 +174,12 @@ abstract class AbstractServlet extends HttpServlet
      */
     public function processTemplate($template, HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
+
+        // load the path to the web application
+        $webappPath = $servletRequest->getContext()->getWebappPath();
+
         // check if the template is available
-        if (!file_exists($pathToTemplate = $this->getWebappPath() . DIRECTORY_SEPARATOR . $template)) {
+        if (!file_exists($pathToTemplate = $webappPath . DIRECTORY_SEPARATOR . $template)) {
             throw new \Exception("Requested template '$pathToTemplate' is not available");
         }
         // process the template
@@ -190,43 +216,6 @@ abstract class AbstractServlet extends HttpServlet
     }
 
     /**
-     * Implements Http GET method.
-     *
-     * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
-     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
-     *
-     * @return void
-     */
-    public function doGet(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
-    {
-
-        // add request and response to session
-        $this->setServletRequest($servletRequest);
-        $this->setServletResponse($servletResponse);
-
-        // create the default action => indexAction
-        $actionMethod = AbstractServlet::DEFAULT_ACTION_NAME . AbstractServlet::ACTION_SUFFIX;
-
-        // load the first part of the path info => that is the action name by default
-        list ($requestedActionName, ) = explode(AbstractServlet::ACTION_DELIMITER, trim($servletRequest->getPathInfo(), AbstractServlet::ACTION_DELIMITER));
-
-        // if the requested action has been found in the path info
-        if (empty($requestedActionName) === false) {
-
-            // if yes, concatenate it to create a valid action name
-            $requestedActionMethod = $requestedActionName . AbstractServlet::ACTION_SUFFIX;
-
-            // check if the requested action method is a class method
-            if (in_array($requestedActionMethod, get_class_methods($this))) {
-                $actionMethod = $requestedActionMethod;
-            }
-        }
-
-        // invoke the action itself
-        $this->$actionMethod($servletRequest, $servletResponse);
-    }
-
-    /**
      * Returns the session with the passed session name.
      *
      * @param boolean $create TRUE if a session has to be created if we can't find any
@@ -244,7 +233,7 @@ abstract class AbstractServlet extends HttpServlet
         }
 
         // if no session has already been load, initialize the session manager
-        $servletRequest->setRequestedSessionName(AbstractServlet::SESSION_NAME);
+        $servletRequest->setRequestedSessionName(ExampleBaseAction::SESSION_NAME);
 
         // return the session
         return $servletRequest->getSession($create);
@@ -299,7 +288,7 @@ abstract class AbstractServlet extends HttpServlet
 
         // if we can't find a session, something went wrong
         if ($session == null) {
-            throw new LoginException(sprintf('Can\'t find session %s', AbstractServlet::SESSION_NAME));
+            throw new LoginException(sprintf('Can\'t find session %s', ExampleBaseAction::SESSION_NAME));
         }
 
         // if we can't find a username, also something went wrong
@@ -312,63 +301,6 @@ abstract class AbstractServlet extends HttpServlet
     }
 
     /**
-     * Implements Http POST method.
-     *
-     * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
-     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
-     *
-     * @return void
-     */
-    public function doPost(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
-    {
-        $this->doGet($servletRequest, $servletResponse);
-    }
-
-    /**
-     * Sets the servlet request instance.
-     *
-     * @param \TechDivision\Servlet\Http\HttpServletRequest $servletRequest The request instance
-     *
-     * @return void
-     */
-    public function setServletRequest(HttpServletRequest $servletRequest)
-    {
-        $this->servletRequest = $servletRequest;
-    }
-
-    /**
-     * Sets the servlet response instance.
-     *
-     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The request instance
-     *
-     * @return void
-     */
-    public function setServletResponse(HttpServletResponse $servletResponse)
-    {
-        $this->servletResponse = $servletResponse;
-    }
-
-    /**
-     * Returns the servlet response instance.
-     *
-     * @return \TechDivision\Servlet\Http\ServletRequest The request instance
-     */
-    public function getServletRequest()
-    {
-        return $this->servletRequest;
-    }
-
-    /**
-     * Returns the servlet request instance.
-     *
-     * @return \TechDivision\Servlet\Http\HttpServletResponse The response instance
-     */
-    public function getServletResponse()
-    {
-        return $this->servletResponse;
-    }
-
-    /**
      * Returns base URL for the html base tag.
      *
      * @return string The base URL depending on the vhost
@@ -378,10 +310,10 @@ abstract class AbstractServlet extends HttpServlet
 
         // if we ARE in a virtual host, return the base URL
         if ($this->getServletRequest()->getContext()->isVhostOf($this->getServletRequest()->getServerName())) {
-            return AbstractServlet::BASE_URL;
+            return ExampleBaseAction::BASE_URL;
         }
 
         // if not, prepend it with the context path
-        return $this->getServletRequest()->getContextPath() . AbstractServlet::BASE_URL;
+        return $this->getServletRequest()->getContextPath() . ExampleBaseAction::BASE_URL;
     }
 }

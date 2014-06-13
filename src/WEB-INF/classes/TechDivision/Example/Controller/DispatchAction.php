@@ -48,6 +48,13 @@ abstract class DispatchAction extends BaseAction
     const ACTION_SUFFIX = 'Action';
 
     /**
+     * The default action delimiter.
+     *
+     * @var string
+     */
+    const ACTION_DELIMITER = '/';
+
+    /**
      * Holds the name of the default method to invoke if the paramter with the method name to invoke is not specified.
      *
      * @var string
@@ -69,7 +76,7 @@ abstract class DispatchAction extends BaseAction
     {
 
         // load the first part of the path info => that is the action name by default
-        list (, $requestedMethodName) = explode(ControllerServlet::ACTION_DELIMITER, trim($servletRequest->getPathInfo(), ControllerServlet::ACTION_DELIMITER));
+        list (, $requestedMethodName) = explode(DispatchAction::ACTION_DELIMITER, trim($servletRequest->getPathInfo(), DispatchAction::ACTION_DELIMITER));
 
         // try to set the default method, if one is specified in the path info
         if ($requestedMethodName == null) {
@@ -84,19 +91,13 @@ abstract class DispatchAction extends BaseAction
             $actionMethod = $requestedActionMethod;
         }
 
-        // initialize a new reflection object
-        $reflectionObject = new ReflectionObject($this);
-
         // check if the specified method is implemented in the sublass
-        if ($reflectionObject->hasMethod($actionMethod) === false) {
+        if (method_exists($this, $actionMethod) === false) {
             throw new MethodNotFoundException(sprintf('Specified method %s not implemented by class %s', $actionMethod, get_class($this)));
         }
 
-        // get the reflection method
-        $reflectionMethod = $reflectionObject->getMethod($actionMethod);
-
         // invoke the requested action method
-        $reflectionMethod->invoke($servletRequest, $servletResponse);
+        $this->$actionMethod($servletRequest, $servletResponse);
     }
 
     /**

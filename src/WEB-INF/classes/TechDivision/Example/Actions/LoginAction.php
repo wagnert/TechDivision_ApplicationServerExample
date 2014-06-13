@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Example\Servlets\LoginServlet
+ * TechDivision\Example\Actions\LoginAction
  *
  * NOTICE OF LICENSE
  *
@@ -13,15 +13,14 @@
  *
  * @category   Appserver
  * @package    TechDivision_ApplicationServerExample
- * @subpackage Http
- * @author     Johann Zelger <jz@techdivision.com>
+ * @subpackage Actions
  * @author     Tim Wagner <tw@techdivision.com>
  * @copyright  2014 TechDivision GmbH <info@techdivision.com>
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  */
 
-namespace TechDivision\Example\Servlets;
+namespace TechDivision\Example\Actions;
 
 use TechDivision\Example\Utils\ContextKeys;
 use TechDivision\Servlet\Http\HttpServletRequest;
@@ -34,14 +33,13 @@ use TechDivision\Example\Exceptions\LoginException;
  *
  * @category   Appserver
  * @package    TechDivision_ApplicationServerExample
- * @subpackage Servlets
- * @author     Johann Zelger <jz@techdivision.com>
+ * @subpackage Actions
  * @author     Tim Wagner <tw@techdivision.com>
  * @copyright  2014 TechDivision GmbH <info@techdivision.com>
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  */
-class LoginServlet extends AbstractServlet
+class LoginAction extends ExampleBaseAction
 {
 
     /**
@@ -71,9 +69,9 @@ class LoginServlet extends AbstractServlet
      */
     public function indexAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
-        $viewData = $this->getProxy(LoginServlet::PROXY_CLASS)->checkForDefaultCredentials();
-        $this->addAttribute(ContextKeys::VIEW_DATA, $viewData);
-        $servletResponse->appendBodyStream($this->processTemplate(LoginServlet::LOGIN_TEMPLATE, $servletRequest, $servletResponse));
+        $viewData = $this->getProxy(LoginAction::PROXY_CLASS)->checkForDefaultCredentials();
+        $this->setAttribute(ContextKeys::VIEW_DATA, $viewData);
+        $servletResponse->appendBodyStream($this->processTemplate(LoginAction::LOGIN_TEMPLATE, $servletRequest, $servletResponse));
     }
 
     /**
@@ -110,9 +108,9 @@ class LoginServlet extends AbstractServlet
             $session->putData('username', $username);
 
         } catch (LoginException $e) { // invalid login credentials
-            $this->addAttribute('errorMessages', array("Username or Password invalid"));
+            $this->setAttribute('errorMessages', array("Username or Password invalid"));
         } catch (\Exception $e) { // if not add an error message
-            $this->addAttribute('errorMessages', array($e->getMessage()));
+            $this->setAttribute('errorMessages', array($e->getMessage()));
         }
 
         // reload all entities and render the dialog

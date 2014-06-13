@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Example\Servlets\ControllerServlet
+ * TechDivision\Example\Controller\ControllerServlet
  *
  * NOTICE OF LICENSE
  *
@@ -21,8 +21,9 @@
  * @link       http://www.appserver.io
  */
 
-namespace TechDivision\Example\Servlets;
+namespace TechDivision\Example\Controller;
 
+use TechDivision\Server\Exceptions\ModuleException;
 use TechDivision\Servlet\ServletConfig;
 use TechDivision\Servlet\Http\HttpServlet;
 use TechDivision\Servlet\Http\HttpSession;
@@ -44,7 +45,7 @@ use TechDivision\Example\Exceptions\LoginException;
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  */
-class ControllerServlet extends HttpServlet
+abstract class ControllerServlet extends HttpServlet
 {
 
     /**
@@ -52,21 +53,14 @@ class ControllerServlet extends HttpServlet
      *
      * @var string
      */
-    const DEFAULT_ACTION_NAME = 'index';
+    const DEFAULT_ACTION_NAME = '/index';
 
     /**
-     * The default controller class suffix.
+     * Returns the available routes.
      *
-     * @var string
+     * @return array The array with the available routes
      */
-    const CONTROLLER_SUFFIX = 'Controller';
-
-    /**
-     * The default delimiter to extract the requested action name from the path info.
-     *
-     * @var string
-     */
-    const ACTION_DELIMITER = '/';
+    protected abstract function getRoutes();
 
     /**
      * Implements Http GET method.
@@ -79,21 +73,27 @@ class ControllerServlet extends HttpServlet
     public function doGet(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
 
-        // load the first part of the path info => that is the action name by default
-        list ($requestedActionName, ) = explode(ControllerServlet::ACTION_DELIMITER, trim($servletRequest->getPathInfo(), ControllerServlet::ACTION_DELIMITER));
+        // load the path info from the servlet request
+        $pathInfo = $servletRequest->getPathInfo();
 
         // if the requested action has been found in the path info
-        if ($requestedActionName == null) {
-            $requestedActionName = ControllerServlet::DEFAULT_ACTION_NAME;
+        if ($pathInfo == null) {
+            $pathInfo = ControllerServlet::DEFAULT_ACTION_NAME;
         }
 
-        // if yes, concatenate it to create a valid action name
-        $requestedActionName = $requestedActionName . ControllerServlet::ACTION_SUFFIX;
+        // load the routes
+        $routes = $this->getRoutes();
 
-        $actionInstance = new $re
+        // try to find an action that invokes the request
+        foreach ($routes as $route => $action) {
+            if (fnmatch($route, $pathInfo)) {
+                $action->perform($servletRequest, $servletResponse);
+                return;
+            }
+        }
 
-        // invoke the action itself
-        $this->perform($servletRequest, $servletResponse);
+        // we can't find an action that handles this request
+        throw new ModuleException(sprintf("No action to handle path info '%s' available.", $pathInfo), 404);
     }
 
     /**

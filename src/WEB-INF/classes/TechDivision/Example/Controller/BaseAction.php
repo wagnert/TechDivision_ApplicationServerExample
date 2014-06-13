@@ -23,6 +23,7 @@
 namespace TechDivision\Example\Controller;
 
 use TechDivision\Lang\Object;
+use TechDivision\Context\Context;
 
 /**
  * This class is the abstract base class for all Actions.

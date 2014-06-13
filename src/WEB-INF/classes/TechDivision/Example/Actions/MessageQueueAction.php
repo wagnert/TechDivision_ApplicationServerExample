@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Example\Servlets\MessageQueueServlet
+ * TechDivision\Example\Actions\MessageQueueAction
  *
  * NOTICE OF LICENSE
  *
@@ -13,14 +13,14 @@
  *
  * @category   Appserver
  * @package    TechDivision_ApplicationServerExample
- * @subpackage Servlets
+ * @subpackage Actions
  * @author     Tim Wagner <tw@techdivision.com>
  * @copyright  2014 TechDivision GmbH <info@techdivision.com>
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  */
 
-namespace TechDivision\Example\Servlets;
+namespace TechDivision\Example\Actions;
 
 use TechDivision\Servlet\Http\HttpServletRequest;
 use TechDivision\Servlet\Http\HttpServletResponse;
@@ -36,13 +36,13 @@ use TechDivision\MessageQueueProtocol\Messages\StringMessage;
  *
  * @category   Appserver
  * @package    TechDivision_ApplicationServerExample
- * @subpackage Servlets
+ * @subpackage Actions
  * @author     Tim Wagner <tw@techdivision.com>
  * @copyright  2014 TechDivision GmbH <info@techdivision.com>
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  */
-class MessageQueueServlet extends AbstractServlet
+class MessageQueueAction extends ExampleBaseAction
 {
 
     /**
@@ -78,10 +78,12 @@ class MessageQueueServlet extends AbstractServlet
         }
 
         // set the uploaded .csv files to the context
-        $this->addAttribute(ContextKeys::OVERVIEW_DATA, $overviewData);
+        $this->setAttribute(ContextKeys::OVERVIEW_DATA, $overviewData);
 
         // render the template
-        $servletResponse->appendBodyStream($this->processTemplate(MessageQueueServlet::MESSAGE_QUEUE_TEMPLATE, $servletRequest, $servletResponse));
+        $servletResponse->appendBodyStream(
+            $this->processTemplate(MessageQueueAction::MESSAGE_QUEUE_TEMPLATE, $servletRequest, $servletResponse)
+        );
     }
 
     /**
