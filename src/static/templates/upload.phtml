@@ -13,6 +13,7 @@
 namespace TechDivision\Example\Servlets;
 
 use TechDivision\Example\Utils\ContextKeys;
+use TechDivision\Example\Utils\RequestKeys;
 
 /** @var $this \TechDivision\Example\Servlets\LoginServlet */
 ?>
@@ -73,10 +74,10 @@ use TechDivision\Example\Utils\ContextKeys;
 
     <div class="container content">
 
-        <?php if ($errorMessages = $this->getAttribute('errorMessages')): ?>
+        <?php if ($errorMessages = $this->getAttribute(ContextKeys::ERROR_MESSAGES)): ?>
             <div class="alert alert-danger">
                 <?php foreach ($errorMessages as $errorMessage): ?>
-                    <?php echo $errorMessage ?></br>
+                    <?php echo $errorMessage ?><br/>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
@@ -92,7 +93,7 @@ use TechDivision\Example\Utils\ContextKeys;
         <br>
 
         <form class="form-center" role="form" action="index.do/upload/upload" method="post" enctype="multipart/form-data">
-            <input name="fileToUpload" type="file" class="form-control" placeholder="Filename">
+            <input name="<?php echo RequestKeys::FILE_TO_UPLOAD ?>" type="file" class="form-control" placeholder="Filename">
             <br>
             <button class="btn btn-lg btn-info btn-block" type="submit">Upload file</button>
         </form>

@@ -30,6 +30,7 @@ use TechDivision\WebServer\Dictionaries\ServerVars;
 use TechDivision\PersistenceContainerClient\ConnectionFactory;
 use TechDivision\Example\Exceptions\LoginException;
 use TechDivision\Example\Controller\DispatchAction;
+use TechDivision\Example\Utils\SessionKeys;
 
 /**
  * Abstract example implementation that provides some kind of basic MVC functionality
@@ -180,7 +181,7 @@ abstract class ExampleBaseAction extends DispatchAction
 
         // check if the template is available
         if (!file_exists($pathToTemplate = $webappPath . DIRECTORY_SEPARATOR . $template)) {
-            throw new \Exception("Requested template '$pathToTemplate' is not available");
+            throw new \Exception(sprintf('Requested template \'%2\' is not available', $pathToTemplate));
         }
         // process the template
         ob_start();
@@ -256,7 +257,7 @@ abstract class ExampleBaseAction extends DispatchAction
         }
 
         // if we can't find a username, also something went wrong
-        if ($session->hasKey('username') === false) {
+        if ($session->hasKey(SessionKeys::USERNAME) === false) {
             return false;
         }
 
@@ -292,12 +293,12 @@ abstract class ExampleBaseAction extends DispatchAction
         }
 
         // if we can't find a username, also something went wrong
-        if ($session->hasKey('username') === false) {
+        if ($session->hasKey(SessionKeys::USERNAME) === false) {
             throw new LoginException('Session has no user registered');
         }
 
         // return the name of the registered user
-        return $session->getData('username');
+        return $session->getData(SessionKeys::USERNAME);
     }
 
     /**

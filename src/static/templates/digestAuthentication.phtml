@@ -72,10 +72,10 @@ use TechDivision\Example\Utils\ContextKeys;
 
     <div class="container content">
 
-        <?php if ($errorMessages = $this->getAttribute('errorMessages')): ?>
+        <?php if ($errorMessages = $this->getAttribute(ContextKeys::ERROR_MESSAGES)): ?>
             <div class="alert alert-danger">
                 <?php foreach ($errorMessages as $errorMessage): ?>
-                    <?php echo $errorMessage ?></br>
+                    <?php echo $errorMessage ?><br/>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
@@ -91,10 +91,10 @@ use TechDivision\Example\Utils\ContextKeys;
         <div class="row-fluid marketing">
 
             <div class="span12 text-center">
-                <?php if ($errorMessages = $this->getAttribute('errorMessages')): ?>
+                <?php if ($errorMessages = $this->getAttribute(ContextKeys::ERROR_MESSAGES)): ?>
                     <div class="alert alert-error">
                         <?php foreach ($errorMessages as $errorMessage): ?>
-                            <?php echo $errorMessage ?></br>
+                            <?php echo $errorMessage ?><br/>
                         <?php endforeach; ?>
                     </div>
                 <?php endif; ?>

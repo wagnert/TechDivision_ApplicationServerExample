@@ -26,6 +26,7 @@ use TechDivision\Servlet\Http\HttpServletRequest;
 use TechDivision\Servlet\Http\HttpServletResponse;
 use TechDivision\Example\Entities\Sample;
 use TechDivision\Example\Utils\ContextKeys;
+use TechDivision\Example\Utils\RequestKeys;
 
 /**
  * Example action implementation that loads data over a persistence container proxy
@@ -90,14 +91,10 @@ class IndexAction extends ExampleBaseAction
     public function loadAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
 
-        // load the params with the entity data
-        $parameterMap = $servletRequest->getParameterMap();
-
         // check if the necessary params has been specified and are valid
-        if (!array_key_exists('sampleId', $parameterMap)) {
-            throw new \Exception();
-        } else {
-            $sampleId = filter_var($parameterMap['sampleId'], FILTER_VALIDATE_INT);
+        $sampleId = $servletRequest->getParameter(RequestKeys::SAMPLE_ID, FILTER_VALIDATE_INT);
+        if ($sampleId == null) {
+            throw new \Exception(sprintf('Can\'t find requested %s', RequestKeys::SAMPLE_ID));
         }
 
         // load the entity to be edited and attach it to the servlet context
@@ -121,14 +118,10 @@ class IndexAction extends ExampleBaseAction
     public function deleteAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
 
-        // load the params with the entity data
-        $parameterMap = $servletRequest->getParameterMap();
-
         // check if the necessary params has been specified and are valid
-        if (!array_key_exists('sampleId', $parameterMap)) {
-            throw new \Exception();
-        } else {
-            $sampleId = filter_var($parameterMap['sampleId'], FILTER_VALIDATE_INT);
+        $sampleId = $servletRequest->getParameter(RequestKeys::SAMPLE_ID, FILTER_VALIDATE_INT);
+        if ($sampleId == null) {
+            throw new \Exception(sprintf('Can\'t find requested %s', RequestKeys::SAMPLE_ID));
         }
 
         // delete the entity
@@ -150,19 +143,13 @@ class IndexAction extends ExampleBaseAction
     public function persistAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
 
-        // load the params with the entity data
-        $parameterMap = $servletRequest->getParameterMap();
+        // check if the necessary params has been specified and are valid
+        $sampleId = $servletRequest->getParameter(RequestKeys::SAMPLE_ID, FILTER_VALIDATE_INT);
 
         // check if the necessary params has been specified and are valid
-        if (!array_key_exists('sampleId', $parameterMap)) {
-            throw new \Exception();
-        } else {
-            $sampleId = filter_var($parameterMap['sampleId'], FILTER_VALIDATE_INT);
-        }
-        if (!array_key_exists('name', $parameterMap)) {
-            throw new \Exception();
-        } else {
-            $name = filter_var($parameterMap['name'], FILTER_SANITIZE_STRING);
+        $name = $servletRequest->getParameter(RequestKeys::NAME);
+        if ($name == null) {
+            throw new \Exception(sprintf('Can\'t find requested %s', RequestKeys::NAME));
         }
 
         // create a new entity and persist it
@@ -184,7 +171,7 @@ class IndexAction extends ExampleBaseAction
      */
     public function getEditLink(Sample $entity)
     {
-        return 'index.do/index/load?sampleId=' . $entity->getSampleId();
+        return sprintf('index.do/index/load?%s=%d', RequestKeys::SAMPLE_ID, $entity->getSampleId());
     }
 
     /**
@@ -196,6 +183,6 @@ class IndexAction extends ExampleBaseAction
      */
     public function getDeleteLink(Sample $entity)
     {
-        return 'index.do/index/delete?sampleId=' . $entity->getSampleId();
+        return sprintf('index.do/index/delete?%s=%d', RequestKeys::SAMPLE_ID, $entity->getSampleId());
     }
 }

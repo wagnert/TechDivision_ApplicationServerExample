@@ -26,6 +26,8 @@ use TechDivision\Example\Utils\ContextKeys;
 use TechDivision\Servlet\Http\HttpServletRequest;
 use TechDivision\Servlet\Http\HttpServletResponse;
 use TechDivision\Example\Exceptions\LoginException;
+use TechDivision\Example\Utils\RequestKeys;
+use TechDivision\Example\Utils\SessionKeys;
 
 /**
  * Example servlet implementation that validates passed user credentials against
@@ -90,13 +92,13 @@ class LoginAction extends ExampleBaseAction
         try {
 
             // check if the necessary params has been specified and are valid
-            if (($username = $servletRequest->getParameter('username')) === null) {
-                throw new \Exception('Please enter a valid username');
+            if (($username = $servletRequest->getParameter(RequestKeys::USERNAME)) === null) {
+                throw new \Exception(sprintf('Please enter a valid %s', RequestKeys::USERNAME));
             }
 
             // check if the necessary params has been specified and are valid
-            if (($password = $servletRequest->getParameter('password')) === null) {
-                throw new \Exception('Please enter a valid password');
+            if (($password = $servletRequest->getParameter(RequestKeys::PASSWORD)) === null) {
+                throw new \Exception(sprintf('Please enter a valid %s', RequestKeys::PASSWORD));
             }
 
             // try to login
@@ -105,12 +107,12 @@ class LoginAction extends ExampleBaseAction
             // if successfully then add the username to the session and redirect to the overview
             $session = $this->getLoginSession(true);
             $session->start();
-            $session->putData('username', $username);
+            $session->putData(SessionKeys::USERNAME, $username);
 
         } catch (LoginException $e) { // invalid login credentials
-            $this->setAttribute('errorMessages', array("Username or Password invalid"));
+            $this->setAttribute(ContextKeys::ERROR_MESSAGES, array("Username or Password invalid"));
         } catch (\Exception $e) { // if not add an error message
-            $this->setAttribute('errorMessages', array($e->getMessage()));
+            $this->setAttribute(ContextKeys::ERROR_MESSAGES, array($e->getMessage()));
         }
 
         // reload all entities and render the dialog

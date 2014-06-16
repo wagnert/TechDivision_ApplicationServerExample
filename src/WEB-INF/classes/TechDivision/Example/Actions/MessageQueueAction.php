@@ -29,6 +29,7 @@ use TechDivision\Example\Utils\ContextKeys;
 use TechDivision\MessageQueueClient\MessageQueue;
 use TechDivision\MessageQueueClient\QueueConnectionFactory;
 use TechDivision\MessageQueueProtocol\Messages\StringMessage;
+use TechDivision\Example\Utils\RequestKeys;
 
 /**
  * Example servlet that imports .csv files by uploading them and sends a message to the
@@ -106,7 +107,7 @@ class MessageQueueAction extends ExampleBaseAction
         $sender = $session->createSender($queue);
 
         // load the params with the entity data
-        $filename = $servletRequest->getParameter('filename');
+        $filename = $servletRequest->getParameter(RequestKeys::FILENAME);
 
         // initialize the message with the name of the file to import the data from
         $message = new StringMessage(ini_get('upload_tmp_dir') . DIRECTORY_SEPARATOR . $filename);
@@ -132,7 +133,7 @@ class MessageQueueAction extends ExampleBaseAction
     {
 
         // load the uploaded file information
-        $fileToUpload = $servletRequest->getPart('fileToUpload');
+        $fileToUpload = $servletRequest->getPart(RequestKeys::FILE_TO_UPLOAD);
 
         // sample for saving file to appservers upload tmp folder with tmpname
         $fileToUpload->write(
@@ -156,7 +157,7 @@ class MessageQueueAction extends ExampleBaseAction
     {
 
         // load the params with the entity data
-        $filename = $servletRequest->getParameter('filename');
+        $filename = $servletRequest->getParameter(RequestKeys::FILENAME);
 
         // delete the file from the temporary upload directory
         unlink(ini_get('upload_tmp_dir') . DIRECTORY_SEPARATOR . $filename);
@@ -174,7 +175,7 @@ class MessageQueueAction extends ExampleBaseAction
      */
     public function getImportLink($importFile)
     {
-        return 'index.do/messageQueue/import?filename=' . $importFile;
+        return sprintf('index.do/messageQueue/import?%s=%s', RequestKeys::FILENAME, $importFile);
     }
 
     /**
@@ -186,6 +187,6 @@ class MessageQueueAction extends ExampleBaseAction
      */
     public function getDeleteLink($importFile)
     {
-        return 'index.do/messageQueue/delete?filename=' . $importFile;
+        return sprintf('index.do/messageQueue/delete?%s=%s', RequestKeys::FILENAME, $importFile);
     }
 }

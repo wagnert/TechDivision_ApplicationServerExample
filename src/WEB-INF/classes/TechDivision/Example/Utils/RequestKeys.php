@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Example\Utils\ContextKeys
+ * TechDivision\Example\Utils\RequestKeys
  *
  * NOTICE OF LICENSE
  *
@@ -23,7 +23,7 @@
 namespace TechDivision\Example\Utils;
 
 /**
- * Context keys that are used to store data in a application context.
+ * Request keys that are used to store data in a request context.
  *
  * @category   Appserver
  * @package    TechDivision_ApplicationServerExample
@@ -33,7 +33,7 @@ namespace TechDivision\Example\Utils;
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  */
-class ContextKeys
+class RequestKeys
 {
 
     /**
@@ -46,23 +46,51 @@ class ContextKeys
     }
 
     /**
-     * The key for a collection with error messages.
+     * The key for a 'action'.
      *
      * @return string
      */
-    const ERROR_MESSAGES = 'error.messages';
+    const ACTION = 'action';
 
     /**
-     * The key for a collection with entities.
+     * The key for a 'sampleId'.
      *
      * @return string
      */
-    const OVERVIEW_DATA = 'overview.data';
+    const SAMPLE_ID = 'sampleId';
 
     /**
-     * The key for an entity.
+     * The key for a 'name'.
      *
      * @return string
      */
-    const VIEW_DATA = 'view.data';
+    const NAME = 'name';
+
+    /**
+     * The key for a 'username'.
+     *
+     * @return string
+     */
+    const USERNAME = 'username';
+
+    /**
+     * The key for a 'password'.
+     *
+     * @return string
+     */
+    const PASSWORD = 'password';
+
+    /**
+     * The key for a 'filename'.
+     *
+     * @return string
+     */
+    const FILENAME = 'filename';
+
+    /**
+     * The key for a 'fileToUpload'.
+     *
+     * @return string
+     */
+    const FILE_TO_UPLOAD = 'fileToUpload';
 }

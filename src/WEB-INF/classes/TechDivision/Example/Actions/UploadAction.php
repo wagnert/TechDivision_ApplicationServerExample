@@ -23,6 +23,7 @@ namespace TechDivision\Example\Actions;
 
 use TechDivision\Servlet\Http\HttpServletRequest;
 use TechDivision\Servlet\Http\HttpServletResponse;
+use TechDivision\Example\Utils\RequestKeys;
 
 /**
  * Example servlet implementation that handles an upload request.
@@ -74,7 +75,7 @@ class UploadAction extends ExampleBaseAction
     {
 
         // sample for saving file to appservers upload tmp folder with tmpname
-        $servletRequest->getPart('fileToUpload')->write(
+        $servletRequest->getPart(RequestKeys::FILE_TO_UPLOAD)->write(
             tempnam(ini_get('upload_tmp_dir'), 'example_upload_')
         );
 
