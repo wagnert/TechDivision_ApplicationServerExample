@@ -24,6 +24,8 @@ namespace TechDivision\Example\Controller;
 
 use TechDivision\Lang\Object;
 use TechDivision\Context\Context;
+use TechDivision\Servlet\Http\HttpServletRequest;
+use TechDivision\Servlet\Http\HttpServletResponse;
 
 /**
  * This class is the abstract base class for all Actions.
@@ -62,10 +64,13 @@ abstract class BaseAction extends Object implements Action
     /**
      * Method that will be invoked before we dispatch the request.
      *
+     * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
+     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
+     *
      * @return void
      * @see \TechDivision\Example\Controller\Action::preDispatch()
      */
-    public function preDispatch()
+    public function preDispatch(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
         return;
     }
@@ -73,10 +78,13 @@ abstract class BaseAction extends Object implements Action
     /**
      * Method that will be invoked after we've dispatched the request.
      *
+     * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
+     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
+     *
      * @return void
      * @see \TechDivision\Example\Controller\Action::preDispatch()
      */
-    public function postDispatch()
+    public function postDispatch(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
         return;
     }

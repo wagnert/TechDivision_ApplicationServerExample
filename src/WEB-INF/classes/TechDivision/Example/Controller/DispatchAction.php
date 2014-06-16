@@ -75,8 +75,11 @@ abstract class DispatchAction extends BaseAction
     public function perform(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
 
+        // the action delimiter we use to extract the action method name
+        $actionDelimiter = $this->getActionDelimiter();
+
         // load the first part of the path info => that is the action name by default
-        list (, $requestedMethodName) = explode(DispatchAction::ACTION_DELIMITER, trim($servletRequest->getPathInfo(), DispatchAction::ACTION_DELIMITER));
+        list (, $requestedMethodName) = explode($actionDelimiter, trim($servletRequest->getPathInfo(), $actionDelimiter));
 
         // try to set the default method, if one is specified in the path info
         if ($requestedMethodName == null) {
@@ -84,16 +87,13 @@ abstract class DispatchAction extends BaseAction
         }
 
         // if yes, concatenate it to create a valid action name
-        $requestedActionMethod = $requestedMethodName . DispatchAction::ACTION_SUFFIX;
+        $requestedActionMethod = $this->getActionSuffix($requestedMethodName);
 
         // check if the requested action method is a class method
         if (in_array($requestedActionMethod, get_class_methods($this))) {
             $actionMethod = $requestedActionMethod;
-        }
-
-        // check if the specified method is implemented in the sublass
-        if (method_exists($this, $actionMethod) === false) {
-            throw new MethodNotFoundException(sprintf('Specified method %s not implemented by class %s', $actionMethod, get_class($this)));
+        } else {
+            throw new MethodNotFoundException(sprintf('Specified method %s not implemented by class %s', $requestedActionMethod, get_class($this)));
         }
 
         // invoke the requested action method
@@ -101,7 +101,7 @@ abstract class DispatchAction extends BaseAction
     }
 
     /**
-     * This method returns the default method name we'll invoke if the path info doesn not contain
+     * This method returns the default method name we'll invoke if the path info doesn't contain
      * the method name, that'll be the second element, when we explode the path info with a slash.
      *
      * @return string The default action method name that has to be invoked
@@ -109,5 +109,32 @@ abstract class DispatchAction extends BaseAction
     protected function getDefaultMethod()
     {
         return DispatchAction::DEFAULT_METHOD_NAME;
+    }
+
+    /**
+     * This method returns the default action delimtier we use to extract the action method name
+     * we've to invoke from the path information.
+     *
+     * @return string The default action delimiter to extract the method name to be invoked
+     */
+    protected function getActionDelimiter()
+    {
+        return DispatchAction::ACTION_DELIMITER;
+    }
+
+    /**
+     * This method returns the action suffix, or prepends the action suffix to the passed action
+     * method name and returns it.
+     *
+     * @param string $requestedMethodName The action method name to append the suffix to
+     *
+     * @return string The action suffix or the action method name, prepended with the action suffix
+     */
+    protected function getActionSuffix($requestedMethodName = null)
+    {
+        if ($requestedMethodName == null) {
+            return DispatchAction::ACTION_SUFFIX;
+        }
+        return $requestedMethodName . DispatchAction::ACTION_SUFFIX;
     }
 }

@@ -53,7 +53,7 @@ abstract class ControllerServlet extends HttpServlet
      *
      * @var string
      */
-    const DEFAULT_ACTION_NAME = '/index';
+    const DEFAULT_ROUTE = '/index';
 
     /**
      * Returns the available routes.
@@ -78,7 +78,7 @@ abstract class ControllerServlet extends HttpServlet
 
         // if the requested action has been found in the path info
         if ($pathInfo == null) {
-            $pathInfo = ControllerServlet::DEFAULT_ACTION_NAME;
+            $pathInfo = $this->getDefaultRoute();
         }
 
         // load the routes
@@ -87,7 +87,9 @@ abstract class ControllerServlet extends HttpServlet
         // try to find an action that invokes the request
         foreach ($routes as $route => $action) {
             if (fnmatch($route, $pathInfo)) {
+                $action->preDispatch($servletRequest, $servletResponse);
                 $action->perform($servletRequest, $servletResponse);
+                $action->postDispatch($servletRequest, $servletResponse);
                 return;
             }
         }
@@ -107,5 +109,15 @@ abstract class ControllerServlet extends HttpServlet
     public function doPost(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
         $this->doGet($servletRequest, $servletResponse);
+    }
+
+    /**
+     * This method returns the default route we'll invoke if the path info doesn't contain one.
+     *
+     * @return string The default route
+     */
+    protected function getDefaultRoute()
+    {
+        return ControllerServlet::DEFAULT_ROUTE;
     }
 }

@@ -42,6 +42,16 @@ interface Action
 {
 
     /**
+     * Method that will be invoked before we dispatch the request.
+     *
+     * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
+     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
+     *
+     * @return void
+     */
+    public function preDispatch(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse);
+
+    /**
      * All classes extending this class must implement the perform() method.
      *
      * This method implements the complete functionality of the action and have to return an initialized
@@ -56,16 +66,12 @@ interface Action
     public function perform(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse);
 
     /**
-     * Method that will be invoked before we dispatch the request.
-     *
-     * @return void
-     */
-    public function preDispatch();
-
-    /**
      * Method that will be invoked after we've dispatched the request.
      *
+     * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
+     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
+     *
      * @return void
      */
-    public function postDispatch();
+    public function postDispatch(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse);
 }
