@@ -48,13 +48,6 @@ abstract class ExampleBaseAction extends DispatchAction
 {
 
     /**
-     * The session name we want to use.
-     *
-     * @var string
-     */
-    const SESSION_NAME = 'example_login';
-
-    /**
      * The applications base URL.
      *
      * @var string
@@ -232,9 +225,6 @@ abstract class ExampleBaseAction extends DispatchAction
         if ($servletRequest == null) {
             throw new \Exception('Can\'t find necessary servlet request instance');
         }
-
-        // if no session has already been load, initialize the session manager
-        $servletRequest->setRequestedSessionName(ExampleBaseAction::SESSION_NAME);
 
         // return the session
         return $servletRequest->getSession($create);

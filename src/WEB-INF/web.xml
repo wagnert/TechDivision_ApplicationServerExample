@@ -4,6 +4,25 @@
     <display-name>Simple Web Servlet Example</display-name>
     <description>Simple Web Servlet Example</description>
 
+    <session-config>
+    
+        <session-name>example_login</session-name>
+        <session-file-prefix>example_session_</session-file-prefix>
+        <session-save-path>/tmp</session-save-path>
+        
+        <!--
+        <garbage-collection-probability>0.1</garbage-collection-probability>
+        <session-save-path>60</session-save-path>
+        <session-maximum-age>0</session-maximum-age>
+        <session-inactivity-timeout>1440</session-inactivity-timeout>
+        <session-cookie-lifetime>86400</session-cookie-lifetime>
+        <session-cookie-domain>localhost</session-cookie-domain>
+        <session-cookie-path>/</session-cookie-path>
+        <session-cookie-secure>false</session-cookie-secure>
+        <session-http-only>false</session-http-only>
+        -->
+    </session-config>
+
     <servlet>
         <description/>
         <display-name>IndexServlet</display-name>
