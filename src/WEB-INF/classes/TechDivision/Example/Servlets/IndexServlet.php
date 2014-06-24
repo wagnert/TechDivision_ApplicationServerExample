@@ -54,7 +54,8 @@ class IndexServlet extends ControllerServlet
         '/basicAuthentication*'  => '\TechDivision\Example\Actions\BasicAuthenticationAction',
         '/digestAuthentication*' => '\TechDivision\Example\Actions\DigestAuthenticationAction',
         '/webSocket*'            => '\TechDivision\Example\Actions\WebSocketAction',
-        '/messageQueue*'         => '\TechDivision\Example\Actions\MessageQueueAction'
+        '/messageQueue*'         => '\TechDivision\Example\Actions\MessageQueueAction',
+        '/sessionGenerator*'     => '\TechDivision\Example\Actions\SessionGeneratorAction'
     );
 
     /**
