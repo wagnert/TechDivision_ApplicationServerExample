@@ -1,0 +1,28 @@
+{
+    "routes": [
+        {
+            "/index*": "\\TechDivision\\Example\\Actions\\IndexAction"
+        },
+        {
+            "/upload*": "\\TechDivision\\Example\\Actions\\UploadAction"
+        },
+        {
+            "/login*": "\\TechDivision\\Example\\Actions\\LoginAction"
+        },
+        {
+            "/basicAuthentication*": "\\TechDivision\\Example\\Actions\\BasicAuthenticationAction"
+        },
+        {
+            "/digestAuthentication*": "\\TechDivision\\Example\\Actions\\DigestAuthenticationAction"
+        },
+        {
+            "/webSocket*": "\\TechDivision\\Example\\Actions\\WebSocketAction"
+        },
+        {
+            "/messageQueue*": "\\TechDivision\\Example\\Actions\\MessageQueueAction"
+        },
+        {
+            "/sessionGenerator*": "\\TechDivision\\Example\\Actions\\SessionGeneratorAction"
+        }
+    ]
+}

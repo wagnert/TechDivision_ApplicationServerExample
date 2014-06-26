@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <web-app version="2.4">
 
-    <display-name>Simple Web Servlet Example</display-name>
-    <description>Simple Web Servlet Example</description>
+    <display-name>appserver.io example application</display-name>
+    <description>This is the example application for the appserver.io servlet engine.</description>
 
     <session-config>
     
@@ -21,22 +21,30 @@
         <session-cookie-secure>false</session-cookie-secure>
         <session-http-only>false</session-http-only>
         -->
+        
     </session-config>
 
     <servlet>
-        <description/>
-        <display-name>IndexServlet</display-name>
-        <servlet-name>IndexServlet</servlet-name>
-        <servlet-class>\TechDivision\Example\Servlets\IndexServlet</servlet-class>
+    
+        <description>The routlt controller servlet implementation.</description>
+        <display-name>The routlt controller servlet</display-name>
+        <servlet-name>routlt</servlet-name>
+        <servlet-class>\AppserverIo\Routlt\ControllerServlet</servlet-class>
+        
+        <init-param>
+            <param-name>configurationFile</param-name>
+            <param-value>WEB-INF/routes.json</param-value>
+        </init-param>
+        
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>IndexServlet</servlet-name>
+        <servlet-name>routlt</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>IndexServlet</servlet-name>
+        <servlet-name>routlt</servlet-name>
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
 
