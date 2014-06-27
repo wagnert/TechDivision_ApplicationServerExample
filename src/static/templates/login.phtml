@@ -13,6 +13,7 @@
 namespace TechDivision\Example\Servlets;
 
 use TechDivision\Example\Utils\ContextKeys;
+use TechDivision\Example\Utils\RequestKeys;
 
 /** @var $this \TechDivision\Example\Servlets\LoginServlet */
 ?>
@@ -55,18 +56,17 @@ use TechDivision\Example\Utils\ContextKeys;
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="index.do"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;&nbsp;Home</a></li>
-                    <li class="active"><a href="login.do"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;&nbsp;Login</a></li>
-                    <li><a href="upload.do"><span class="glyphicon glyphicon-upload"></span>&nbsp;&nbsp;&nbsp;Upload</a></li>
-                    <li><a href="websocket.do"><span class="glyphicon glyphicon-retweet"></span>&nbsp;&nbsp;&nbsp;WebSocket</a></li>
-                    <li><a href="messageQueue.do"><span class="glyphicon glyphicon-list"></span>&nbsp;&nbsp;&nbsp;Message-Queue</a></li>
+                    <li class="active"><a href="index.do/login"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;&nbsp;Login</a></li>
+                    <li><a href="index.do/upload"><span class="glyphicon glyphicon-upload"></span>&nbsp;&nbsp;&nbsp;Upload</a></li>
+                    <li><a href="index.do/webSocket"><span class="glyphicon glyphicon-retweet"></span>&nbsp;&nbsp;&nbsp;WebSocket</a></li>
+                    <li><a href="index.do/messageQueue"><span class="glyphicon glyphicon-list"></span>&nbsp;&nbsp;&nbsp;Message-Queue</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-briefcase"></span>&nbsp;&nbsp;&nbsp;Authentication <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="basicAuthentication.do">Basic</a></li>
-                            <li><a href="digestAuthentication.do">Digest</a></li>
+                            <li><a href="index.do/basicAuthentication">Basic</a></li>
+                            <li><a href="index.do/digestAuthentication">Digest</a></li>
                         </ul>
                     </li>
-
                 </ul>
             </div>
         </div>
@@ -74,10 +74,10 @@ use TechDivision\Example\Utils\ContextKeys;
 
     <div class="container content">
 
-        <?php if ($errorMessages = $this->getAttribute('errorMessages')): ?>
+        <?php if ($errorMessages = $this->getAttribute(ContextKeys::ERROR_MESSAGES)): ?>
             <div class="alert alert-danger">
                 <?php foreach ($errorMessages as $errorMessage): ?>
-                    <?php echo $errorMessage ?></br>
+                    <?php echo $errorMessage ?><br/>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
@@ -90,9 +90,9 @@ use TechDivision\Example\Utils\ContextKeys;
 
         <h1>Please sign in</h1>
 
-        <form class="form-center" role="form" action="login.do/login" method="post">
-            <input type="text" class="form-control" placeholder="Username" required="" autofocus="" name="username">
-            <input type="password" class="form-control" placeholder="Password" required="" name="password">
+        <form class="form-center" role="form" action="index.do/login/login" method="post">
+            <input type="text" class="form-control" placeholder="Username" required="" autofocus="" name="<?php echo RequestKeys::USERNAME ?>">
+            <input type="password" class="form-control" placeholder="Password" required="" name="<?php echo RequestKeys::PASSWORD ?>">
             <label class="checkbox">
                 <input type="checkbox" value="remember-me"> Remember me
             </label>

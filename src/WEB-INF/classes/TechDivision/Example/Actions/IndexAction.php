@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Example\Servlets\IndexServlet
+ * TechDivision\Example\Actions\IndexAction
  *
  * NOTICE OF LICENSE
  *
@@ -13,23 +13,23 @@
  *
  * @category   Appserver
  * @package    TechDivision_ApplicationServerExample
- * @subpackage Http
- * @author     Johann Zelger <jz@techdivision.com>
+ * @subpackage Actions
  * @author     Tim Wagner <tw@techdivision.com>
  * @copyright  2014 TechDivision GmbH <info@techdivision.com>
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  */
 
-namespace TechDivision\Example\Servlets;
+namespace TechDivision\Example\Actions;
 
 use TechDivision\Servlet\Http\HttpServletRequest;
 use TechDivision\Servlet\Http\HttpServletResponse;
 use TechDivision\Example\Entities\Sample;
 use TechDivision\Example\Utils\ContextKeys;
+use TechDivision\Example\Utils\RequestKeys;
 
 /**
- * Example servlet implementation that loads data over a persistence container proxy
+ * Example action implementation that loads data over a persistence container proxy
  * and renders a list, based on the returned values.
  *
  * Additional it provides functionality to edit, delete und persist the data after
@@ -37,14 +37,13 @@ use TechDivision\Example\Utils\ContextKeys;
  *
  * @category   Appserver
  * @package    TechDivision_ApplicationServerExample
- * @subpackage Servlets
- * @author     Johann Zelger <jz@techdivision.com>
+ * @subpackage Actions
  * @author     Tim Wagner <tw@techdivision.com>
  * @copyright  2014 TechDivision GmbH <info@techdivision.com>
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  */
-class IndexServlet extends AbstractServlet
+class IndexAction extends ExampleBaseAction
 {
 
     /**
@@ -74,9 +73,9 @@ class IndexServlet extends AbstractServlet
      */
     public function indexAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
-        $overviewData = $this->getProxy(IndexServlet::PROXY_CLASS)->findAll();
-        $this->addAttribute(ContextKeys::OVERVIEW_DATA, $overviewData);
-        $servletResponse->appendBodyStream($this->processTemplate(IndexServlet::INDEX_TEMPLATE, $servletRequest, $servletResponse));
+        $overviewData = $this->getProxy(IndexAction::PROXY_CLASS)->findAll();
+        $this->setAttribute(ContextKeys::OVERVIEW_DATA, $overviewData);
+        $servletResponse->appendBodyStream($this->processTemplate(IndexAction::INDEX_TEMPLATE, $servletRequest, $servletResponse));
     }
 
     /**
@@ -92,19 +91,15 @@ class IndexServlet extends AbstractServlet
     public function loadAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
 
-        // load the params with the entity data
-        $parameterMap = $servletRequest->getParameterMap();
-
         // check if the necessary params has been specified and are valid
-        if (!array_key_exists('sampleId', $parameterMap)) {
-            throw new \Exception();
-        } else {
-            $sampleId = filter_var($parameterMap['sampleId'], FILTER_VALIDATE_INT);
+        $sampleId = $servletRequest->getParameter(RequestKeys::SAMPLE_ID, FILTER_VALIDATE_INT);
+        if ($sampleId == null) {
+            throw new \Exception(sprintf('Can\'t find requested %s', RequestKeys::SAMPLE_ID));
         }
 
         // load the entity to be edited and attach it to the servlet context
-        $viewData = $this->getProxy(IndexServlet::PROXY_CLASS)->load($sampleId);
-        $this->addAttribute(ContextKeys::VIEW_DATA, $viewData);
+        $viewData = $this->getProxy(IndexAction::PROXY_CLASS)->load($sampleId);
+        $this->setAttribute(ContextKeys::VIEW_DATA, $viewData);
 
         // reload all entities and render the dialog
         $this->indexAction($servletRequest, $servletResponse);
@@ -123,18 +118,14 @@ class IndexServlet extends AbstractServlet
     public function deleteAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
 
-        // load the params with the entity data
-        $parameterMap = $servletRequest->getParameterMap();
-
         // check if the necessary params has been specified and are valid
-        if (!array_key_exists('sampleId', $parameterMap)) {
-            throw new \Exception();
-        } else {
-            $sampleId = filter_var($parameterMap['sampleId'], FILTER_VALIDATE_INT);
+        $sampleId = $servletRequest->getParameter(RequestKeys::SAMPLE_ID, FILTER_VALIDATE_INT);
+        if ($sampleId == null) {
+            throw new \Exception(sprintf('Can\'t find requested %s', RequestKeys::SAMPLE_ID));
         }
 
         // delete the entity
-        $this->getProxy(IndexServlet::PROXY_CLASS)->delete($sampleId);
+        $this->getProxy(IndexAction::PROXY_CLASS)->delete($sampleId);
 
         // reload all entities and render the dialog
         $this->indexAction($servletRequest, $servletResponse);
@@ -152,26 +143,20 @@ class IndexServlet extends AbstractServlet
     public function persistAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
 
-        // load the params with the entity data
-        $parameterMap = $servletRequest->getParameterMap();
+        // check if the necessary params has been specified and are valid
+        $sampleId = $servletRequest->getParameter(RequestKeys::SAMPLE_ID, FILTER_VALIDATE_INT);
 
         // check if the necessary params has been specified and are valid
-        if (!array_key_exists('sampleId', $parameterMap)) {
-            throw new \Exception();
-        } else {
-            $sampleId = filter_var($parameterMap['sampleId'], FILTER_VALIDATE_INT);
-        }
-        if (!array_key_exists('name', $parameterMap)) {
-            throw new \Exception();
-        } else {
-            $name = filter_var($parameterMap['name'], FILTER_SANITIZE_STRING);
+        $name = $servletRequest->getParameter(RequestKeys::NAME);
+        if ($name == null) {
+            throw new \Exception(sprintf('Can\'t find requested %s', RequestKeys::NAME));
         }
 
         // create a new entity and persist it
         $entity = new Sample();
         $entity->setSampleId((integer) $sampleId);
         $entity->setName($name);
-        $this->getProxy(IndexServlet::PROXY_CLASS)->persist($entity);
+        $this->getProxy(IndexAction::PROXY_CLASS)->persist($entity);
 
         // reload all entities and render the dialog
         $this->indexAction($servletRequest, $servletResponse);
@@ -186,7 +171,7 @@ class IndexServlet extends AbstractServlet
      */
     public function getEditLink(Sample $entity)
     {
-        return 'index.do/load?sampleId=' . $entity->getSampleId();
+        return sprintf('index.do/index/load?%s=%d', RequestKeys::SAMPLE_ID, $entity->getSampleId());
     }
 
     /**
@@ -198,6 +183,6 @@ class IndexServlet extends AbstractServlet
      */
     public function getDeleteLink(Sample $entity)
     {
-        return 'index.do/delete?sampleId=' . $entity->getSampleId();
+        return sprintf('index.do/index/delete?%s=%d', RequestKeys::SAMPLE_ID, $entity->getSampleId());
     }
 }

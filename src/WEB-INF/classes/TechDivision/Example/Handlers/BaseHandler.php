@@ -49,32 +49,11 @@ abstract class BaseHandler extends AbstractHandler
     const METHOD_NAME_PARAM = 'action';
 
     /**
-     * Defines the persistence container application name to connect to.
-     *
-     * @var string
-     */
-    const PERSISTENCE_CONTAINER_APPLICATION_NAME = 'example';
-
-    /**
      * The connected web socket clients.
      *
      * @var \SplObjectStorage
      */
     protected $clients;
-
-    /**
-     * The persistence container connection to use.
-     *
-     * @var \TechDivision\PersistenceContainerClient\Interfaces\Connnection
-     */
-    protected $connection;
-
-    /**
-     * The persistence container session to use.
-     *
-     * @var \TechDivision\PersistenceContainerClient\Interfaces\Session
-     */
-    protected $session;
 
     /**
      * Initializes the message handler with the container.
@@ -85,10 +64,6 @@ abstract class BaseHandler extends AbstractHandler
     {
         // initialize the object storage for the client connections
         $this->clients = new \SplObjectStorage();
-
-        // create proxy connnection + session
-        $this->connection = ConnectionFactory::createContextConnection(BaseHandler::PERSISTENCE_CONTAINER_APPLICATION_NAME);
-        $this->session = $this->connection->createContextSession();
     }
 
     /**
@@ -101,8 +76,16 @@ abstract class BaseHandler extends AbstractHandler
      */
     public function getProxy($proxyClass)
     {
-        $initialContext = $this->session->createInitialContext();
-        return $initialContext->lookup($proxyClass);
+
+        // load the application name
+        $applicationName = $this->getRequest()->getContext()->getName();
+
+        // initialize the connection and the session
+        $connection = ConnectionFactory::createContextConnection($applicationName);
+        $session = $connection->createContextSession();
+
+        // create an return the proxy instance
+        return $session->createInitialContext()->lookup($proxyClass);
     }
 
     /**

@@ -1,0 +1,36 @@
+{
+    "routes": [
+        {
+            "urlMapping": "/index*",
+            "actionClass": "\\TechDivision\\Example\\Actions\\IndexAction"
+        },
+        {
+            "urlMapping": "/upload*",
+            "actionClass": "\\TechDivision\\Example\\Actions\\UploadAction"
+        },
+        {
+            "urlMapping": "/login*",
+            "actionClass": "\\TechDivision\\Example\\Actions\\LoginAction"
+        },
+        {
+            "urlMapping": "/basicAuthentication*",
+            "actionClass": "\\TechDivision\\Example\\Actions\\BasicAuthenticationAction"
+        },
+        {
+            "urlMapping": "/digestAuthentication*",
+            "actionClass": "\\TechDivision\\Example\\Actions\\DigestAuthenticationAction"
+        },
+        {
+            "urlMapping": "/webSocket*",
+            "actionClass": "\\TechDivision\\Example\\Actions\\WebSocketAction"
+        },
+        {
+            "urlMapping": "/messageQueue*",
+            "actionClass": "\\TechDivision\\Example\\Actions\\MessageQueueAction"
+        },
+        {
+            "urlMapping": "/sessionGenerator*",
+            "actionClass": "\\TechDivision\\Example\\Actions\\SessionGeneratorAction"
+        }
+    ]
+}

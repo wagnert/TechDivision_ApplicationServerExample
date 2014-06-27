@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Example\Utils\ContextKeys
+ * TechDivision\Example\Utils\SessionKeys
  *
  * NOTICE OF LICENSE
  *
@@ -23,7 +23,7 @@
 namespace TechDivision\Example\Utils;
 
 /**
- * Context keys that are used to store data in a application context.
+ * Session keys that are used to store data in a session context.
  *
  * @category   Appserver
  * @package    TechDivision_ApplicationServerExample
@@ -33,7 +33,7 @@ namespace TechDivision\Example\Utils;
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  */
-class ContextKeys
+class SessionKeys
 {
 
     /**
@@ -46,23 +46,9 @@ class ContextKeys
     }
 
     /**
-     * The key for a collection with error messages.
+     * The key for a 'username'.
      *
      * @return string
      */
-    const ERROR_MESSAGES = 'error.messages';
-
-    /**
-     * The key for a collection with entities.
-     *
-     * @return string
-     */
-    const OVERVIEW_DATA = 'overview.data';
-
-    /**
-     * The key for an entity.
-     *
-     * @return string
-     */
-    const VIEW_DATA = 'view.data';
+    const USERNAME = 'username';
 }

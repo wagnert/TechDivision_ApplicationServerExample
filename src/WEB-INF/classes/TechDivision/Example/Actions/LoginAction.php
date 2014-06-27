@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Example\Servlets\LoginServlet
+ * TechDivision\Example\Actions\LoginAction
  *
  * NOTICE OF LICENSE
  *
@@ -13,20 +13,21 @@
  *
  * @category   Appserver
  * @package    TechDivision_ApplicationServerExample
- * @subpackage Http
- * @author     Johann Zelger <jz@techdivision.com>
+ * @subpackage Actions
  * @author     Tim Wagner <tw@techdivision.com>
  * @copyright  2014 TechDivision GmbH <info@techdivision.com>
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  */
 
-namespace TechDivision\Example\Servlets;
+namespace TechDivision\Example\Actions;
 
 use TechDivision\Example\Utils\ContextKeys;
 use TechDivision\Servlet\Http\HttpServletRequest;
 use TechDivision\Servlet\Http\HttpServletResponse;
 use TechDivision\Example\Exceptions\LoginException;
+use TechDivision\Example\Utils\RequestKeys;
+use TechDivision\Example\Utils\SessionKeys;
 
 /**
  * Example servlet implementation that validates passed user credentials against
@@ -34,14 +35,13 @@ use TechDivision\Example\Exceptions\LoginException;
  *
  * @category   Appserver
  * @package    TechDivision_ApplicationServerExample
- * @subpackage Servlets
- * @author     Johann Zelger <jz@techdivision.com>
+ * @subpackage Actions
  * @author     Tim Wagner <tw@techdivision.com>
  * @copyright  2014 TechDivision GmbH <info@techdivision.com>
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  */
-class LoginServlet extends AbstractServlet
+class LoginAction extends ExampleBaseAction
 {
 
     /**
@@ -71,9 +71,9 @@ class LoginServlet extends AbstractServlet
      */
     public function indexAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
-        $viewData = $this->getProxy(LoginServlet::PROXY_CLASS)->checkForDefaultCredentials();
-        $this->addAttribute(ContextKeys::VIEW_DATA, $viewData);
-        $servletResponse->appendBodyStream($this->processTemplate(LoginServlet::LOGIN_TEMPLATE, $servletRequest, $servletResponse));
+        $viewData = $this->getProxy(LoginAction::PROXY_CLASS)->checkForDefaultCredentials();
+        $this->setAttribute(ContextKeys::VIEW_DATA, $viewData);
+        $servletResponse->appendBodyStream($this->processTemplate(LoginAction::LOGIN_TEMPLATE, $servletRequest, $servletResponse));
     }
 
     /**
@@ -92,27 +92,27 @@ class LoginServlet extends AbstractServlet
         try {
 
             // check if the necessary params has been specified and are valid
-            if (($username = $servletRequest->getParameter('username')) === null) {
-                throw new \Exception('Please enter a valid username');
+            if (($username = $servletRequest->getParameter(RequestKeys::USERNAME)) === null) {
+                throw new \Exception(sprintf('Please enter a valid %s', RequestKeys::USERNAME));
             }
 
             // check if the necessary params has been specified and are valid
-            if (($password = $servletRequest->getParameter('password')) === null) {
-                throw new \Exception('Please enter a valid password');
+            if (($password = $servletRequest->getParameter(RequestKeys::PASSWORD)) === null) {
+                throw new \Exception(sprintf('Please enter a valid %s', RequestKeys::PASSWORD));
             }
 
             // try to login
-            $this->getProxy(LoginServlet::PROXY_CLASS)->login($username, $password);
+            $this->getProxy(LoginAction::PROXY_CLASS)->login($username, $password);
 
             // if successfully then add the username to the session and redirect to the overview
             $session = $this->getLoginSession(true);
             $session->start();
-            $session->putData('username', $username);
+            $session->putData(SessionKeys::USERNAME, $username);
 
         } catch (LoginException $e) { // invalid login credentials
-            $this->addAttribute('errorMessages', array("Username or Password invalid"));
+            $this->setAttribute(ContextKeys::ERROR_MESSAGES, array("Username or Password invalid"));
         } catch (\Exception $e) { // if not add an error message
-            $this->addAttribute('errorMessages', array($e->getMessage()));
+            $this->setAttribute(ContextKeys::ERROR_MESSAGES, array($e->getMessage()));
         }
 
         // reload all entities and render the dialog

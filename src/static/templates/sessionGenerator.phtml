@@ -86,38 +86,11 @@ use TechDivision\Example\Utils\RequestKeys;
             <img src="http://appserver.io/static/img/logo-black.png"/>
         </a>
 
-        <br>
+        <br/><br/><br/><br/>
 
-        <h1>Select file</h1>
+        <p>Generated Session-ID: <?php echo $this->getSessionId() ?></p>
 
-        <br>
-
-        <form class="form-center" role="form" action="index.do/messageQueue/upload" method="post" enctype="multipart/form-data">
-            <input name="<?php echo RequestKeys::FILE_TO_UPLOAD ?>" type="file" class="form-control" placeholder="Filename">
-            <br>
-            <button class="btn btn-lg btn-info btn-block" type="submit">Upload file</button>
-        </form>
-
-        <br><br>
-
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($this->getAttribute(ContextKeys::OVERVIEW_DATA) as $importFile): ?>
-                    <tr>
-                        <td><?php echo $importFile ?></td>
-                        <td><a href="<?php echo $this->getImportLink($importFile) ?>">Import</a></td>
-                        <td><a href="<?php echo $this->getDeleteLink($importFile) ?>">Delete</a></td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+        <br/><br/><br/><br/>
 
         <div class="footer">
             <p>&copy; and built with pride by <a href="http://appserver.io" target="_blank">appserver.io</a></p>

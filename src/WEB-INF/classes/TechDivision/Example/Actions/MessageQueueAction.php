@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Example\Servlets\MessageQueueServlet
+ * TechDivision\Example\Actions\MessageQueueAction
  *
  * NOTICE OF LICENSE
  *
@@ -13,14 +13,14 @@
  *
  * @category   Appserver
  * @package    TechDivision_ApplicationServerExample
- * @subpackage Servlets
+ * @subpackage Actions
  * @author     Tim Wagner <tw@techdivision.com>
  * @copyright  2014 TechDivision GmbH <info@techdivision.com>
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  */
 
-namespace TechDivision\Example\Servlets;
+namespace TechDivision\Example\Actions;
 
 use TechDivision\Servlet\Http\HttpServletRequest;
 use TechDivision\Servlet\Http\HttpServletResponse;
@@ -29,6 +29,7 @@ use TechDivision\Example\Utils\ContextKeys;
 use TechDivision\MessageQueueClient\MessageQueue;
 use TechDivision\MessageQueueClient\QueueConnectionFactory;
 use TechDivision\MessageQueueProtocol\Messages\StringMessage;
+use TechDivision\Example\Utils\RequestKeys;
 
 /**
  * Example servlet that imports .csv files by uploading them and sends a message to the
@@ -36,13 +37,13 @@ use TechDivision\MessageQueueProtocol\Messages\StringMessage;
  *
  * @category   Appserver
  * @package    TechDivision_ApplicationServerExample
- * @subpackage Servlets
+ * @subpackage Actions
  * @author     Tim Wagner <tw@techdivision.com>
  * @copyright  2014 TechDivision GmbH <info@techdivision.com>
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  */
-class MessageQueueServlet extends AbstractServlet
+class MessageQueueAction extends ExampleBaseAction
 {
 
     /**
@@ -78,10 +79,12 @@ class MessageQueueServlet extends AbstractServlet
         }
 
         // set the uploaded .csv files to the context
-        $this->addAttribute(ContextKeys::OVERVIEW_DATA, $overviewData);
+        $this->setAttribute(ContextKeys::OVERVIEW_DATA, $overviewData);
 
         // render the template
-        $servletResponse->appendBodyStream($this->processTemplate(MessageQueueServlet::MESSAGE_QUEUE_TEMPLATE, $servletRequest, $servletResponse));
+        $servletResponse->appendBodyStream(
+            $this->processTemplate(MessageQueueAction::MESSAGE_QUEUE_TEMPLATE, $servletRequest, $servletResponse)
+        );
     }
 
     /**
@@ -104,7 +107,7 @@ class MessageQueueServlet extends AbstractServlet
         $sender = $session->createSender($queue);
 
         // load the params with the entity data
-        $filename = $servletRequest->getParameter('filename');
+        $filename = $servletRequest->getParameter(RequestKeys::FILENAME);
 
         // initialize the message with the name of the file to import the data from
         $message = new StringMessage(ini_get('upload_tmp_dir') . DIRECTORY_SEPARATOR . $filename);
@@ -130,7 +133,7 @@ class MessageQueueServlet extends AbstractServlet
     {
 
         // load the uploaded file information
-        $fileToUpload = $servletRequest->getPart('fileToUpload');
+        $fileToUpload = $servletRequest->getPart(RequestKeys::FILE_TO_UPLOAD);
 
         // sample for saving file to appservers upload tmp folder with tmpname
         $fileToUpload->write(
@@ -154,7 +157,7 @@ class MessageQueueServlet extends AbstractServlet
     {
 
         // load the params with the entity data
-        $filename = $servletRequest->getParameter('filename');
+        $filename = $servletRequest->getParameter(RequestKeys::FILENAME);
 
         // delete the file from the temporary upload directory
         unlink(ini_get('upload_tmp_dir') . DIRECTORY_SEPARATOR . $filename);
@@ -172,7 +175,7 @@ class MessageQueueServlet extends AbstractServlet
      */
     public function getImportLink($importFile)
     {
-        return 'messageQueue.do/import?filename=' . $importFile;
+        return sprintf('index.do/messageQueue/import?%s=%s', RequestKeys::FILENAME, $importFile);
     }
 
     /**
@@ -184,6 +187,6 @@ class MessageQueueServlet extends AbstractServlet
      */
     public function getDeleteLink($importFile)
     {
-        return 'messageQueue.do/delete?filename=' . $importFile;
+        return sprintf('index.do/messageQueue/delete?%s=%s', RequestKeys::FILENAME, $importFile);
     }
 }

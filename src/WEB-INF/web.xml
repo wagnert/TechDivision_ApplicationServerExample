@@ -1,110 +1,55 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <web-app version="2.4">
 
-    <display-name>Simple Web Servlet Example</display-name>
-    <description>Simple Web Servlet Example</description>
+    <display-name>appserver.io example application</display-name>
+    <description>This is the example application for the appserver.io servlet engine.</description>
+
+    <session-config>
+    
+        <session-name>example_login</session-name>
+        <session-file-prefix>example_session_</session-file-prefix>
+        <session-save-path>/tmp</session-save-path>
+        
+        <!--
+        <garbage-collection-probability>0.1</garbage-collection-probability>
+        <session-save-path>60</session-save-path>
+        <session-maximum-age>0</session-maximum-age>
+        <session-inactivity-timeout>1440</session-inactivity-timeout>
+        <session-cookie-lifetime>86400</session-cookie-lifetime>
+        <session-cookie-domain>localhost</session-cookie-domain>
+        <session-cookie-path>/</session-cookie-path>
+        <session-cookie-secure>false</session-cookie-secure>
+        <session-http-only>false</session-http-only>
+        -->
+        
+    </session-config>
 
     <servlet>
-        <description/>
-        <display-name>IndexServlet</display-name>
-        <servlet-name>IndexServlet</servlet-name>
-        <servlet-class>\TechDivision\Example\Servlets\IndexServlet</servlet-class>
-    </servlet>
-
-    <servlet>
-        <description/>
-        <display-name>LoginServlet</display-name>
-        <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>\TechDivision\Example\Servlets\LoginServlet</servlet-class>
-    </servlet>
-
-    <servlet>
-        <description/>
-        <display-name>UploadServlet</display-name>
-        <servlet-name>UploadServlet</servlet-name>
-        <servlet-class>\TechDivision\Example\Servlets\UploadServlet</servlet-class>
-    </servlet>
-
-    <servlet>
-        <description/>
-        <display-name>WebSocketServlet</display-name>
-        <servlet-name>WebSocketServlet</servlet-name>
-        <servlet-class>\TechDivision\Example\Servlets\WebSocketServlet</servlet-class>
-    </servlet>
-
-    <servlet>
-        <description/>
-        <display-name>BasicAuthenticationServlet</display-name>
-        <servlet-name>BasicAuthenticationServlet</servlet-name>
-        <servlet-class>\TechDivision\Example\Servlets\BasicAuthenticationServlet</servlet-class>
-    </servlet>
-
-    <servlet>
-        <description/>
-        <display-name>DigestAuthenticationServlet</display-name>
-        <servlet-name>DigestAuthenticationServlet</servlet-name>
-        <servlet-class>\TechDivision\Example\Servlets\DigestAuthenticationServlet</servlet-class>
-    </servlet>
-
-    <servlet>
-        <description/>
-        <display-name>MessageQueueServlet</display-name>
-        <servlet-name>MessageQueueServlet</servlet-name>
-        <servlet-class>\TechDivision\Example\Servlets\MessageQueueServlet</servlet-class>
+    
+        <description>The routlt controller servlet implementation.</description>
+        <display-name>The routlt controller servlet</display-name>
+        <servlet-name>routlt</servlet-name>
+        <servlet-class>\AppserverIo\Routlt\ControllerServlet</servlet-class>
+        
+        <init-param>
+            <param-name>configurationFile</param-name>
+            <param-value>WEB-INF/routes.json</param-value>
+        </init-param>
+        
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>LoginServlet</servlet-name>
-        <url-pattern>/login.do*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>UploadServlet</servlet-name>
-        <url-pattern>/upload.do*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>WebSocketServlet</servlet-name>
-        <url-pattern>/websocket.do*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>BasicAuthenticationServlet</servlet-name>
-        <url-pattern>/basicAuthentication.do*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>BasicAuthenticationServlet</servlet-name>
-        <url-pattern>/basicAuthentication.do*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>DigestAuthenticationServlet</servlet-name>
-        <url-pattern>/digestAuthentication.do*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>DigestAuthenticationServlet</servlet-name>
-        <url-pattern>/digestAuthentication.do*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>MessageQueueServlet</servlet-name>
-        <url-pattern>/messageQueue.do*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>IndexServlet</servlet-name>
+        <servlet-name>routlt</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>IndexServlet</servlet-name>
+        <servlet-name>routlt</servlet-name>
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
 
     <security>
-        <url-pattern>/basicAuthentication.do*</url-pattern>
+        <url-pattern>/index.do/basicAuthentication*</url-pattern>
         <auth>
             <auth_type>Basic</auth_type>
             <realm>test</realm>
@@ -116,7 +61,7 @@
     </security>
 
     <security>
-        <url-pattern>/digestAuthentication.do*</url-pattern>
+        <url-pattern>/index.do/digestAuthentication*</url-pattern>
         <auth>
             <auth_type>Digest</auth_type>
             <realm>Digest-Example-Realm</realm>
@@ -126,5 +71,5 @@
             </options>
         </auth>
     </security>
-
+    
 </web-app>
