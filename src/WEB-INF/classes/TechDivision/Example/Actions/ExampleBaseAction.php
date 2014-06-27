@@ -22,6 +22,7 @@
 
 namespace TechDivision\Example\Actions;
 
+use AppserverIo\Routlt\DispatchAction;
 use TechDivision\Servlet\Http\HttpServlet;
 use TechDivision\Servlet\Http\HttpSession;
 use TechDivision\Servlet\Http\HttpServletRequest;
@@ -29,7 +30,6 @@ use TechDivision\Servlet\Http\HttpServletResponse;
 use TechDivision\WebServer\Dictionaries\ServerVars;
 use TechDivision\PersistenceContainerClient\ConnectionFactory;
 use TechDivision\Example\Exceptions\LoginException;
-use TechDivision\Example\Controller\DispatchAction;
 use TechDivision\Example\Utils\SessionKeys;
 
 /**

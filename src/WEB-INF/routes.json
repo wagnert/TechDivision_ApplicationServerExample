@@ -1,28 +1,36 @@
 {
     "routes": [
         {
-            "/index*": "\\TechDivision\\Example\\Actions\\IndexAction"
+            "urlMapping": "/index*",
+            "actionClass": "\\TechDivision\\Example\\Actions\\IndexAction"
         },
         {
-            "/upload*": "\\TechDivision\\Example\\Actions\\UploadAction"
+            "urlMapping": "/upload*",
+            "actionClass": "\\TechDivision\\Example\\Actions\\UploadAction"
         },
         {
-            "/login*": "\\TechDivision\\Example\\Actions\\LoginAction"
+            "urlMapping": "/login*",
+            "actionClass": "\\TechDivision\\Example\\Actions\\LoginAction"
         },
         {
-            "/basicAuthentication*": "\\TechDivision\\Example\\Actions\\BasicAuthenticationAction"
+            "urlMapping": "/basicAuthentication*",
+            "actionClass": "\\TechDivision\\Example\\Actions\\BasicAuthenticationAction"
         },
         {
-            "/digestAuthentication*": "\\TechDivision\\Example\\Actions\\DigestAuthenticationAction"
+            "urlMapping": "/digestAuthentication*",
+            "actionClass": "\\TechDivision\\Example\\Actions\\DigestAuthenticationAction"
         },
         {
-            "/webSocket*": "\\TechDivision\\Example\\Actions\\WebSocketAction"
+            "urlMapping": "/webSocket*",
+            "actionClass": "\\TechDivision\\Example\\Actions\\WebSocketAction"
         },
         {
-            "/messageQueue*": "\\TechDivision\\Example\\Actions\\MessageQueueAction"
+            "urlMapping": "/messageQueue*",
+            "actionClass": "\\TechDivision\\Example\\Actions\\MessageQueueAction"
         },
         {
-            "/sessionGenerator*": "\\TechDivision\\Example\\Actions\\SessionGeneratorAction"
+            "urlMapping": "/sessionGenerator*",
+            "actionClass": "\\TechDivision\\Example\\Actions\\SessionGeneratorAction"
         }
     ]
 }
