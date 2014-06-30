@@ -115,7 +115,7 @@ abstract class ExampleBaseAction extends DispatchAction
     /**
      * Returns the servlet response instance.
      *
-     * @return \TechDivision\Servlet\Http\ServletRequest The request instance
+     * @return \TechDivision\Servlet\Http\HttpServletRequest The request instance
      */
     public function getServletRequest()
     {
@@ -214,7 +214,7 @@ abstract class ExampleBaseAction extends DispatchAction
      *
      * @param boolean $create TRUE if a session has to be created if we can't find any
      *
-     * @return \TechDivision\ServletEngine\Http\Session The requested session instance
+     * @return \TechDivision\Servlet\Http\HttpSession|null The requested session instance
      * @throws \Exception Is thrown if we can't find a request instance
      */
     public function getLoginSession($create = false)
