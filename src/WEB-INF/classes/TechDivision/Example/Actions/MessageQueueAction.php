@@ -100,9 +100,12 @@ class MessageQueueAction extends ExampleBaseAction
     public function importAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
 
+        // load the application name
+        $applicationName = $this->getServletRequest()->getContext()->getName();
+
         // initialize the connection and the session
         $queue = MessageQueue::createQueue('queue/import');
-        $connection = QueueConnectionFactory::createQueueConnection();
+        $connection = QueueConnectionFactory::createQueueConnection($applicationName);
         $session = $connection->createQueueSession();
         $sender = $session->createSender($queue);
 
@@ -136,6 +139,7 @@ class MessageQueueAction extends ExampleBaseAction
         $fileToUpload = $servletRequest->getPart(RequestKeys::FILE_TO_UPLOAD);
 
         // sample for saving file to appservers upload tmp folder with tmpname
+        $fileToUpload->init();
         $fileToUpload->write(
             tempnam(ini_get('upload_tmp_dir'), 'example_upload_') . '.' . pathinfo($fileToUpload->getFilename(), PATHINFO_EXTENSION)
         );
