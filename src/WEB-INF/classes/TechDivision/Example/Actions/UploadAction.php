@@ -75,9 +75,9 @@ class UploadAction extends ExampleBaseAction
     {
 
         // sample for saving file to appservers upload tmp folder with tmpname
-        $servletRequest->getPart(RequestKeys::FILE_TO_UPLOAD)->write(
-            tempnam(ini_get('upload_tmp_dir'), 'example_upload_')
-        );
+        $fileToUpload = $servletRequest->getPart(RequestKeys::FILE_TO_UPLOAD);
+        $fileToUpload->init();
+        $fileToUpload->write(tempnam(ini_get('upload_tmp_dir'), 'example_upload_'));
 
         // after the successfull upload, render the template again
         $this->indexAction($servletRequest, $servletResponse);
