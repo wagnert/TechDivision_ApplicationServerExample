@@ -25,6 +25,7 @@ namespace TechDivision\Example\MessageBeans;
 use TechDivision\MessageQueueClient\MessageQueue;
 use TechDivision\MessageQueueClient\QueueConnectionFactory;
 use TechDivision\MessageQueueProtocol\Message;
+use TechDivision\MessageQueueProtocol\Utils\PriorityMedium;
 use TechDivision\MessageQueueProtocol\Messages\ArrayMessage;
 use TechDivision\MessageQueue\Receiver\AbstractReceiver;
 
@@ -65,14 +66,17 @@ class ImportReceiver extends AbstractReceiver
         // open the import file
         $importData = file($importFile);
 
+        // load the application name
+        $applicationName = $this->getApplication()->getName();
+
         // initialize the connection and the session
         $queue = MessageQueue::createQueue('queue/import_chunk');
-        $connection = QueueConnectionFactory::createQueueConnection();
+        $connection = QueueConnectionFactory::createQueueConnection($applicationName);
         $session = $connection->createQueueSession();
         $sender = $session->createSender($queue);
 
         // init chunk data
-        $chunkSize = 10;
+        $chunkSize = 100;
 
         // if data contains less entries than chunk size
         if (sizeof($importData) <= $chunkSize) {
@@ -103,10 +107,15 @@ class ImportReceiver extends AbstractReceiver
                 $i = 0;
 
                 // send chunked data message
-                $send = $sender->send(new ArrayMessage($chunkData), false);
+                $message = new ArrayMessage($chunkData);
+                $message->setPriority(PriorityMedium::get());
+                $send = $sender->send($message, false);
 
                 // reset chunk data
                 $chunkData = array();
+
+                // reduce CPU load a bit
+                usleep(10000); // === 0.01 s
             }
         }
 

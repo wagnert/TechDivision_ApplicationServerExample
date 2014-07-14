@@ -25,8 +25,8 @@ use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Persistence\ObjectManager;
-use TechDivision\ApplicationServer\Interfaces\ApplicationInterface;
 use TechDivision\Example\Entities\User;
+use TechDivision\Application\Interfaces\ApplicationInterface;
 
 /**
  * A singleton session bean implementation that handles the
@@ -70,7 +70,7 @@ class AbstractProcessor
      * Checks on every start if the database already exists, if not
      * the database will be created immediately.
      *
-     * @param \TechDivision\ApplicationServer\Interfaces\ApplicationInterface $application The application instance
+     * @param \TechDivision\Application\Interfaces\ApplicationInterface $application The application instance
      *
      * @return void
      */

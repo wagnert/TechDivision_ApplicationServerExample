@@ -58,8 +58,11 @@ class ImportChunkReceiver extends AbstractReceiver
         // put status message
         error_log($logMessage = "Process chunked data message");
 
+        // load the application name
+        $applicationName = $this->getApplication()->getName();
+
         // initialize the persistence container proxy
-        $connection = ConnectionFactory::createContextConnection('example');
+        $connection = ConnectionFactory::createContextConnection($applicationName);
         $session = $connection->createContextSession();
         $initialContext = $session->createInitialContext();
 
