@@ -60,7 +60,7 @@ class AbstractProcessor
     /**
      * The application instance that provides the entity manager.
      *
-     * @var \TechDivision\ApplicationServer\Interfaces\ApplicationInterface
+     * @var \TechDivision\Application\Interfaces\ApplicationInterface
      */
     protected $application;
 
@@ -103,7 +103,7 @@ class AbstractProcessor
     /**
      * The application instance providing the database connection.
      *
-     * @param \TechDivision\ApplicationServer\Interfaces\ApplicationInterface $application The application instance
+     * @param \TechDivision\Application\Interfaces\ApplicationInterface $application The application instance
      *
      * @return void
      */
@@ -115,7 +115,7 @@ class AbstractProcessor
     /**
      * The application instance providing the database connection.
      *
-     * @return \TechDivision\ApplicationServer\Interfaces\ApplicationInterface The application instance
+     * @return \TechDivision\Application\Interfaces\ApplicationInterface The application instance
      */
     public function getApplication()
     {
@@ -158,7 +158,7 @@ class AbstractProcessor
     /**
      * Return's the system configuration
      *
-     * @return \TechDivision\ApplicationServer\Api\Node\NodeInterface The system configuration
+     * @return \TechDivision\Configuration\Interfaces\NodeInterface The system configuration
      */
     public function getSystemConfiguration()
     {
