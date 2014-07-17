@@ -66,7 +66,7 @@
     <!-- ==================================================================== -->
 	<target name="create-phar" depends="copy" description="Creates a PHAR file for deployment.">
         <!-- install TechDivision_Phar package to create the PHAR archive -->
-        <exec dir="${php-target.dir}" executable="composer">
+        <exec dir="${php-target.dir}" executable="composer.phar">
             <arg line="require techdivision/phar dev-master" />
         </exec>
         <!-- create the PHAR archive itself from the backup sources -->
