@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <web-app version="2.4">
 
     <display-name>appserver.io example application</display-name>
@@ -8,9 +8,9 @@
     
         <session-name>example_login</session-name>
         <session-file-prefix>example_session_</session-file-prefix>
-        <session-save-path>/tmp</session-save-path>
         
         <!--
+        <session-save-path>/tmp</session-save-path>
         <garbage-collection-probability>0.1</garbage-collection-probability>
         <session-save-path>60</session-save-path>
         <session-maximum-age>0</session-maximum-age>
