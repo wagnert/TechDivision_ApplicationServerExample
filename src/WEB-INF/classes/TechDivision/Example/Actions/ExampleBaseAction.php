@@ -279,7 +279,7 @@ abstract class ExampleBaseAction extends DispatchAction
 
         // if we can't find a session, something went wrong
         if ($session == null) {
-            throw new LoginException(sprintf('Can\'t find session %s', ExampleBaseAction::SESSION_NAME));
+            throw new LoginException(sprintf('Can\'t find session %s', $this->getServletRequest()->getRequestedSessionName()));
         }
 
         // if we can't find a username, also something went wrong
