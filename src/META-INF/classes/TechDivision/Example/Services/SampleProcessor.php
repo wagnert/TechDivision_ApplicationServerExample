@@ -42,13 +42,6 @@ class SampleProcessor extends AbstractProcessor
 {
 
     /**
-     * A dummy counter to check that we can be stateful.
-     *
-     * @var integer
-     */
-    protected $counter = 0;
-
-    /**
      * Loads and returns the entity with the ID passed as parameter.
      *
      * @param integer $id The ID of the entity to load
@@ -107,10 +100,6 @@ class SampleProcessor extends AbstractProcessor
      */
     public function findAll()
     {
-
-        // raise the dummy counter
-        $this->counter++;
-
         // load all entities
         $entityManager = $this->getEntityManager();
         $repository = $entityManager->getRepository('TechDivision\Example\Entities\Sample');
