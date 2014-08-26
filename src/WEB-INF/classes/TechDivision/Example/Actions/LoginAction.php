@@ -102,7 +102,7 @@ class LoginAction extends ExampleBaseAction
             }
 
             // try to login
-            // $this->getProxy(LoginAction::PROXY_CLASS)->login($username, $password);
+            $this->getProxy(LoginAction::PROXY_CLASS)->login($username, $password);
 
             // if successfully then add the username to the session and redirect to the overview
             $session = $this->getLoginSession(true);
