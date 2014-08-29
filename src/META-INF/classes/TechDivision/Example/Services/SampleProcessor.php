@@ -42,6 +42,32 @@ class SampleProcessor extends AbstractProcessor
 {
 
     /**
+     * Example method that should be invoked after constructor.
+     *
+     * @return void
+     * @PostConstruct
+     */
+    public function initialize()
+    {
+        $this->getInitialContext()->getSystemLogger()->info(
+            sprintf('%s has successfully been invoked by @PostConstruct annotation', __METHOD__)
+        );
+    }
+
+    /**
+     * Example method that should be invoked after constructor.
+     *
+     * @return void
+     * @PreDestroy
+     */
+    public function destroy()
+    {
+        $this->getInitialContext()->getSystemLogger()->info(
+            sprintf('%s has successfully been invoked by @PreDestroy annotation', __METHOD__)
+        );
+    }
+
+    /**
      * Loads and returns the entity with the ID passed as parameter.
      *
      * @param integer $id The ID of the entity to load

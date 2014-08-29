@@ -36,10 +36,24 @@ use Doctrine\ORM\Tools\SchemaTool;
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  *
- * @Stateless
+ * @Singleton
+ * @Startup
  */
 class SchemaProcessor extends AbstractProcessor
 {
+
+    /**
+     * Example method that should be invoked after constructor.
+     *
+     * @return void
+     * @PostConstruct
+     */
+    public function initialize()
+    {
+        $this->getInitialContext()->getSystemLogger()->info(
+            sprintf('%s has successfully been invoked by @PostConstruct annotation', __METHOD__)
+        );
+    }
 
     /**
      * Deletes the database schema and creates it new.
