@@ -57,6 +57,19 @@ class UserProcessor extends AbstractProcessor
     protected $user;
 
     /**
+     * Example method that should be invoked after constructor.
+     *
+     * @return void
+     * @PreDestroy
+     */
+    public function destroy()
+    {
+        $this->getInitialContext()->getSystemLogger()->info(
+            sprintf('%s has successfully been invoked by @PreDestroy annotation', __METHOD__)
+        );
+    }
+
+    /**
      * Validates the passed username agains the password.
      *
      * @param string $username The username to login with
