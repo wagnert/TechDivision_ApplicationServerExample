@@ -200,8 +200,8 @@ abstract class ExampleBaseAction extends DispatchAction
         $connection = ConnectionFactory::createContextConnection($applicationName);
         $session = $connection->createContextSession();
 
-        // check if we've a session ID
-        if ($this->isLoggedIn()) {
+        // check if we've a a HTTP session-ID
+        if ($this->getLoginSession() != null) { // if yes, use it for connecting to the stateful session bean
             $session->setSessionId($this->getLoginSession()->getId());
         }
 
@@ -263,6 +263,16 @@ abstract class ExampleBaseAction extends DispatchAction
     public function getLogoutLink()
     {
         return 'index.do/login/logout';
+    }
+
+    /**
+     * Returns the link to edit the data of the actual user.
+     *
+     * @return string The link to edit the data of the user actually logged in
+     */
+    public function getUserEditLink()
+    {
+        return 'index.do/user/index';
     }
 
     /**

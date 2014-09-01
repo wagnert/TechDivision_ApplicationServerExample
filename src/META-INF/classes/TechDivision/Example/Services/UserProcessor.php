@@ -23,6 +23,7 @@
 namespace TechDivision\Example\Services;
 
 use TechDivision\Example\Exceptions\LoginException;
+use TechDivision\Example\Exceptions\UserNotFoundException;
 
 /**
  * A singleton session bean implementation that handles the
@@ -36,7 +37,7 @@ use TechDivision\Example\Exceptions\LoginException;
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  *
- * @Stateless
+ * @Stateful
  */
 class UserProcessor extends AbstractProcessor
 {
@@ -47,6 +48,26 @@ class UserProcessor extends AbstractProcessor
      * @var string
      */
     const DEFAULT_USERNAME = 'appserver';
+
+    /**
+     * The user, logged into the system.
+     *
+     * @var \TechDivision\Example\Entities\User
+     */
+    protected $user;
+
+    /**
+     * Example method that should be invoked after constructor.
+     *
+     * @return void
+     * @PreDestroy
+     */
+    public function destroy()
+    {
+        $this->getInitialContext()->getSystemLogger()->info(
+            sprintf('%s has successfully been invoked by @PreDestroy annotation', __METHOD__)
+        );
+    }
 
     /**
      * Validates the passed username agains the password.
@@ -74,6 +95,28 @@ class UserProcessor extends AbstractProcessor
         if ($user->getPassword() !== md5($password)) {
             throw new LoginException('Username or Password doesn\'t match');
         }
+
+        // store the user in the session
+        $this->user = $user;
+    }
+
+    /**
+     * Returns the data of the user that has been logged into the system.
+     *
+     * @return \TechDivision\Example\Entities\User The user logged into the system
+     * @throws \TechDivision\Example\Exceptions\UserNotFoundException Is thrown if no user has been logged into the system
+     * @see \TechDivision\Example\Services\UserProcessor::login()
+     */
+    public function getUserViewData()
+    {
+
+        // check if a user has already been logged into the system
+        if ($this->user == null) {
+            throw new UserNotFoundException('Can\'t find a user logged into the system');
+        }
+
+        // return the user instance
+        return $this->user;
     }
 
     /**

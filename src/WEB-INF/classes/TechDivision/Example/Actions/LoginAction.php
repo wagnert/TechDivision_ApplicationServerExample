@@ -101,12 +101,14 @@ class LoginAction extends ExampleBaseAction
                 throw new \Exception(sprintf('Please enter a valid %s', RequestKeys::PASSWORD));
             }
 
-            // try to login
+            // start the session, because we need a session-ID for our stateful session bean
+            $session = $this->getLoginSession(true);
+            $session->start();
+
+            // try to login, using the session bean
             $this->getProxy(LoginAction::PROXY_CLASS)->login($username, $password);
 
             // if successfully then add the username to the session and redirect to the overview
-            $session = $this->getLoginSession(true);
-            $session->start();
             $session->putData(SessionKeys::USERNAME, $username);
 
         } catch (LoginException $e) { // invalid login credentials

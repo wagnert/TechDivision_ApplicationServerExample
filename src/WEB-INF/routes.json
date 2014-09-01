@@ -31,6 +31,10 @@
         {
             "urlMapping": "/sessionGenerator*",
             "actionClass": "\\TechDivision\\Example\\Actions\\SessionGeneratorAction"
+        },
+        {
+            "urlMapping": "/user*",
+            "actionClass": "\\TechDivision\\Example\\Actions\\UserAction"
         }
     ]
 }

@@ -42,6 +42,19 @@ class SchemaProcessor extends AbstractProcessor
 {
 
     /**
+     * Example method that should be invoked after constructor.
+     *
+     * @return void
+     * @PostConstruct
+     */
+    public function initialize()
+    {
+        $this->getInitialContext()->getSystemLogger()->info(
+            sprintf('%s has successfully been invoked by @PostConstruct annotation', __METHOD__)
+        );
+    }
+
+    /**
      * Deletes the database schema and creates it new.
      *
      * Attention: All data will be lost if this method has been invoked.

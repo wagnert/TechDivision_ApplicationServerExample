@@ -93,4 +93,60 @@ class RequestKeys
      * @return string
      */
     const FILE_TO_UPLOAD = 'fileToUpload';
+
+    /**
+     * The key for a 'userId'.
+     *
+     * @return string
+     */
+    const USER_ID = 'userId';
+
+    /**
+     * The key for a 'ldapSynced'.
+     *
+     * @return string
+     */
+    const LDAP_SYNCED = 'ldapSynced';
+
+    /**
+     * The key for a 'enabled'.
+     *
+     * @return string
+     */
+    const ENABLED = 'enabled';
+
+    /**
+     * The key for a 'syncedAt'.
+     *
+     * @return string
+     */
+    const SYNCED_AT = 'syncedAt';
+
+    /**
+     * The key for a 'contractedHours'.
+     *
+     * @return string
+     */
+    const CONTRACTED_HOURS = 'contractedHours';
+
+    /**
+     * The key for a 'rate'.
+     *
+     * @return string
+     */
+    const RATE = 'rate';
+
+    /**
+     * The key for a 'email'.
+     *
+     * @return string
+     */
+    const EMAIL = 'email';
+
+    /**
+     * The key for a 'userLocale'.
+     *
+     * @return string
+     */
+    const USER_LOCALE = 'userLocale';
 }
