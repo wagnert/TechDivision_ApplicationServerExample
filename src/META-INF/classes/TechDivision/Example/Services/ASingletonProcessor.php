@@ -22,6 +22,8 @@
 
 namespace TechDivision\Example\Services;
 
+use TechDivision\EnterpriseBeans\TimerInterface;
+use TechDivision\EnterpriseBeans\TimedObjectInterface;
 use TechDivision\Application\Interfaces\ApplicationInterface;
 
 /**
@@ -38,7 +40,7 @@ use TechDivision\Application\Interfaces\ApplicationInterface;
  * @Singleton
  * @Startup
  */
-class ASingletonProcessor extends \Stackable
+class ASingletonProcessor extends \Stackable implements TimedObjectInterface
 {
 
     /**
@@ -106,5 +108,35 @@ class ASingletonProcessor extends \Stackable
     public function getInitialContext()
     {
         return $this->getApplication()->getInitialContext();
+    }
+
+    /**
+     * A dummy method invoked by the container upon timer schedule.
+     *
+     * @param TimerInterface $timer The timer instance
+     *
+     * @return void
+     * @Schedule(dayOfMonth = EVERY, month = EVERY, year = EVERY, second = ZERO, minute = ZERO, hour = EVERY)
+     */
+    public function invokedByTimer(TimerInterface $timer)
+    {
+        $this->getInitialContext()->getSystemLogger()->info(
+            sprintf('%s has successfully been invoked by @Schedule annotation', __METHOD__)
+        );
+    }
+
+    /**
+     * Invoked by the container upon timer expiration.
+     *
+     * @param \TechDivision\EnterpriseBeans\TimerInterface $timer Timer whose expiration caused this notification
+     *
+     * @return void
+     * @Timeout
+     **/
+    public function timeout(TimerInterface $timer)
+    {
+        $this->getInitialContext()->getSystemLogger()->info(
+            sprintf('%s has successfully been invoked by @Timeout annotation', __METHOD__)
+        );
     }
 }
