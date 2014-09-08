@@ -149,4 +149,11 @@ class RequestKeys
      * @return string
      */
     const USER_LOCALE = 'userLocale';
+
+    /**
+     * The key for a 'watchDirectory'.
+     *
+     * @return string
+     */
+    const WATCH_DIRECTORY = 'watchDirectory';
 }

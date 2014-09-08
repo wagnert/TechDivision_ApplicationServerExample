@@ -1,6 +1,8 @@
 /target
 /vendor/
 /instance-src
+/src/vendor
+/src/components
 /.idea
 /.buildpath
 /.project

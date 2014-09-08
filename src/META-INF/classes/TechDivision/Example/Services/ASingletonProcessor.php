@@ -24,6 +24,7 @@ namespace TechDivision\Example\Services;
 
 use TechDivision\EnterpriseBeans\TimerInterface;
 use TechDivision\EnterpriseBeans\TimedObjectInterface;
+use TechDivision\PersistenceContainer\TimerServiceContext;
 use TechDivision\Application\Interfaces\ApplicationInterface;
 
 /**
@@ -116,7 +117,7 @@ class ASingletonProcessor extends \Stackable implements TimedObjectInterface
      * @param TimerInterface $timer The timer instance
      *
      * @return void
-     * @Schedule(dayOfMonth = EVERY, month = EVERY, year = EVERY, second = ZERO, minute = ZERO, hour = EVERY)
+     * @Schedule(dayOfMonth = EVERY, month = EVERY, year = EVERY, second = ZERO, minute = EVERY, hour = EVERY)
      */
     public function invokedByTimer(TimerInterface $timer)
     {
@@ -131,12 +132,11 @@ class ASingletonProcessor extends \Stackable implements TimedObjectInterface
      * @param \TechDivision\EnterpriseBeans\TimerInterface $timer Timer whose expiration caused this notification
      *
      * @return void
-     * @Timeout
      **/
     public function timeout(TimerInterface $timer)
     {
         $this->getInitialContext()->getSystemLogger()->info(
-            sprintf('%s has successfully been invoked by @Timeout annotation', __METHOD__)
+            sprintf('%s has successfully been by interface', __METHOD__)
         );
     }
 }

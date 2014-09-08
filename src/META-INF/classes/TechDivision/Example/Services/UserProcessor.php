@@ -103,16 +103,26 @@ class UserProcessor extends AbstractProcessor
     /**
      * Returns the data of the user that has been logged into the system.
      *
+     * This method is an example implementation on how you can use a stateful
+     * session bean to temporary store session data.
+     *
+     * @param string $username The username of the user to return the data for
+     *
      * @return \TechDivision\Example\Entities\User The user logged into the system
-     * @throws \TechDivision\Example\Exceptions\UserNotFoundException Is thrown if no user has been logged into the system
+     * @throws \TechDivision\Example\Exceptions\FoundInvalidUserException Is thrown if no user has been logged into the system or the username doesn't match
      * @see \TechDivision\Example\Services\UserProcessor::login()
      */
-    public function getUserViewData()
+    public function getUserViewData($username)
     {
 
-        // check if a user has already been logged into the system
+        // if we already have a user, compare the username
+        if ($this->user != null && $this->user->getUsername() != $username) {
+            throw new FoundInvalidUserException(sprintf('Username of user logged into the system doesn\'t match %s', $username));
+        }
+
+        // if no user has been loaded, try to load the user
         if ($this->user == null) {
-            throw new UserNotFoundException('Can\'t find a user logged into the system');
+            $this->user = $repository->findOneBy(array('username' => $username));
         }
 
         // return the user instance
