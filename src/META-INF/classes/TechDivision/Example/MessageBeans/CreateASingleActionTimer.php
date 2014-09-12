@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Example\MessageBeans\ImportReceiver
+ * TechDivision\Example\MessageBeans\CreateATimer
  *
  * NOTICE OF LICENSE
  *
@@ -14,7 +14,7 @@
  * @category   Appserver
  * @package    TechDivision_ApplicationServerExample
  * @subpackage MessageBeans
- * @author     Johann Zelger <jz@techdivision.com>
+ * @author     Tim Wagner <tw@techdivision.com>
  * @copyright  2014 TechDivision GmbH <info@techdivision.com>
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
@@ -22,25 +22,26 @@
 
 namespace TechDivision\Example\MessageBeans;
 
-use TechDivision\Naming\InitialContext;
-use TechDivision\Example\Entities\Sample;
 use TechDivision\MessageQueueProtocol\Message;
 use TechDivision\MessageQueue\Receiver\AbstractReceiver;
+use TechDivision\EnterpriseBeans\TimerInterface;
+use TechDivision\EnterpriseBeans\TimedObjectInterface;
 
 /**
- * An message receiver that imports data chunks into a database.
+ * This is the implementation of a message bean that simply creates and starts a single
+ * action timer.
  *
  * @category   Appserver
  * @package    TechDivision_ApplicationServerExample
  * @subpackage MessageBeans
- * @author     Johann Zelger <jz@techdivision.com>
+ * @author     Tim Wagner <tw@techdivision.com>
  * @copyright  2014 TechDivision GmbH <info@techdivision.com>
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  *
  * @MessageDriven
  */
-class ImportChunkReceiver extends AbstractReceiver
+class CreateASingleActionTimer extends AbstractReceiver implements TimedObjectInterface
 {
 
     /**
@@ -55,34 +56,36 @@ class ImportChunkReceiver extends AbstractReceiver
     public function onMessage(Message $message, $sessionId)
     {
 
-        // put status message
-        error_log($logMessage = "Process chunked data message");
+        // load the timer service
+        $timerServiceRegistry = $this->getApplication()->getManager(TimerServiceContext::IDENTIFIER);
+        $timerService = $timerServiceRegistry->locate(__CLASS__);
 
-        // create an initial context instance and inject the servlet request
-        $initialContext = new InitialContext();
-        $initialContext->injectApplication($this->getApplication());
+        // our single action timer should be invoked 60 seconds from now
+        $duration = 60000000;
 
-        // lookup and return the requested bean proxy
-        $processor = $initialContext->lookup('TechDivision\Example\Services\SampleProcessor');
+        // we create a single action timer
+        $timerService->createSingleActionTimer($duration);
 
-        // read in message chunk data
-        $chunkData = $message->getMessage();
-
-        // import the data found in the file
-        foreach ($chunkData as $data) {
-
-            // explode the name parts and append the data in the database
-            list ($firstname, $lastname) = explode(',', $data);
-
-            // prepare the entity
-            $entity = new Sample();
-            $entity->setName(trim($firstname . ', ' . $lastname));
-
-            // store the entity in the database
-            $processor->persist($entity);
-        }
+        // log a message that the single action timer has been successfully created
+        $this->getApplication()->getInitialContext()->getSystemLogger()->info(
+            sprintf('Successfully created a single action timer with a duration of %d seconds', $duration)
+        );
 
         // update the message monitor for this message
         $this->updateMonitor($message);
+    }
+
+    /**
+     * Invoked by the container upon timer expiration.
+     *
+     * @param \TechDivision\EnterpriseBeans\TimerInterface $timer Timer whose expiration caused this notification
+     *
+     * @return void
+     **/
+    public function timeout(TimerInterface $timer)
+    {
+        $this->getApplication()->getInitialContext()->getSystemLogger()->info(
+            sprintf('%s has successfully been by interface', __METHOD__)
+        );
     }
 }

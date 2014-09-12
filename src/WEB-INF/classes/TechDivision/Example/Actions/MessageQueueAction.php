@@ -25,11 +25,11 @@ namespace TechDivision\Example\Actions;
 use TechDivision\Servlet\Http\HttpServletRequest;
 use TechDivision\Servlet\Http\HttpServletResponse;
 use TechDivision\Example\Entities\Sample;
+use TechDivision\Example\Utils\RequestKeys;
 use TechDivision\Example\Utils\ContextKeys;
 use TechDivision\MessageQueueClient\MessageQueue;
 use TechDivision\MessageQueueClient\QueueConnectionFactory;
 use TechDivision\MessageQueueProtocol\Messages\StringMessage;
-use TechDivision\Example\Utils\RequestKeys;
 
 /**
  * Example servlet that imports .csv files by uploading them and sends a message to the
@@ -146,6 +146,25 @@ class MessageQueueAction extends ExampleBaseAction
 
         // after the successfull upload, render the template again
         $this->indexAction($servletRequest, $servletResponse);
+
+        // check if we should watch the directory for periodic import
+        if ($servletRequest->getParameter(RequestKeys::WATCH_DIRECTORY, FILTER_VALIDATE_BOOLEAN)) {
+
+            // load the application name
+            $applicationName = $this->getServletRequest()->getContext()->getName();
+
+            // initialize the connection and the session
+            $queue = MessageQueue::createQueue('queue/create_a_interval_timer');
+            $connection = QueueConnectionFactory::createQueueConnection($applicationName);
+            $session = $connection->createQueueSession();
+            $sender = $session->createSender($queue);
+
+            // initialize the message with the name of the directory we want to watch
+            $message = new StringMessage(ini_get('upload_tmp_dir'));
+
+            // create a new message and send it
+            $sender->send($message, false);
+        }
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Example\Exceptions\UserNotFoundException
+ * TechDivision\Example\Exceptions\FoundInvalidUserException
  *
  * NOTICE OF LICENSE
  *
@@ -23,7 +23,7 @@
 namespace TechDivision\Example\Exceptions;
 
 /**
- * This exception that will be thrown if no user has been logged into the system.
+ * This exception that will be thrown if no user or one that does not match the username has been found.
  *
  * @category   Appserver
  * @package    TechDivision_ApplicationServerExample
@@ -33,6 +33,6 @@ namespace TechDivision\Example\Exceptions;
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  */
-class UserNotFoundException extends \Exception
+class FoundInvalidUserException extends \Exception
 {
 }

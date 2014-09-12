@@ -103,16 +103,43 @@ class UserProcessor extends AbstractProcessor
     /**
      * Returns the data of the user that has been logged into the system.
      *
+     * This method is an example implementation on how you can use a stateful
+     * session bean to temporary store session data.
+     *
+     * @param string $username The username of the user to return the data for
+     *
      * @return \TechDivision\Example\Entities\User The user logged into the system
-     * @throws \TechDivision\Example\Exceptions\UserNotFoundException Is thrown if no user has been logged into the system
+     * @throws \TechDivision\Example\Exceptions\FoundInvalidUserException Is thrown if no user has been logged into the system or the username doesn't match
      * @see \TechDivision\Example\Services\UserProcessor::login()
      */
-    public function getUserViewData()
+    public function getUserViewData($username)
     {
 
-        // check if a user has already been logged into the system
+        // if we already have a user, compare the username
+        if ($this->user != null && $this->user->getUsername() != $username) {
+            throw new FoundInvalidUserException(sprintf('Username of user logged into the system doesn\'t match %s', $username));
+        }
+
+        // if no user has been loaded, try to load the user
         if ($this->user == null) {
-            throw new UserNotFoundException('Can\'t find a user logged into the system');
+
+            // load the entity manager and the user repository
+            $entityManager = $this->getEntityManager();
+            $repository = $entityManager->getRepository('TechDivision\Example\Entities\User');
+
+            // reload the user from the repository
+            $this->user = $repository->findOneBy(array('username' => $username));
+
+            // log a message that the data has been loaded from database
+            $this->getInitialContext()->getSystemLogger()->info(
+                sprintf('Successfully reloaded data from database in stateful session bean %s', __CLASS__)
+            );
+
+        } else { // log a message that the data has already been loaded
+
+            $this->getInitialContext()->getSystemLogger()->info(
+                sprintf('Successfully loaded data from stateful session bean instance %s', __CLASS__)
+            );
         }
 
         // return the user instance

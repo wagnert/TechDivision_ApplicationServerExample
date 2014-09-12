@@ -71,7 +71,7 @@ class UserAction extends ExampleBaseAction
      */
     public function indexAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
-        $viewData = $this->getProxy(UserAction::PROXY_CLASS)->getUserViewData();
+        $viewData = $this->getProxy(UserAction::PROXY_CLASS)->getUserViewData($this->getUsername());
         $this->setAttribute(ContextKeys::VIEW_DATA, $viewData);
         $servletResponse->appendBodyStream($this->processTemplate(UserAction::USER_DETAIL_TEMPLATE, $servletRequest, $servletResponse));
     }

@@ -6,4 +6,10 @@
     <message-queue type="\TechDivision\Example\MessageBeans\ImportChunkReceiver">
         <destination>queue/import_chunk</destination>
     </message-queue>
+    <message-queue type="\TechDivision\Example\MessageBeans\CreateASingleActionTimer">
+        <destination>queue/create_a_single_action_timer</destination>
+    </message-queue>
+    <message-queue type="\TechDivision\Example\MessageBeans\CreateAIntervalTimer">
+        <destination>queue/create_a_interval_timer</destination>
+    </message-queue>
 </message-queues>

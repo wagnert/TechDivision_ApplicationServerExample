@@ -23,7 +23,7 @@
 namespace TechDivision\Example\Handlers;
 
 use Ratchet\ConnectionInterface;
-use TechDivision\PersistenceContainerClient\ConnectionFactory;
+use TechDivision\Naming\InitialContext;
 use TechDivision\WebSocketServer\Handlers\AbstractHandler;
 
 /**
@@ -62,7 +62,6 @@ abstract class BaseHandler extends AbstractHandler
      */
     public function __construct()
     {
-        // initialize the object storage for the client connections
         $this->clients = new \SplObjectStorage();
     }
 
@@ -77,15 +76,12 @@ abstract class BaseHandler extends AbstractHandler
     public function getProxy($proxyClass)
     {
 
-        // load the application name
-        $applicationName = $this->getRequest()->getContext()->getName();
+        // create an initial context instance and inject the servlet request
+        $initialContext = new InitialContext();
+        $initialContext->injectApplication($this->getRequest()->getContext());
 
-        // initialize the connection and the session
-        $connection = ConnectionFactory::createContextConnection($applicationName);
-        $session = $connection->createContextSession();
-
-        // create an return the proxy instance
-        return $session->createInitialContext()->lookup($proxyClass);
+        // lookup and return the requested bean proxy
+        return $initialContext->lookup($proxyClass);
     }
 
     /**
