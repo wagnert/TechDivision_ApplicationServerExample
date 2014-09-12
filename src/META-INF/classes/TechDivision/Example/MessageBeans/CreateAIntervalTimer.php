@@ -61,9 +61,9 @@ class CreateAIntervalTimer extends AbstractReceiver
         $timerServiceRegistry = $this->getApplication()->getManager(TimerServiceContext::IDENTIFIER);
         $timerService = $timerServiceRegistry->locate(__CLASS__);
 
-        // our single action timer should be invoked 60 seconds from now, every 10 se
-        $initialExpiration = 60000000;
-        $intervalDuration = 10000000;
+        // our single action timer should be invoked 10 seconds from now, every 1 second
+        $initialExpiration = 10000000;
+        $intervalDuration = 1000000;
 
         // we create the interval timer
         $timerService->createIntervalTimer($initialExpiration, $intervalDuration, new String($message->getMessage()));

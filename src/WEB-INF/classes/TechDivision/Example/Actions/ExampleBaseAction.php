@@ -23,14 +23,13 @@
 namespace TechDivision\Example\Actions;
 
 use AppserverIo\Routlt\DispatchAction;
+use TechDivision\Naming\InitialContext;
 use TechDivision\Servlet\Http\HttpServlet;
 use TechDivision\Servlet\Http\HttpSession;
 use TechDivision\Servlet\Http\HttpServletRequest;
 use TechDivision\Servlet\Http\HttpServletResponse;
-use TechDivision\WebServer\Dictionaries\ServerVars;
-use TechDivision\PersistenceContainerClient\ConnectionFactory;
-use TechDivision\Example\Exceptions\LoginException;
 use TechDivision\Example\Utils\SessionKeys;
+use TechDivision\Example\Exceptions\LoginException;
 
 /**
  * Abstract example implementation that provides some kind of basic MVC functionality
@@ -82,9 +81,11 @@ abstract class ExampleBaseAction extends DispatchAction
     public function perform(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
 
+        // set servlet request/response
         $this->setServletRequest($servletRequest);
         $this->setServletResponse($servletResponse);
 
+        // call parent method
         parent::perform($servletRequest, $servletResponse);
     }
 
@@ -193,20 +194,12 @@ abstract class ExampleBaseAction extends DispatchAction
     public function getProxy($proxyClass)
     {
 
-        // load the application name
-        $applicationName = $this->getServletRequest()->getContext()->getName();
+        // create an initial context instance and inject the servlet request
+        $initialContext = new InitialContext();
+        $initialContext->injectServletRequest($this->getServletRequest());
 
-        // initialize the connection and the session
-        $connection = ConnectionFactory::createContextConnection($applicationName);
-        $session = $connection->createContextSession();
-
-        // check if we've a a HTTP session-ID
-        if ($this->getLoginSession() != null) { // if yes, use it for connecting to the stateful session bean
-            $session->setSessionId($this->getLoginSession()->getId());
-        }
-
-        // create an return the proxy instance
-        return $session->createInitialContext()->lookup($proxyClass);
+        // lookup and return the requested bean proxy
+        return $initialContext->lookup($proxyClass);
     }
 
     /**

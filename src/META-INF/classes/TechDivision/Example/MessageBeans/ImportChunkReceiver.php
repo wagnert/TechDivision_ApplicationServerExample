@@ -22,10 +22,10 @@
 
 namespace TechDivision\Example\MessageBeans;
 
+use TechDivision\Naming\InitialContext;
 use TechDivision\Example\Entities\Sample;
 use TechDivision\MessageQueueProtocol\Message;
 use TechDivision\MessageQueue\Receiver\AbstractReceiver;
-use TechDivision\PersistenceContainerClient\ConnectionFactory;
 
 /**
  * An message receiver that imports data chunks into a database.
@@ -58,15 +58,11 @@ class ImportChunkReceiver extends AbstractReceiver
         // put status message
         error_log($logMessage = "Process chunked data message");
 
-        // load the application name
-        $applicationName = $this->getApplication()->getName();
+        // create an initial context instance and inject the servlet request
+        $initialContext = new InitialContext();
+        $initialContext->injectApplication($this->getApplication());
 
-        // initialize the persistence container proxy
-        $connection = ConnectionFactory::createContextConnection($applicationName);
-        $session = $connection->createContextSession();
-        $initialContext = $session->createInitialContext();
-
-        // lookup the remote processor implementation
+        // lookup and return the requested bean proxy
         $processor = $initialContext->lookup('TechDivision\Example\Services\SampleProcessor');
 
         // read in message chunk data

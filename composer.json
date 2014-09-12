@@ -1,20 +1,21 @@
 {
 	"name" : "techdivision/techdivision_applicationsserverexample",
 	"description" : "The example application for the ApplicationServer",
-	"version" : "0.6.0",
+	"version" : "0.9.0",
 	"require" : {
 		"components/jquery" : "*",
 		"components/font-awesome" : "*",
 		"components/bootstrap" : "3.1.1",
 		"appserver-io/routlt" : "0.1.*",
-		"techdivision/persistencecontainerclient" : "0.6.*",
+		"techdivision/naming" : "0.1.*",
+		"techdivision/properties" : "0.1.*",
 		"techdivision/messagequeueclient" : "0.6.*"
 	},
 	"require-dev" : {
 		"phpunit/phpunit" : "3.7.*",
 		"appserver-io/build" : "0.1.*",
-		"techdivision/enterprisebeans" : "0.1.*",
-		"techdivision/phar" : "dev-master"
+		"techdivision/phar" : "dev-master",
+		"techdivision/enterprisebeans" : "0.1.*"
 	},
 	"config" : {
 		"vendor-dir" : "src/vendor",
