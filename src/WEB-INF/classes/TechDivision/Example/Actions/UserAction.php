@@ -24,6 +24,7 @@ namespace TechDivision\Example\Actions;
 
 use TechDivision\Servlet\Http\HttpServletRequest;
 use TechDivision\Servlet\Http\HttpServletResponse;
+use TechDivision\Example\Utils\ProxyKeys;
 use TechDivision\Example\Utils\ContextKeys;
 
 /**
@@ -52,13 +53,6 @@ class UserAction extends ExampleBaseAction
     const USER_DETAIL_TEMPLATE = 'static/templates/user_detail.phtml';
 
     /**
-     * Class name of the persistence container proxy that handles the data.
-     *
-     * @var string
-     */
-    const PROXY_CLASS = 'TechDivision\Example\Services\UserProcessor';
-
-    /**
      * Default action to invoke if no action parameter has been found in the request.
      *
      * Loads the data of the user actually logged into the system and attaches it to the servlet
@@ -71,7 +65,7 @@ class UserAction extends ExampleBaseAction
      */
     public function indexAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
-        $viewData = $this->getProxy(UserAction::PROXY_CLASS)->getUserViewData($this->getUsername());
+        $viewData = $this->getProxy(ProxyKeys::USER_PROCESSOR)->getUserViewData($this->getUsername());
         $this->setAttribute(ContextKeys::VIEW_DATA, $viewData);
         $servletResponse->appendBodyStream($this->processTemplate(UserAction::USER_DETAIL_TEMPLATE, $servletRequest, $servletResponse));
     }

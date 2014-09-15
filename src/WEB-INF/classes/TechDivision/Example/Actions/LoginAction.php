@@ -26,6 +26,7 @@ use TechDivision\Example\Utils\ContextKeys;
 use TechDivision\Servlet\Http\HttpServletRequest;
 use TechDivision\Servlet\Http\HttpServletResponse;
 use TechDivision\Example\Exceptions\LoginException;
+use TechDivision\Example\Utils\ProxyKeys;
 use TechDivision\Example\Utils\RequestKeys;
 use TechDivision\Example\Utils\SessionKeys;
 
@@ -52,13 +53,6 @@ class LoginAction extends ExampleBaseAction
     const LOGIN_TEMPLATE = 'static/templates/login.phtml';
 
     /**
-     * Class name of the persistence container proxy that handles the data.
-     *
-     * @var string
-     */
-    const PROXY_CLASS = 'TechDivision\Example\Services\UserProcessor';
-
-    /**
      * Default action to invoke if no action parameter has been found in the request.
      *
      * Loads all sample data and attaches it to the servlet context ready to be rendered
@@ -71,7 +65,7 @@ class LoginAction extends ExampleBaseAction
      */
     public function indexAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
-        $viewData = $this->getProxy(LoginAction::PROXY_CLASS)->checkForDefaultCredentials();
+        $viewData = $this->getProxy(ProxyKeys::USER_PROCESSOR)->checkForDefaultCredentials();
         $this->setAttribute(ContextKeys::VIEW_DATA, $viewData);
         $servletResponse->appendBodyStream($this->processTemplate(LoginAction::LOGIN_TEMPLATE, $servletRequest, $servletResponse));
     }
@@ -106,7 +100,7 @@ class LoginAction extends ExampleBaseAction
             $session->start();
 
             // try to login, using the session bean
-            $this->getProxy(LoginAction::PROXY_CLASS)->login($username, $password);
+            $this->getProxy(ProxyKeys::USER_PROCESSOR)->login($username, $password);
 
             // if successfully then add the username to the session and redirect to the overview
             $session->putData(SessionKeys::USERNAME, $username);

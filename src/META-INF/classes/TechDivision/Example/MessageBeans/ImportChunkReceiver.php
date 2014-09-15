@@ -63,7 +63,7 @@ class ImportChunkReceiver extends AbstractReceiver
         $initialContext->injectApplication($this->getApplication());
 
         // lookup and return the requested bean proxy
-        $processor = $initialContext->lookup('TechDivision\Example\Services\SampleProcessor');
+        $processor = $initialContext->lookup('php:app/SampleProcessor/local');
 
         // read in message chunk data
         $chunkData = $message->getMessage();

@@ -25,8 +25,10 @@ namespace TechDivision\Example\Actions;
 use TechDivision\Servlet\Http\HttpServletRequest;
 use TechDivision\Servlet\Http\HttpServletResponse;
 use TechDivision\Example\Entities\Sample;
+use TechDivision\Example\Utils\ProxyKeys;
 use TechDivision\Example\Utils\ContextKeys;
 use TechDivision\Example\Utils\RequestKeys;
+
 
 /**
  * Example action implementation that loads data over a persistence container proxy
@@ -54,13 +56,6 @@ class IndexAction extends ExampleBaseAction
     const INDEX_TEMPLATE = 'static/templates/index.phtml';
 
     /**
-     * Class name of the persistence container proxy that handles the data.
-     *
-     * @var string
-     */
-    const PROXY_CLASS = 'TechDivision\Example\Services\SampleProcessor';
-
-    /**
      * Default action to invoke if no action parameter has been found in the request.
      *
      * Loads all sample data and attaches it to the servlet context ready to be rendered
@@ -73,7 +68,7 @@ class IndexAction extends ExampleBaseAction
      */
     public function indexAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
-        $overviewData = $this->getProxy(IndexAction::PROXY_CLASS)->findAll();
+        $overviewData = $this->getProxy(ProxyKeys::SAMPLE_PROCESSOR)->findAll();
         $this->setAttribute(ContextKeys::OVERVIEW_DATA, $overviewData);
         $servletResponse->appendBodyStream($this->processTemplate(IndexAction::INDEX_TEMPLATE, $servletRequest, $servletResponse));
     }
@@ -98,7 +93,7 @@ class IndexAction extends ExampleBaseAction
         }
 
         // load the entity to be edited and attach it to the servlet context
-        $viewData = $this->getProxy(IndexAction::PROXY_CLASS)->load($sampleId);
+        $viewData = $this->getProxy(ProxyKeys::SAMPLE_PROCESSOR)->load($sampleId);
         $this->setAttribute(ContextKeys::VIEW_DATA, $viewData);
 
         // reload all entities and render the dialog
@@ -125,7 +120,7 @@ class IndexAction extends ExampleBaseAction
         }
 
         // delete the entity
-        $this->getProxy(IndexAction::PROXY_CLASS)->delete($sampleId);
+        $this->getProxy(ProxyKeys::SAMPLE_PROCESSOR)->delete($sampleId);
 
         // reload all entities and render the dialog
         $this->indexAction($servletRequest, $servletResponse);
@@ -156,7 +151,7 @@ class IndexAction extends ExampleBaseAction
         $entity = new Sample();
         $entity->setSampleId((integer) $sampleId);
         $entity->setName($name);
-        $this->getProxy(IndexAction::PROXY_CLASS)->persist($entity);
+        $this->getProxy(ProxyKeys::SAMPLE_PROCESSOR)->persist($entity);
 
         // reload all entities and render the dialog
         $this->indexAction($servletRequest, $servletResponse);
