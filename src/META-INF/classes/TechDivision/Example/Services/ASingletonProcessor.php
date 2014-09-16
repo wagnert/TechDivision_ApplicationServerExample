@@ -38,7 +38,7 @@ use TechDivision\Application\Interfaces\ApplicationInterface;
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  *
- * @Singleton
+ * @Singleton(name="ASingletonProcessor", mappedName="SingletonProcessor", description="A sample implementation for a singleton session bean")
  * @Startup
  */
 class ASingletonProcessor extends \Stackable implements TimedObjectInterface

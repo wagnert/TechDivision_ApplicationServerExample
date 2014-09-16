@@ -44,6 +44,13 @@ class ImportChunkReceiver extends AbstractReceiver
 {
 
     /**
+     * The proxy class we need to connect to the persistence container.
+     *
+     * @var string
+     */
+    const PROXY_CLASS = 'SampleProcessor';
+
+    /**
      * Will be invoked when a new message for this message bean will be available.
      *
      * @param \TechDivision\MessageQueueProtocol\Message $message   A message this message bean is listen for
@@ -63,7 +70,7 @@ class ImportChunkReceiver extends AbstractReceiver
         $initialContext->injectApplication($this->getApplication());
 
         // lookup and return the requested bean proxy
-        $processor = $initialContext->lookup('TechDivision\Example\Services\SampleProcessor');
+        $processor = $initialContext->lookup(ImportChunkReceiver::PROXY_CLASS);
 
         // read in message chunk data
         $chunkData = $message->getMessage();

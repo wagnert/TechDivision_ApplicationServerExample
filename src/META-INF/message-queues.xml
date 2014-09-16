@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <message-queues>
-    <message-queue type="\TechDivision\Example\MessageBeans\ImportReceiver">
+    <message-queue type="ImportReceiver">
         <destination>queue/import</destination>
     </message-queue>
-    <message-queue type="\TechDivision\Example\MessageBeans\ImportChunkReceiver">
+    <message-queue type="ImportChunkReceiver">
         <destination>queue/import_chunk</destination>
     </message-queue>
-    <message-queue type="\TechDivision\Example\MessageBeans\CreateASingleActionTimer">
+    <message-queue type="CreateASingleActionTimer">
         <destination>queue/create_a_single_action_timer</destination>
     </message-queue>
-    <message-queue type="\TechDivision\Example\MessageBeans\CreateAIntervalTimer">
+    <message-queue type="CreateAIntervalTimer">
         <destination>queue/create_a_interval_timer</destination>
     </message-queue>
 </message-queues>
