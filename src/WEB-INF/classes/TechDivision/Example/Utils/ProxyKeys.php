@@ -50,12 +50,12 @@ class ProxyKeys
      *
      * @return string
      */
-    const SAMPLE_PROCESSOR = 'php:app/SampleProcessor/local';
+    const SAMPLE_PROCESSOR = 'SampleProcessor';
 
     /**
      * The naming directory key for the 'TechDivision\Example\Services\UserProcessor' session bean.
      *
      * @return string
      */
-    const USER_PROCESSOR = 'php:app/UserProcessor/local';
+    const USER_PROCESSOR = 'UserProcessor';
 }
