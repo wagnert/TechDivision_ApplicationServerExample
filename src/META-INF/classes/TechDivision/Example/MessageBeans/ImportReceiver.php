@@ -57,8 +57,8 @@ class ImportReceiver extends AbstractReceiver
     public function onMessage(Message $message, $sessionId)
     {
 
-        // log that a Message was received
-        error_log($logMessage = "Successfully received / finished message");
+        // log a message that the message has successfully been received
+        $this->getApplication()->getInitialContext()->getSystemLogger()->info('Successfully received / finished message');
 
         // define the import file from message
         $importFile = $message->getMessage();
