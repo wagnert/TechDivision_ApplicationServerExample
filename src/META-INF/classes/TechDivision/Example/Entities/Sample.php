@@ -40,30 +40,30 @@ class Sample
 
     /**
      * @var integer
-     * 
-     * @Id 
-     * @Column(type="integer") 
+     *
+     * @Id
+     * @Column(type="integer")
      * @GeneratedValue
      */
     public $sampleId;
 
     /**
      * @var string
-     * 
+     *
      * @Column(type="string", length=255)
      */
     public $name;
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
-     * 
+     *
      * @OneToMany(targetEntity="User", mappedBy="sample", cascade={"all"}, fetch="EAGER")
      */
     protected $users;
 
     /**
      * Initializes the collection with the users.
-     * 
+     *
      * @return void
      */
     public function __construct()
@@ -75,18 +75,18 @@ class Sample
      * Sets the value for the class member sampleId.
      *
      * @param integer $sampleId Holds the value for the class member sampleId
-     * 
+     *
      * @return void
      */
     public function setSampleId($sampleId)
     {
         $this->sampleId = $sampleId;
     }
-    
+
     /**
      * Returns the value of the class member sampleId.
      *
-     * @return integer Holds the value of the class member sampleId
+     * @return integer|null Holds the value of the class member sampleId
      */
     public function getSampleId()
     {
@@ -97,7 +97,7 @@ class Sample
      * Sets the value for the class member name.
      *
      * @param string $name Holds the value for the class member name
-     * 
+     *
      * @return void
      */
     public function setName($name)
@@ -117,7 +117,7 @@ class Sample
 
     /**
      * Returns the user collection.
-     * 
+     *
      * @return \Doctrine\Common\Collections\ArrayCollection The user collection
      */
     public function getUsers()

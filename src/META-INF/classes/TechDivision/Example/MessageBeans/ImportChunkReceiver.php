@@ -62,8 +62,8 @@ class ImportChunkReceiver extends AbstractReceiver
     public function onMessage(Message $message, $sessionId)
     {
 
-        // put status message
-        error_log($logMessage = "Process chunked data message");
+        // log a message that the message we now process the passed chunk
+        $this->getApplication()->getInitialContext()->getSystemLogger()->info('Process chunked data message');
 
         // create an initial context instance and inject the servlet request
         $initialContext = new InitialContext();
