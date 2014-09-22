@@ -89,10 +89,10 @@
     <target name="copy-to-hub" description="Copies any built package to the snapshot hosting server.">
         <echo message="Now try to upload ${package.name} to snapshot server"/>
         <exec executable="scp" failonerror="true">
-            <arg line="-o StrictHostKeyChecking=no -i ${user.home}/.ssh/id_rsa ${php-target.dir}${package.name} ${hub.scp-user}@${hub.address}:${hub.snapshot-path}${package.name}"/>
+            <arg line="-o StrictHostKeyChecking=no -i ${user.home}/.ssh/id_dsa ${php-target.dir}${package.name} ${hub.scp-user}@${hub.address}:${hub.snapshot-path}${package.name}"/>
         </exec>
         <exec executable="scp" failonerror="true">
-            <arg line="-o StrictHostKeyChecking=no -i ${user.home}/.ssh/id_rsa ${hub.scp-user}@${hub.address}:${hub.snapshot-path}${package.name} ${hub.scp-user}@${hub.address}:${hub.snapshot-path}${appserver.webapp.name}-latest.phar"/>
+            <arg line="-o StrictHostKeyChecking=no -i ${user.home}/.ssh/id_dsa ${hub.scp-user}@${hub.address}:${hub.snapshot-path}${package.name} ${hub.scp-user}@${hub.address}:${hub.snapshot-path}${appserver.webapp.name}-latest.phar"/>
         </exec>
     </target>
 
