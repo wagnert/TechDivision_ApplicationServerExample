@@ -15,6 +15,9 @@
     <!-- initialize the directory where we can find the real build files -->
     <property name="vendor.dir" value ="${basedir}/src/${codepool}" />
     <property name="build.dir" value="${vendor.dir}/appserver-io/build" />
+    <property name="php-target.dir" value="${basedir}/target"/>
+    <property name="hub.address" value="appserver.io"/>
+    <property name="hub.snapshot-path" value="/var/www/apps.appserver.io/${appserver.webapp.name}"/>
     
     <!-- ==================================================================== -->
     <!-- Import the common build configuration file                           -->
@@ -78,6 +81,16 @@
         <delete includeemptydirs="true">
             <fileset dir="${php-target.dir}/${appserver.webapp.name}" includes="**/.git/" defaultexcludes="false"/>
         </delete>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Copies any built package to the snapshot hosting server.             -->
+    <!-- ==================================================================== -->
+    <target name="copy-to-hub" description="Copies any built package to the snapshot hosting server.">
+        <echo message="Now try to upload ${package.name} to snapshot server"/>
+        <exec executable="scp" failonerror="true">
+            <arg line="-o StrictHostKeyChecking=no -i ${user.home}/.ssh/id_rsa ${php-target.dir}${package.name} ${hub.scp-user}@${hub.address}:${hub.snapshot-path}"/>
+        </exec>
     </target>
 
     <!-- ==================================================================== -->
