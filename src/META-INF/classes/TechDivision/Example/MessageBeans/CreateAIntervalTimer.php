@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Example\MessageBeans\CreateATimer
+ * TechDivision\Example\MessageBeans\CreateAIntervalTimer
  *
  * NOTICE OF LICENSE
  *
@@ -29,8 +29,7 @@ use TechDivision\MessageQueue\Receiver\AbstractReceiver;
 use TechDivision\PersistenceContainer\TimerServiceContext;
 
 /**
- * This is the implementation of a message bean that simply creates and starts a single
- * action timer.
+ * This is the implementation of a message bean that simply creates and starts an interval timer.
  *
  * @category   Appserver
  * @package    TechDivision_ApplicationServerExample
@@ -59,7 +58,7 @@ class CreateAIntervalTimer extends AbstractReceiver
 
         // load the timer service
         $timerServiceRegistry = $this->getApplication()->getManager(TimerServiceContext::IDENTIFIER);
-        $timerService = $timerServiceRegistry->locate(__CLASS__);
+        $timerService = $timerServiceRegistry->locate(substr(strrchr(__CLASS__, '\\'), 1));
 
         // our single action timer should be invoked 10 seconds from now, every 1 second
         $initialExpiration = 10000000;

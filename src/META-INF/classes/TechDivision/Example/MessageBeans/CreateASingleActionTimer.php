@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Example\MessageBeans\CreateATimer
+ * TechDivision\Example\MessageBeans\CreateASingleActionTimer
  *
  * NOTICE OF LICENSE
  *
@@ -58,7 +58,7 @@ class CreateASingleActionTimer extends AbstractReceiver implements TimedObjectIn
 
         // load the timer service
         $timerServiceRegistry = $this->getApplication()->getManager(TimerServiceContext::IDENTIFIER);
-        $timerService = $timerServiceRegistry->locate(__CLASS__);
+        $timerService = $timerServiceRegistry->locate(substr(strrchr(__CLASS__, '\\'), 1));
 
         // our single action timer should be invoked 60 seconds from now
         $duration = 60000000;
