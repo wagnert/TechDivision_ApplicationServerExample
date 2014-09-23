@@ -115,7 +115,7 @@
 	<target name="create-phar" depends="copy" description="Creates a PHAR file for deployment.">
         <!-- create the PHAR archive itself from the backup sources -->
         <exec dir="${php-target.dir}" executable="${vendor.dir}/bin/phar">
-            <arg line="-c create -n ${php-target.dir}/${package.filename} -d ${php-target.dir}/${package.name}"/>
+            <arg line="-c create -n ${php-target.dir}/${package.filename} -d ${php-target.dir}/${appserver.webapp.name}"/>
         </exec>
         <!-- create dodeploy flag to be transmitted via scp and do deploy on target system if needed -->
         <touch file="${php-target.dir}/${package.filename}.dodeploy"/>
