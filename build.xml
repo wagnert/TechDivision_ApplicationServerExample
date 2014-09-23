@@ -117,8 +117,6 @@
         <exec dir="${php-target.dir}" executable="${vendor.dir}/bin/phar">
             <arg line="-c create -n ${php-target.dir}/${package.filename} -d ${php-target.dir}/${appserver.webapp.name}"/>
         </exec>
-        <!-- create dodeploy flag to be transmitted via scp and do deploy on target system if needed -->
-        <touch file="${php-target.dir}/${package.filename}.dodeploy"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -126,11 +124,10 @@
     <!-- ==================================================================== -->
     <target name="deploy-phar" depends="create-phar"
             description="Deploys the PHAR file into the configured deployment directory.">
-        <copy todir="${appserver.deploy.dir}">
-            <fileset dir="${php-target.dir}">
-                <include name="${package.filename}*"/>
-            </fileset>
-        </copy>
+        <copy file="${php-target.dir}/${package.filename}" tofile="${appserver.deploy.dir}/${appserver.webapp.name}.phar" failonerror="true"/>
+
+        <!-- create dodeploy flag to be transmitted via scp and do deploy on target system if needed -->
+        <touch file="${appserver.deploy.dir}/${appserver.webapp.name}.phar.dodeploy"/>
     </target>
 
 </project>
