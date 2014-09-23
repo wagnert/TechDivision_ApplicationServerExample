@@ -92,7 +92,7 @@
             <arg line="-o StrictHostKeyChecking=no -i ${user.home}/.ssh/id_dsa ${php-target.dir}/${package.filename} ${hub.scp-user}@${hub.address}:${hub.snapshot-path}${package.filename}"/>
         </exec>
         <exec executable="scp" failonerror="true">
-            <arg line="-o StrictHostKeyChecking=no -i ${user.home}/.ssh/id_dsa ${hub.scp-user}@${hub.address}:${hub.snapshot-path}${package.filename} ${hub.scp-user}@localhost:${hub.snapshot-path}${appserver.webapp.name}-latest.phar"/>
+            <arg line="-o StrictHostKeyChecking=no -i ${user.home}/.ssh/id_dsa ${php-target.dir}/${package.filename} ${hub.scp-user}@localhost:${hub.snapshot-path}${appserver.webapp.name}-latest.phar"/>
         </exec>
     </target>
 
