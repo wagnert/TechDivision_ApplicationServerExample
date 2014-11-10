@@ -50,12 +50,12 @@ class ProxyKeys
      *
      * @return string
      */
-    const SAMPLE_PROCESSOR = 'SampleProcessor';
+    const SAMPLE_PROCESSOR = 'SampleProcessor'; // 'php:global/example/SampleProcessor/remote' for remote access
 
     /**
      * The naming directory key for the 'TechDivision\Example\Services\UserProcessor' session bean.
      *
      * @return string
      */
-    const USER_PROCESSOR = 'UserProcessor';
+    const USER_PROCESSOR = 'UserProcessor'; // 'php:global/example/UserProcessor/remote' for remote access
 }
