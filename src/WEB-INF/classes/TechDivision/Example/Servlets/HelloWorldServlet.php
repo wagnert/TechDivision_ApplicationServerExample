@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Example\Utils\ProxyKeys
+ * TechDivision\Example\Servlets\HelloWorldServlet
  *
  * NOTICE OF LICENSE
  *
@@ -13,49 +13,45 @@
  *
  * @category   Appserver
  * @package    TechDivision_ApplicationServerExample
- * @subpackage Utils
+ * @subpackage Handlers
  * @author     Tim Wagner <tw@techdivision.com>
  * @copyright  2014 TechDivision GmbH <info@techdivision.com>
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  */
 
-namespace TechDivision\Example\Utils;
+namespace TechDivision\Example\Servlets;
+
+use TechDivision\Servlet\Http\HttpServlet;
+use TechDivision\Servlet\Http\HttpServletRequest;
+use TechDivision\Servlet\Http\HttpServletResponse;
 
 /**
- * Context keys that are used to store data in a application context.
+ * Demo servlet handling GET requests.
  *
  * @category   Appserver
  * @package    TechDivision_ApplicationServerExample
- * @subpackage Utils
+ * @subpackage Handlers
  * @author     Tim Wagner <tw@techdivision.com>
  * @copyright  2014 TechDivision GmbH <info@techdivision.com>
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  */
-class ProxyKeys
+class HelloWorldServlet extends HttpServlet
 {
 
     /**
-     * Private to constructor to avoid instancing this class.
+     * Handles a HTTP GET request.
+     *
+     * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
+     * @param \TechDivision\Servlet\Http\HttpServletResponse $servletResponse The response instance
      *
      * @return void
+     * @throws \TechDivision\Servlet\ServletException Is thrown if the request method is not implemented
+     * @see \TechDivision\Servlet\Http\HttpServlet::doGet()
      */
-    private function __construct()
+    public function doGet(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
+        $servletResponse->appendBodyStream('Hello World!');
     }
-
-    /**
-     * The naming directory key for the 'TechDivision\Example\Services\SampleProcessor' session bean.
-     *
-     * @return string
-     */
-    const SAMPLE_PROCESSOR = 'SampleProcessor'; // 'php:global/example/SampleProcessor/remote' for remote access
-
-    /**
-     * The naming directory key for the 'TechDivision\Example\Services\UserProcessor' session bean.
-     *
-     * @return string
-     */
-    const USER_PROCESSOR = 'UserProcessor'; // 'php:global/example/UserProcessor/remote' for remote access
 }

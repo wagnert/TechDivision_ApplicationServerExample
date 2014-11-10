@@ -25,6 +25,13 @@
     </session-config>
 
     <servlet>
+        <description>The hello world as servlet implementation.</description>
+        <display-name>Hello World</display-name>
+        <servlet-name>helloWorld</servlet-name>
+        <servlet-class>\TechDivision\Example\Servlets\HelloWorldServlet</servlet-class>
+    </servlet>
+
+    <servlet>
     
         <description>The routlt controller servlet implementation.</description>
         <display-name>The routlt controller servlet</display-name>
@@ -37,6 +44,11 @@
         </init-param>
         
     </servlet>
+
+    <servlet-mapping>
+        <servlet-name>helloWorld</servlet-name>
+        <url-pattern>/helloWorld.do</url-pattern>
+    </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>routlt</servlet-name>
