@@ -19,6 +19,7 @@
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  */
+
 namespace TechDivision\Example\Services;
 
 use TechDivision\Example\Entities\Sample;
@@ -40,6 +41,22 @@ use TechDivision\Example\Services\AbstractProcessor;
  */
 class SampleProcessor extends AbstractProcessor
 {
+
+    /**
+     * The user processor instance.
+     *
+     * @var \TechDivision\Example\Services\UserProcessor
+     * @EnterpriseBean(name="UserProcessor")
+     */
+    protected $userProcessor;
+
+    /**
+     * The user processor instance.
+     *
+     * @var \TechDivision\PersistenceContainer\TimerServiceContext
+     * @Resource(name="TimerServiceContext")
+     */
+    protected $timerService;
 
     /**
      * Example method that should be invoked after constructor.

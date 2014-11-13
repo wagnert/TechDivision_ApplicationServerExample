@@ -58,26 +58,55 @@ class AbstractProcessor
     protected $pathToEntities = 'META-INF/classes/TechDivision/Example/Entities';
 
     /**
+     * The array with the Doctrine connection parameters.
+     *
+     * @var array
+     */
+    protected $connectionParameters;
+
+    /**
      * The application instance that provides the entity manager.
      *
      * @var \TechDivision\Application\Interfaces\ApplicationInterface
+     * @Resource(name="ApplicationInterface")
      */
     protected $application;
 
     /**
-     * Initializes the session bean with the Application instance.
-     *
-     * Checks on every start if the database already exists, if not
-     * the database will be created immediately.
-     *
-     * @param \TechDivision\Application\Interfaces\ApplicationInterface $application The application instance
+     * Initializes the database connection parameters necessary
+     * to connect to the database using Doctrine.
      *
      * @return void
+     * @PostConstruct
      */
-    public function __construct(ApplicationInterface $application)
+    public function initConnectionParameters()
     {
-        $this->setApplication($application);
-        $this->initConnectionParameters();
+
+        // iterate over the found database sources
+        foreach ($this->getDatasources() as $datasourceNode) {
+
+            // if the datasource is related to the session bean
+            if ($datasourceNode->getName() == $this->getDatasourceName()) {
+
+                // initialize the database node
+                $databaseNode = $datasourceNode->getDatabase();
+
+                // initialize the connection parameters
+                $connectionParameters = array(
+                    'driver'   => $databaseNode->getDriver()->getNodeValue()->__toString(),
+                    'user'     => $databaseNode->getUser()->getNodeValue()->__toString(),
+                    'password' => $databaseNode->getPassword()->getNodeValue()->__toString()
+                );
+
+                // initialize the path to the database when we use sqlite for example
+                if ($path = $databaseNode->getPath()->getNodeValue()->__toString()) {
+                    $connectionParameters['path'] = $this->getApplication()->getWebappPath() . DIRECTORY_SEPARATOR . $path;
+                }
+
+                // set the connection parameters
+                $this->setConnectionParameters($connectionParameters);
+            }
+        }
     }
 
     /**
@@ -98,18 +127,6 @@ class AbstractProcessor
     public function getDatasourceName()
     {
         return $this->datasourceName;
-    }
-
-    /**
-     * The application instance providing the database connection.
-     *
-     * @param \TechDivision\Application\Interfaces\ApplicationInterface $application The application instance
-     *
-     * @return void
-     */
-    public function setApplication(ApplicationInterface $application)
-    {
-        $this->application = $application;
     }
 
     /**
@@ -182,6 +199,7 @@ class AbstractProcessor
      */
     public function getEntityManager()
     {
+
         // prepare the path to the entities
         $absolutePaths = array();
         if ($relativePaths = $this->getPathToEntities()) {
@@ -189,44 +207,9 @@ class AbstractProcessor
                 $absolutePaths[] = $this->getApplication()->getWebappPath() . DIRECTORY_SEPARATOR . $relativePath;
             }
         }
+
         // create the database configuration and initialize the entity manager
         $metadataConfiguration = Setup::createAnnotationMetadataConfiguration($absolutePaths, true);
         return EntityManager::create($this->getConnectionParameters(), $metadataConfiguration);
-    }
-
-    /**
-     * Initializes the database connection parameters necessary
-     * to connect to the database using Doctrine.
-     *
-     * @return void
-     */
-    public function initConnectionParameters()
-    {
-
-        // iterate over the found database sources
-        foreach ($this->getDatasources() as $datasourceNode) {
-
-            // if the datasource is related to the session bean
-            if ($datasourceNode->getName() == $this->getDatasourceName()) {
-
-                // initialize the database node
-                $databaseNode = $datasourceNode->getDatabase();
-
-                // initialize the connection parameters
-                $connectionParameters = array(
-                    'driver'   => $databaseNode->getDriver()->getNodeValue()->__toString(),
-                    'user'     => $databaseNode->getUser()->getNodeValue()->__toString(),
-                    'password' => $databaseNode->getPassword()->getNodeValue()->__toString()
-                );
-
-                // initialize the path to the database when we use sqlite for example
-                if ($path = $databaseNode->getPath()->getNodeValue()->__toString()) {
-                    $connectionParameters['path'] = $this->getApplication()->getWebappPath() . DIRECTORY_SEPARATOR . $path;
-                }
-
-                // set the connection parameters
-                $this->setConnectionParameters($connectionParameters);
-            }
-        }
     }
 }

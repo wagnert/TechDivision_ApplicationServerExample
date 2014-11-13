@@ -48,23 +48,9 @@ class ASingletonProcessor extends \Stackable implements TimedObjectInterface
      * The application instance that provides the entity manager.
      *
      * @var \TechDivision\Application\Interfaces\ApplicationInterface
+     * @Resource(name="ApplicationInterface")
      */
     protected $application;
-
-    /**
-     * Initializes the session bean with the Application instance.
-     *
-     * Checks on every start if the database already exists, if not
-     * the database will be created immediately.
-     *
-     * @param \TechDivision\Application\Interfaces\ApplicationInterface $application The application instance
-     *
-     * @return void
-     */
-    public function __construct(ApplicationInterface $application)
-    {
-        $this->setApplication($application);
-    }
 
     /**
      * Example method that should be invoked after constructor.
@@ -77,18 +63,6 @@ class ASingletonProcessor extends \Stackable implements TimedObjectInterface
         $this->getInitialContext()->getSystemLogger()->info(
             sprintf('%s has successfully been invoked by @PostConstruct annotation', __METHOD__)
         );
-    }
-
-    /**
-     * The application instance providing the database connection.
-     *
-     * @param \TechDivision\Application\Interfaces\ApplicationInterface $application The application instance
-     *
-     * @return void
-     */
-    public function setApplication(ApplicationInterface $application)
-    {
-        $this->application = $application;
     }
 
     /**
