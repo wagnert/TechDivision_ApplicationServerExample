@@ -29,7 +29,6 @@ use TechDivision\Example\Utils\ProxyKeys;
 use TechDivision\Example\Utils\ContextKeys;
 use TechDivision\Example\Utils\RequestKeys;
 
-
 /**
  * Example action implementation that loads data over a persistence container proxy
  * and renders a list, based on the returned values.

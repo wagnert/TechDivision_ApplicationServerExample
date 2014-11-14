@@ -19,7 +19,6 @@
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link       http://www.appserver.io
  */
-
 namespace TechDivision\Example\Actions;
 
 use TechDivision\Servlet\Http\HttpServletRequest;
@@ -56,8 +55,6 @@ class BasicAuthenticationAction extends ExampleBaseAction
      */
     public function indexAction(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
-        $servletResponse->appendBodyStream(
-            $this->processTemplate(BasicAuthenticationAction::INDEX_TEMPLATE, $servletRequest, $servletResponse)
-        );
+        $servletResponse->appendBodyStream($this->processTemplate(BasicAuthenticationAction::INDEX_TEMPLATE, $servletRequest, $servletResponse));
     }
 }
