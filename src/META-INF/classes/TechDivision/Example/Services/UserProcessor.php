@@ -101,6 +101,16 @@ class UserProcessor extends AbstractProcessor
     }
 
     /**
+     * Returns the user actually logged into the system.
+     *
+     * @return \TechDivision\Example\Entities\User|null The user instance
+     */
+    public function getUserViewDataOfLoggedIn()
+    {
+        return $this->user;
+    }
+
+    /**
      * Returns the data of the user that has been logged into the system.
      *
      * This method is an example implementation on how you can use a stateful

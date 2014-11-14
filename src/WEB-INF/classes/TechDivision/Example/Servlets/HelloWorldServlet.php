@@ -41,6 +41,22 @@ class HelloWorldServlet extends HttpServlet
 {
 
     /**
+     * The user processor instance.
+     *
+     * @var \TechDivision\Example\Services\SampleProcessor
+     * @EnterpriseBean(name="SampleProcessor")
+     */
+    protected $sampleProcessor;
+
+    /**
+     * The user processor instance (a SFB instance).
+     *
+     * @var \TechDivision\Example\Services\UserProcessor
+     * @EnterpriseBean(name="UserProcessor")
+     */
+    protected $userProcessor;
+
+    /**
      * Handles a HTTP GET request.
      *
      * @param \TechDivision\Servlet\Http\HttpServletRequest  $servletRequest  The request instance
@@ -52,6 +68,20 @@ class HelloWorldServlet extends HttpServlet
      */
     public function doGet(HttpServletRequest $servletRequest, HttpServletResponse $servletResponse)
     {
+
+        // check if we've a user logged into the system
+        if ($loggedInUser = $this->userProcessor->getUserViewDataOfLoggedIn()) {
+            $servletRequest->getContext()->getInitialContext()->getSystemLogger()->info(
+                sprintf("Found user logged in: %s", $loggedInUser->getUsername())
+            );
+        }
+
+        // log the number of samples found in the databse
+        $servletRequest->getContext()->getInitialContext()->getSystemLogger()->info(
+            sprintf("Found %d samples", sizeof($this->sampleProcessor->findAll()))
+        );
+
+        // append the Hello World! to the body stream
         $servletResponse->appendBodyStream('Hello World!');
     }
 }
