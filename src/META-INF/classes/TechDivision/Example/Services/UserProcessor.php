@@ -57,6 +57,14 @@ class UserProcessor extends AbstractProcessor
     protected $user;
 
     /**
+     * The DIC provider instance.
+     *
+     * @var \TechDivision\DependencyInjectionContainer\Interfaces\ProviderInterface
+     * @Resource(name="ProviderInterface")
+     */
+    protected $provider;
+
+    /**
      * Example method that should be invoked after constructor.
      *
      * @return void
@@ -191,7 +199,7 @@ class UserProcessor extends AbstractProcessor
             $entityManager = $this->getEntityManager();
 
             // set user data and save it
-            $user = $this->getApplication()->newInstance('\TechDivision\Example\Entities\User');
+            $user = $this->provider->newInstance('\TechDivision\Example\Entities\User');
             $user->setEmail('info@appserver.io');
             $user->setUsername(UserProcessor::DEFAULT_USERNAME);
             $user->setUserLocale('en_US');
